@@ -1,42 +1,110 @@
-import 'package:auth_test/screens/auth_screen.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import './user_transactions.dart';
+import './transaction.dart';
 
-import './screens/chat_screen.dart';
-import './screens/auth_screen.dart';
 
-void main() async {
-  WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp();
-  runApp(const MyApp());
-}
+void main() => runApp(MyApp());
 
 class MyApp extends StatelessWidget {
-  const MyApp({Key? key}) : super(key: key);
-
-  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'FlutterChat App',
-      theme: ThemeData(
-        primarySwatch: Colors.grey,
-        backgroundColor: Colors.black,
-        accentColor: Colors.deepPurple,
-        accentColorBrightness: Brightness.dark,
-        buttonTheme: ButtonTheme.of(context).copyWith(
-            buttonColor: Colors.pink,
-            textTheme: ButtonTextTheme.primary,
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(20),
-            )),
-      ),
-      home: AuthScreen(),
-      //ChatScreen(),
+      title: 'Payroll',
+      home: MyHomePage(),
     );
   }
 }
 
+class MyHomePage extends StatelessWidget{
+  var titleController = TextEditingController();
+  var amountController = TextEditingController();
+  Transaction t1 = new Transaction('title', 0);
 
+  final List<Transaction> transactions_list = [
 
-//FINISHED ADDING AN APP THEME
+  ];
+
+  @override
+  Widget build(BuildContext context){
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Teddy The Tracker'),
+        actions: <Widget>[
+          IconButton(
+            icon: Icon(Icons.add),
+            onPressed: (){
+              // not currently working
+              showModalBottomSheet(
+                context: context,
+                builder: (BuildContext context) {
+                  //return NewTransaction();
+                  return Container(
+                    height: 400,
+                    color: Colors.white,
+                    child: Align(
+                      alignment: Alignment.topCenter,
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        mainAxisSize: MainAxisSize.min,
+                        children: <Widget>[
+                          const Text(
+                            'Add New Transaction',
+                            style: const TextStyle(
+                                fontWeight: FontWeight.bold,
+                                fontSize: 25
+                            ),
+                          ),
+                          TextField(
+                            controller: titleController,
+                            decoration: InputDecoration(
+                              hintText: 'Enter the title for your expense',
+                              labelText: 'Title',
+                              border: OutlineInputBorder(),
+                            ),
+                          ),
+                          TextField(
+                            controller: amountController,
+                            decoration: InputDecoration(
+                              hintText: 'Enter the amount for your expense',
+                              labelText: 'Amount',
+                              border: OutlineInputBorder(),
+                            ),
+                            keyboardType: TextInputType.number,
+                          ),
+                          ElevatedButton(
+                              child: const Text('Confirm'),
+                              // save data
+                              onPressed: () {
+                                
+                              }
+                          ),
+                          ElevatedButton(
+                            child: const Text('Cancel'),
+                            onPressed: () => Navigator.pop(context),
+                          ),
+                        ],
+                      ),
+                    ),
+                  );
+              },);
+            },
+          ),
+        ],
+      ),
+      body:
+      Container(
+        color: Colors.white,
+        child: Align(
+          alignment: Alignment.topLeft,
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            mainAxisSize: MainAxisSize.min,
+            children: <Widget>[
+              UserTransactions()
+            ],
+          ),
+        ),
+      )
+    );
+  }
+}

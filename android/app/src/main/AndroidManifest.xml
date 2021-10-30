@@ -1,7 +1,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example.auth_test">
+    package="com.example.payroll">
    <application
-        android:label="auth_test"
+        android:label="payroll"
         android:icon="@mipmap/ic_launcher">
         <activity
             android:name=".MainActivity"
