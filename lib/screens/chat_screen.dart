@@ -4,6 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class ChatScreen extends StatelessWidget {
+  const ChatScreen({Key? key}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -30,7 +32,7 @@ class ChatScreen extends StatelessWidget {
           },
         ),
         floatingActionButton: FloatingActionButton(
-            child: Icon(Icons.add),
+            child: const Icon(Icons.add),
             onPressed: () {
               FirebaseFirestore.instance
                   .collection("chats/2n4pOdjrY95A2tR9Kq2q/messages")

@@ -1,9 +1,10 @@
-// ignore_for_file: deprecated_member_use
+// ignore_for_file: deprecated_member_use, must_be_immutable
 
 import 'package:flutter/material.dart';
 
 class AuthForm extends StatefulWidget {
   bool isLoading;
+  bool isLogged;
 
   final void Function(
     String email,
@@ -12,14 +13,18 @@ class AuthForm extends StatefulWidget {
     bool isLogin,
     BuildContext ctx,
   ) submitFn;
-  AuthForm(this.submitFn, this.isLoading);
+  AuthForm(
+    this.submitFn,
+    this.isLoading,
+    this.isLogged,
+  );
   @override
   _AuthFormState createState() => _AuthFormState();
 }
 
 class _AuthFormState extends State<AuthForm> {
   final _formkey = GlobalKey<FormState>();
-  var _isLogin = true;
+  late var _isLogin = widget.isLogged;
   var _userEmail = "";
   var _userPassword = "";
   var _userUsername = "";

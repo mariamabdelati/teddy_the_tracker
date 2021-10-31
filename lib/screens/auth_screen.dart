@@ -1,18 +1,22 @@
+// ignore_for_file: deprecated_member_use, avoid_print
+
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/services.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 import 'package:auth_test/widgets/auth/auth_form.dart';
 
 class AuthScreen extends StatefulWidget {
+  AuthScreen(this._isLogin);
+  final bool _isLogin;
+
   @override
   _AuthScreenState createState() => _AuthScreenState();
 }
 
 class _AuthScreenState extends State<AuthScreen> {
   final _auth = FirebaseAuth.instance;
-  var _isLoading = false;
+  bool _isLoading = false;
 
   void _submitAuthForm(
     String email,
@@ -72,6 +76,7 @@ class _AuthScreenState extends State<AuthScreen> {
       body: AuthForm(
         _submitAuthForm,
         _isLoading,
+        widget._isLogin,
       ),
     );
   }

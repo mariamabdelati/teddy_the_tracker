@@ -1,9 +1,10 @@
 import 'package:auth_test/screens/auth_screen.dart';
+import 'package:auth_test/widgets/auth/auth_form.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 
-import './screens/chat_screen.dart';
-import './screens/auth_screen.dart';
+import './screens/welcome_screen.dart';
+import 'constants.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -20,10 +21,8 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'FlutterChat App',
       theme: ThemeData(
-        primarySwatch: Colors.grey,
-        backgroundColor: Colors.black,
-        accentColor: Colors.deepPurple,
-        accentColorBrightness: Brightness.dark,
+        primaryColor: kPrimaryColor,
+        scaffoldBackgroundColor: Colors.white,
         buttonTheme: ButtonTheme.of(context).copyWith(
             buttonColor: Colors.pink,
             textTheme: ButtonTextTheme.primary,
@@ -31,7 +30,7 @@ class MyApp extends StatelessWidget {
               borderRadius: BorderRadius.circular(20),
             )),
       ),
-      home: AuthScreen(),
+      home: const WelcomeScreen(),
       //ChatScreen(),
     );
   }
