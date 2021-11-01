@@ -1,5 +1,7 @@
 // ignore_for_file: deprecated_member_use, must_be_immutable
 
+import 'package:auth_test/constants.dart';
+import 'package:auth_test/main.dart';
 import 'package:flutter/material.dart';
 
 class AuthForm extends StatefulWidget {
@@ -50,6 +52,8 @@ class _AuthFormState extends State<AuthForm> {
     return Center(
       child: Card(
         margin: const EdgeInsets.all(20),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(13)),
+        color: mainColorList[4],
         child: SingleChildScrollView(
           child: Padding(
             padding: const EdgeInsets.all(16),
@@ -110,6 +114,7 @@ class _AuthFormState extends State<AuthForm> {
                     RaisedButton(
                       onPressed: _trySubmit,
                       child: Text(_isLogin ? "Login" : "Create account"),
+                      color: mainColorList[2],
                     ),
                   if (!widget.isLoading)
                     FlatButton(
@@ -120,8 +125,8 @@ class _AuthFormState extends State<AuthForm> {
                       },
                       child: Text(_isLogin
                           ? 'create new account'
-                          : 'Already have an account'),
-                      textColor: Theme.of(context).primaryColor,
+                          : 'Already have an account?'),
+                      textColor: mainColorList[2],
                     )
                 ],
               ),

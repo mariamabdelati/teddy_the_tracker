@@ -3,6 +3,7 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:auth_test/constants.dart';
 
 import 'package:auth_test/widgets/auth/auth_form.dart';
 
@@ -72,7 +73,7 @@ class _AuthScreenState extends State<AuthScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Theme.of(context).primaryColor,
+      backgroundColor: mainColorList[0],
       body: AuthForm(
         _submitAuthForm,
         _isLoading,
