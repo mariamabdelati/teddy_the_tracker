@@ -4,14 +4,10 @@ import './transactions_list.dart';
 import './transaction.dart';
 
 class UserTransactions extends StatefulWidget {
-
-
-
-
   @override
-  _UserTransactionsState createState() => _UserTransactionsState();
+  UserTransactionsState createState() => UserTransactionsState();
 }
-class _UserTransactionsState extends State<UserTransactions>{
+class UserTransactionsState extends State<UserTransactions>{
   final List<Transaction> _userTransactions = [
 
     //adding expenses manually

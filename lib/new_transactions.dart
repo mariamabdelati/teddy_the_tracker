@@ -19,13 +19,6 @@ class NewTransaction extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           mainAxisSize: MainAxisSize.min,
           children: <Widget>[
-            const Text(
-              'Add New Transaction',
-              style: const TextStyle(
-                  fontWeight: FontWeight.bold,
-                  fontSize: 25
-              ),
-            ),
             TextField(
               controller: titleController,
               decoration: InputDecoration(
