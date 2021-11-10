@@ -1,1 +1,1 @@
-# payroll-expense-tracker
+# teddy-the-tracker
