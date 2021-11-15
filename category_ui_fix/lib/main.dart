@@ -3,14 +3,16 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:teddy_categories/screens/category_expansion_tile.dart';
 
+import 'Ali/view_entries.dart';
+
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
-  runApp(const SelectCategory());
+  runApp(const AddEntry());
 }
 
-class SelectCategory extends StatelessWidget {
-  const SelectCategory({Key? key}) : super(key: key);
+class AddEntry extends StatelessWidget {
+  const AddEntry({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -33,7 +35,7 @@ class SelectCategory extends StatelessWidget {
               borderRadius: BorderRadius.circular(20),
             )),
       ),
-      home: const CategoryExpansionTile(),
+      home: const ViewEntries(),//const CategoryExpansionTile(),
     );
   }
 }
