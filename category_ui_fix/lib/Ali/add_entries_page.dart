@@ -116,7 +116,7 @@ class AddNewEntryPageState extends State<AddNewEntryPage> {
                             //amount_var = amountController.text.toString();
 
                             await expenseRef.add({
-                              'amount': amount,
+                              'amount': int.parse(amount),
                               'categoryId': 1,
                               'date': _dateTime.toString(),
                               'expenseId': 2,
