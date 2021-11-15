@@ -1,7 +1,12 @@
+import 'dart:async';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:teddy_categories/screens/submission_button.dart';
 import 'package:teddy_categories/constants.dart';
+//import 'category_expansion_tile.dart';
+
+var size = 0;
 
 class CreateNewCategory extends StatefulWidget {
   final String title;
@@ -54,6 +59,25 @@ class _CreateNewCategoryState extends State<CreateNewCategory> {
   final _budgettext = TextEditingController();
 
 
+
+
+  Future<bool> categoryCheck(String newCat) async {
+    final QuerySnapshot result = await FirebaseFirestore.instance
+        .collection('categories/JBSahpmjY2TtK0gRdT4s/category')
+        .where('label', isEqualTo: newCat)
+        .limit(1)
+        .get();
+    final List<DocumentSnapshot> documents = result.docs;
+    return (documents.length == 1);
+  }
+
+  void connector(String v) async {
+    bool value = await categoryCheck(v);
+    setState(() {
+      _invalid = value;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -97,6 +121,7 @@ class _CreateNewCategoryState extends State<CreateNewCategory> {
   );
   }
 
+  late bool _invalid;
   Widget buildCategory() {
     return TextFormField(
       controller: _categorytext,
@@ -109,9 +134,15 @@ class _CreateNewCategoryState extends State<CreateNewCategory> {
           onPressed: _categorytext.clear,
         ),
       ),
+
+
+
     validator: (value) {
-      if (value!.isEmpty || spaceRemover(value).isEmpty) {
+      connector(value!.toLowerCase().trim());
+      if (value == "" || spaceRemover(value) == "") {
         return "Category cannot be empty";
+      } else if (_invalid){
+        return "Category already exists";
       } else {
         return null;
       }
@@ -145,7 +176,7 @@ class _CreateNewCategoryState extends State<CreateNewCategory> {
     inputFormatters: <TextInputFormatter>[
       FilteringTextInputFormatter.allow(RegExp(r"^\d*\.?\d{0,2}"))
     ],
-    onSaved: (value) => setState(() => budget = value!.isEmpty ? value: zeroCheck(value)),
+    onSaved: (value) => setState(() => budget = value!.isEmpty ? "-1" : zeroCheck(value)),
   );
   }
 
@@ -155,14 +186,20 @@ class _CreateNewCategoryState extends State<CreateNewCategory> {
     builder: (context) {
       return SubmitButtonWidget(
       onClicked: () {
+
         final isValid = formKey.currentState!.validate();
         FocusScope.of(context).unfocus();
 
         if (isValid) {
           formKey.currentState!.save();
 
+          CollectionReference categoriesRef = FirebaseFirestore.instance.collection("categories/JBSahpmjY2TtK0gRdT4s/category");
+
+          categoriesRef.add(
+              {"label": newCategory.toLowerCase().trim(), "budget": int.parse(budget), "parentId": 0, "categoryId": size + 1, "childIds": [], "expenseIds": []});
+
           final message =
-              "Category: $newCategory\nBudget: $budget";
+              "'$newCategory' has been successfully added to your categories";
           final snackBar = SnackBar(
             content: Text(
               message,
@@ -171,6 +208,8 @@ class _CreateNewCategoryState extends State<CreateNewCategory> {
             backgroundColor: Colors.green,
           );
           ScaffoldMessenger.of(context).showSnackBar(snackBar);
+
+          //Navigator.pop(context, MaterialPageRoute(builder: (context) => const CategoryExpansionTile()));
         }
       },
     );
