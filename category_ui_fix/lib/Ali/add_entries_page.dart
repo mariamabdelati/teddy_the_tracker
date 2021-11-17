@@ -5,6 +5,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/services.dart';
 
 import 'package:teddy_categories/screens/category_expansion_tile.dart';
+import 'package:teddy_categories/screens/submission_button.dart';
 
 import '../constants.dart';
 
@@ -18,6 +19,8 @@ class AddNewEntryPage extends StatefulWidget {
 }
 
 class AddNewEntryPageState extends State<AddNewEntryPage> {
+
+  //this function takes a string and removes beginning zeros so that the we can check that the user did not enter an amount that is 0
   String zeroCheck(String x) {
     String y = "";
     for (int i = 0; i < x.length; i++) {
@@ -35,7 +38,9 @@ class AddNewEntryPageState extends State<AddNewEntryPage> {
   }
 
   final formKey = GlobalKey<FormState>();
+  //variable used to save the new title
   String newTitle = "";
+  //variable used to save the new amount
   String amount = "";
 
   final _titletext = TextEditingController();
@@ -73,6 +78,7 @@ class AddNewEntryPageState extends State<AddNewEntryPage> {
             icon: const Icon(Icons.arrow_back_rounded),
           ),
         ),
+      //form containing list view of the fields
         body:Form(
             key: formKey,
               child: ListView(
@@ -105,41 +111,14 @@ class AddNewEntryPageState extends State<AddNewEntryPage> {
                       thickness: 0.5,
                     ),
                     const SizedBox(height: 32),
-                    Container(
-                      padding: const EdgeInsets.all(8.0),
-                      color: Colors.white,
-                      child: ElevatedButton(
-                          child: const Text('Confirm'),
-                          onPressed: () async {
-                            //save to firebase
-                            //tite_var = titleController.text.toString();
-                            //amount_var = amountController.text.toString();
-
-                            await expenseRef.add({
-                              'amount': int.parse(amount),
-                              'categoryId': 1,
-                              'date': _dateTime.toString(),
-                              'expenseId': 2,
-                              'label': newTitle.toLowerCase(),
-                              'recurring': isChecked,
-                            }).then((value) => print("amount added"));
-                          }),
-                    ),
-                    Container(
-                      padding: const EdgeInsets.all(8.0),
-                      color: Colors.white,
-                      child: ElevatedButton(
-                          child: const Text('Cancel'),
-                          onPressed: () {
-                            Navigator.pop(context);
-                          }),
-                    ),
+                    buildSubmit(),
                   ],
                 ),
             ),
         );
   }
 
+  //builds title text field 
   buildTitle() {
     return TextFormField(
       controller: _titletext,
@@ -153,6 +132,7 @@ class AddNewEntryPageState extends State<AddNewEntryPage> {
           onPressed: _titletext.clear,
         ),
       ),
+      //validates the value in title y making it a required field and ensuring it isnt empty
       validator: (value) {
         if (value == "" || value!.trim() == "") {
           return "Title cannot be empty";
@@ -160,6 +140,7 @@ class AddNewEntryPageState extends State<AddNewEntryPage> {
           return null;
         }
       },
+      //this is triggered upon saving the form using the submission button
       onSaved: (value) => setState(() => newTitle = value!.trim()),
     );
   }
@@ -177,6 +158,8 @@ class AddNewEntryPageState extends State<AddNewEntryPage> {
           onPressed: _amounttext.clear,
         ),
       ),
+      
+      //validations check if amount is empty or 0
       validator: (value) {
         if (value! == "") {
           return "Amount must not be empty";
@@ -186,6 +169,7 @@ class AddNewEntryPageState extends State<AddNewEntryPage> {
           return null;
         }
       },
+      // only allow numbers and decimal places up to 2 places
       keyboardType: TextInputType.number,
       inputFormatters: <TextInputFormatter>[
         FilteringTextInputFormatter.allow(RegExp(r"^\d*\.?\d{0,2}"))
@@ -197,8 +181,12 @@ class AddNewEntryPageState extends State<AddNewEntryPage> {
   buildDate() {
     return Row(children: [
       const Text(
-        "Choose a date \n",
-        style: TextStyle(fontSize: 20),
+        "Choose a date                 ",
+        textAlign: TextAlign.left,
+        style: TextStyle(
+            fontSize: 17,
+            fontWeight: FontWeight.bold,
+            color: Color(0xFF5689B9)),
       ),
       ElevatedButton(
           child: const Text('Date'),
@@ -211,8 +199,13 @@ class AddNewEntryPageState extends State<AddNewEntryPage> {
 
   buildRecurring() {
     return Row(children: [
-      const Text("Recurring?\n",
-          style: TextStyle(fontSize: 20)),
+      const Text("Recurring?        ",
+        textAlign: TextAlign.left,
+        style: TextStyle(
+            fontSize: 17,
+            fontWeight: FontWeight.bold,
+            color: Color(0xFF5689B9)),
+      ),
       Checkbox(
         checkColor: Colors.white,
         value: isChecked,
@@ -223,5 +216,49 @@ class AddNewEntryPageState extends State<AddNewEntryPage> {
         },
       ),
     ]);
+  }
+
+  Widget buildSubmit() {
+    return Builder(
+      builder: (context) {
+        return SubmitButtonWidget(
+          onClicked: () async {
+            
+            //checks if the data is valid
+            final isValid = formKey.currentState!.validate();
+            FocusScope.of(context).unfocus();
+
+            if (isValid) {
+              //saves the values (triggers onsaved)
+              formKey.currentState!.save();
+
+              //add to db
+              await expenseRef.add({
+                'amount': amount,
+                'categoryId': 1,
+                'date': _dateTime.toString(),
+                'expenseId': 2,
+                'label': newTitle.toLowerCase(),
+                'recurring': isChecked,
+              });
+
+              //shows snackbar with details upon adding
+              final message =
+                  "'$newTitle' with amount '$amount 'has been successfully added to your entries";
+              final snackBar = SnackBar(
+                content: Text(
+                  message,
+                  style: const TextStyle(fontSize: 20),
+                ),
+                backgroundColor: Colors.green,
+              );
+              ScaffoldMessenger.of(context).showSnackBar(snackBar);
+
+              //Navigator.pop(context, MaterialPageRoute(builder: (context) => const CategoryExpansionTile()));
+            }
+          },
+        );
+      },
+    );
   }
 }
