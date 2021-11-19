@@ -53,13 +53,13 @@ class ViewEntriesState extends State<ViewEntries> {
               alignment: Alignment.bottomRight,
               padding: const EdgeInsets.all(8.0),
               child: ElevatedButton(
-                  child: const Text('View Entries'),
+                  child: const Text('View Expenses'),
                   onPressed: () {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
                           builder: (context) => const View_Entries_Firebase(
-                            title: 'View Entries')),
+                            title: 'View Expenses')),
                     );
                   }),
             )

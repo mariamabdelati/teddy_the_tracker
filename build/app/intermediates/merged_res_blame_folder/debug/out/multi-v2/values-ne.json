@@ -1,7 +1,7 @@
 {
     "logs": [
         {
-            "outputFile": "C:\\Users\\alypr\\StudioProjects\\merged\\teddy-the-tracker-mariam\\category_ui_fix\\build\\app\\intermediates\\incremental\\mergeDebugResources\\merged.dir\\values-ne\\values-ne.xml",
+            "outputFile": "C:\\Users\\alypr\\StudioProjects\\teddy-the-tracker\\build\\app\\intermediates\\incremental\\mergeDebugResources\\merged.dir\\values-ne\\values-ne.xml",
             "map": [
                 {
                     "source": "C:\\Users\\alypr\\.gradle\\caches\\transforms-2\\files-2.1\\d30bd78f85a4293b98780e7f434b7d55\\jetified-play-services-basement-17.1.0\\res\\values-ne\\values.xml",
