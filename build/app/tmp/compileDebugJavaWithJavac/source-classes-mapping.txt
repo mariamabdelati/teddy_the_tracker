@@ -1,0 +1,4 @@
+io/flutter/plugins/GeneratedPluginRegistrant.java
+ io.flutter.plugins.GeneratedPluginRegistrant
+com/example/teddy_categories/BuildConfig.java
+ com.example.teddy_categories.BuildConfig

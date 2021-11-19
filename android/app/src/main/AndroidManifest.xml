@@ -1,7 +1,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example.payroll">
+    package="com.example.teddy_categories">
    <application
-        android:label="payroll"
+        android:label="Teddy the Tracker"
         android:icon="@mipmap/ic_launcher">
         <activity
             android:name=".MainActivity"
