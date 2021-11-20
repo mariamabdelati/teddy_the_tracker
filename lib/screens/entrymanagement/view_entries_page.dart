@@ -15,19 +15,17 @@ class _ViewEntriesPageState extends State<ViewEntriesPage> {
   final CollectionReference expenseRef = FirebaseFirestore.instance
       .collection('/expenses/cFqsqHPIscrC6cY9iPs6/expense');
 
-
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: Text(widget.title),
-        leading: IconButton(
+        /*leading: IconButton(
           onPressed: () {
             Navigator.pop(context);
           },
           icon: const Icon(Icons.arrow_back_rounded),
-        ),
+        ),*/
       ),
       //form containing list view of the fields
       body: StreamBuilder(
@@ -52,17 +50,17 @@ class _ViewEntriesPageState extends State<ViewEntriesPage> {
                             vertical: 10,
                             horizontal: 15
                         ),
-                        decoration: BoxDecoration(
+                        decoration: BoxDecoration(borderRadius: const BorderRadius.all(Radius.circular(15.0)),
                             border: Border.all(
                               color:Color(0xFF5689B9),
-                              width: 3,
+                              width: 2,
                             )
                         ),
                         padding: const EdgeInsets.all(7),
                         child: Text('EGP ' + data.docs[index]['amount'],
                           textAlign: TextAlign.center,
                           style: const TextStyle(fontWeight: FontWeight.bold,
-                            fontSize: 20,
+                            fontSize: 17,
                             color: Color(0xFF5689B9),
                           ),
                         ),

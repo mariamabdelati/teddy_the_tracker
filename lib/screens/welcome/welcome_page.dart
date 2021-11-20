@@ -18,7 +18,7 @@ class LoginPage extends StatefulWidget {
       String username,
       bool isLogin,
       BuildContext ctx,
-  ) submitFn;
+      ) submitFn;
 
   LoginPage(this.submitFn, this.isLoading, this.isLogged, {Key? key}) : super(key: key);
 
@@ -158,7 +158,7 @@ class _LoginPageState extends State<LoginPage> {
                           child: Text(
                             "Set Money Goals",
                             style:
-                                TextStyle(color: _headingColor, fontSize: 28),
+                            TextStyle(color: _headingColor, fontSize: 28),
                           ),
                         ),
                         Container(
@@ -168,7 +168,7 @@ class _LoginPageState extends State<LoginPage> {
                             "We make tracking your expenses easy. Join Teddy the Tracker now to manage your expenses.",
                             textAlign: TextAlign.center,
                             style:
-                                TextStyle(color: _headingColor, fontSize: 16),
+                            TextStyle(color: _headingColor, fontSize: 16),
                           ),
                         )
                       ],
@@ -264,26 +264,26 @@ class _LoginPageState extends State<LoginPage> {
                 ),
                 Column(
                   children: <Widget>[
-                  if (widget.isLoading) const CircularProgressIndicator(),
-                  if (!widget.isLoading)
-                    RoundButton(
-                      text: _isLogin? "Login" : "Create Account",
-                      onClicked: _trySubmit,
-                    ),
+                    if (widget.isLoading) const CircularProgressIndicator(),
+                    if (!widget.isLoading)
+                      RoundButton(
+                        text: _isLogin? "Login" : "Create Account",
+                        onClicked: _trySubmit,
+                      ),
                     const SizedBox(
                       height: 10,
                     ),
-                 if (!widget.isLoading)
-                    GestureDetector(
-                      onTap: () {
-                        setState(() {
-                          _isLogin = !_isLogin;
-                        });
-                      },
-                      child: RoundOutlinedButton(
-                        text: _isLogin? "Create New Account" : "Back to Login",
-                      ),
-                    )
+                    if (!widget.isLoading)
+                      GestureDetector(
+                        onTap: () {
+                          setState(() {
+                            _isLogin = !_isLogin;
+                          });
+                        },
+                        child: RoundOutlinedButton(
+                          text: _isLogin? "Create New Account" : "Back to Login",
+                        ),
+                      )
                   ],
                 ),
               ],
@@ -401,4 +401,3 @@ class _LoginPageState extends State<LoginPage> {
     );
   }
 }
-

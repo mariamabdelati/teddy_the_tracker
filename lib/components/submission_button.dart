@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:teddy_categories/constants.dart';
+import 'package:teddy_the_tracker/constants.dart';
 
 class SubmitButtonWidget extends StatelessWidget {
   final VoidCallback onClicked;

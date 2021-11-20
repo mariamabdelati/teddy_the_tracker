@@ -48,6 +48,15 @@ class AddNewEntryPageState extends State<AddNewEntryPage> {
       .collection('/expenses/cFqsqHPIscrC6cY9iPs6/expense');
 
   var _dateTime = DateTime.now();
+  String dateText = '';
+
+  String getDateText(){
+    if (dateText == '') {
+      return 'Date';
+    }else{
+      return DateFormat('dd-MM-yyyy').format(_dateTime);
+    }
+  }
 
   void _showDatePicker() {
     showDatePicker(
@@ -58,6 +67,7 @@ class AddNewEntryPageState extends State<AddNewEntryPage> {
         .then((value) {
       setState(() {
         _dateTime = value!;
+        dateText = DateFormat('dd-MM-yyyy').format(value);
       });
     });
   }
@@ -67,12 +77,12 @@ class AddNewEntryPageState extends State<AddNewEntryPage> {
     return Scaffold(
       appBar: AppBar(
         title: Text(widget.title),
-        leading: IconButton(
+        /*leading: IconButton(
           onPressed: () {
             Navigator.pop(context);
           },
           icon: const Icon(Icons.arrow_back_rounded),
-        ),
+        ),*/
       ),
 
       //form containing list view of the fields
@@ -168,7 +178,7 @@ class AddNewEntryPageState extends State<AddNewEntryPage> {
         prefixIcon: SizedBox(
             width: 60,
             child:
-                Icon(Icons.account_balance_wallet_outlined, size: 25, color: iconsColor)),
+            Icon(Icons.account_balance_wallet_outlined, size: 25, color: iconsColor)),
         suffixIcon: SizedBox(
           width: 60,
           child: IconButton(
@@ -201,23 +211,28 @@ class AddNewEntryPageState extends State<AddNewEntryPage> {
     );
   }
 
-  buildDate() {
-    return Row(children: [
-      const Text(
-        "Choose a date                 ",
-        textAlign: TextAlign.left,
-        style: TextStyle(
-            fontSize: 17,
-            fontWeight: FontWeight.bold,
-            color: Color(0xFF5689B9)),
+  buildDate(){
+    return TextFormField(
+      readOnly: true,
+      onTap: () {
+        _showDatePicker();
+      },
+      decoration: InputDecoration(
+        hintText: getDateText(),
+        hintStyle: getDateText() != 'Date' ? const TextStyle(color: Colors.black87) : null,
+        border: OutlineInputBorder(borderRadius: BorderRadius.circular(20)),
+        prefixIcon: SizedBox(
+            width: 60,
+            child: Icon(Icons.date_range_rounded, size: 25, color: iconsColor)),
       ),
-      ElevatedButton(
-          child: const Text('Date'),
-          onPressed: () {
-            //get date here
-            _showDatePicker();
-          }),
-    ]);
+      validator: (value) {
+        if (getDateText() == "Date") {
+          return "Date must not be empty";
+        } else {
+          return null;
+        }
+      },
+    );
   }
 
   buildRecurring() {
