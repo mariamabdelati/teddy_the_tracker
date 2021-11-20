@@ -3,6 +3,7 @@
 import 'package:auth_test/widgets/welcome/body.dart';
 import 'package:flutter/material.dart';
 import 'package:auth_test/constants.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 class WelcomeScreen extends StatelessWidget {
   const WelcomeScreen({Key? key}) : super(key: key);

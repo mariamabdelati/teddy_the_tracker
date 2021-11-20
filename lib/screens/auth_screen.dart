@@ -1,11 +1,12 @@
 // ignore_for_file: deprecated_member_use, avoid_print
 
+import 'package:auth_test/screens/dashboard_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:auth_test/constants.dart';
-
 import 'package:auth_test/widgets/auth/auth_form.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 class AuthScreen extends StatefulWidget {
   AuthScreen(this._isLogin);
@@ -45,7 +46,12 @@ class _AuthScreenState extends State<AuthScreen> {
           "username": username,
           "email": email,
         });
+
+        // create wallet(uid) DON'T FORGET IT OR MARIAM WILL KILL YOU
       }
+      Navigator.of(context).pushAndRemoveUntil(
+          MaterialPageRoute(builder: (context) => const DashboardScreen()),
+          (route) => false);
     } on FirebaseAuthException catch (err) {
       var msg = "Error occured, please check your credentials";
 
@@ -82,6 +88,5 @@ class _AuthScreenState extends State<AuthScreen> {
     );
   }
 }
-
 
 // storing Extra user data 5:35;
