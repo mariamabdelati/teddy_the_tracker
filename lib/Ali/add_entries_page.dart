@@ -53,6 +53,20 @@ class AddNewEntryPageState extends State<AddNewEntryPage> {
       .collection('/expenses/cFqsqHPIscrC6cY9iPs6/expense');
 
   var _dateTime = DateTime.now();
+  String date_button_string = '';
+
+  /*String formattedDate = DateFormat('dd-MM-yyyy').format(_dateTime);*/
+  /*DateFormat('dd-MM-yyyy').format(_dateTime)*/
+
+  String get_date_button_Text(){
+    if (date_button_string == '') {
+      return 'Date';
+    }else{
+        return DateFormat('dd-MM-yyyy').format(_dateTime);
+    }
+    }
+
+
 
   void _showDatePicker() {
     showDatePicker(
@@ -63,6 +77,7 @@ class AddNewEntryPageState extends State<AddNewEntryPage> {
         .then((value) {
       setState(() {
         _dateTime = value!;
+        date_button_string = DateFormat('dd-MM-yyyy').format(value);
       });
     });
   }
@@ -190,7 +205,7 @@ class AddNewEntryPageState extends State<AddNewEntryPage> {
             color: Color(0xFF5689B9)),
       ),
       ElevatedButton(
-          child: const Text('Date'),
+          child: Text(get_date_button_Text()),
           onPressed: () {
             //get date here
             _showDatePicker();
