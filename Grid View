@@ -16,32 +16,32 @@ GridView.count(
   children: <Widget>[
     Container(
       padding: const EdgeInsets.all(8),
-      child: const Text("He'd have you all unravel at the"),
+      child: const Text("eXPENSE1"),
       color: Colors.teal[100],
     ),
     Container(
       padding: const EdgeInsets.all(8),
-      child: const Text('Heed not the rabble'),
+      child: const Text('Income1'),
       color: Colors.teal[200],
     ),
     Container(
       padding: const EdgeInsets.all(8),
-      child: const Text('Sound of screams but the'),
+      child: const Text('Exepnse2'),
       color: Colors.teal[300],
     ),
     Container(
       padding: const EdgeInsets.all(8),
-      child: const Text('Who scream'),
+      child: const Text('Expense 3'),
       color: Colors.teal[400],
     ),
     Container(
       padding: const EdgeInsets.all(8),
-      child: const Text('Revolution is coming...'),
+      child: const Text('Hello there'),
       color: Colors.teal[500],
     ),
     Container(
       padding: const EdgeInsets.all(8),
-      child: const Text('Revolution, they...'),
+      child: const Text('General Kenobi'),
       color: Colors.teal[600],
     ),
   ],
