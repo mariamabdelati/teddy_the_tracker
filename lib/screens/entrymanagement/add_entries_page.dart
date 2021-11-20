@@ -84,7 +84,6 @@ class AddNewEntryPageState extends State<AddNewEntryPage> {
           icon: const Icon(Icons.arrow_back_rounded),
         ),*/
       ),
-
       //form containing list view of the fields
       body: Form(
         key: formKey,

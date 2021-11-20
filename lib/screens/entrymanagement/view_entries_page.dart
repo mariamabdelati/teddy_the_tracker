@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_core/firebase_core.dart';
+//import 'package:firebase_core/firebase_core.dart';
 
 class ViewEntriesPage extends StatefulWidget {
   final String title;
@@ -27,6 +27,7 @@ class _ViewEntriesPageState extends State<ViewEntriesPage> {
           icon: const Icon(Icons.arrow_back_rounded),
         ),*/
       ),
+
       //form containing list view of the fields
       body: StreamBuilder(
           stream: expenseRef.snapshots(),

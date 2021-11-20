@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:teddy_the_tracker/constants.dart';
 
-
 class RoundOutlinedButton extends StatefulWidget {
   final String text;
   const RoundOutlinedButton({Key? key, required this.text}) : super(key: key);

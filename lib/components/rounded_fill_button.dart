@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:teddy_the_tracker/constants.dart';
 
-
 class RoundButton extends StatefulWidget {
   final String text;
   final VoidCallback onClicked;
