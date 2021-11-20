@@ -1,8 +1,8 @@
 // ignore_for_file: prefer_const_constructors
 
-import 'package:auth_test/widgets/welcome/body.dart';
+import 'package:teddy_the_tracker/widgets/welcome/body.dart';
 import 'package:flutter/material.dart';
-import 'package:auth_test/constants.dart';
+import 'package:teddy_the_tracker/constants.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 class WelcomeScreen extends StatelessWidget {

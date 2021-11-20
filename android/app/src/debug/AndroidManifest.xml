@@ -1,9 +1,5 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-<<<<<<< HEAD
-    package="com.example.auth_test">
-=======
     package="com.example.teddy_categories">
->>>>>>> 81e15421d895fbe0cc4d9b92137aceaa31319c4e
     <!-- Flutter needs it to communicate with the running application
          to allow setting breakpoints, to provide hot reload, etc.
     -->

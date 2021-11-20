@@ -1,4 +1,5 @@
 import 'package:teddy_the_tracker/screens/dashboard/blank.dart';
+import 'package:teddy_the_tracker/screens/profilemanagement/profile.dart';
 import '../../screens/entrymanagement/add_entries_page.dart';
 import '../../screens/entrymanagement/view_entries_page.dart';
 import '../../constants.dart';
@@ -46,9 +47,11 @@ class _DashboardScreenState extends State<DashboardScreen> {
     const pages = [
       Blank(),
       ViewEntriesPage(title: "View All Entries"),
-      AddNewEntryPage(title: 'Create New Entry',),
+      AddNewEntryPage(
+        title: 'Create New Entry',
+      ),
       Blank(),
-      Blank(),
+      Profile(),
     ];
     return Scaffold(
       /*appBar: AppBar(
@@ -61,8 +64,9 @@ class _DashboardScreenState extends State<DashboardScreen> {
       extendBodyBehindAppBar: true,
       extendBody: true,
       bottomNavigationBar: Theme(
-        data: Theme.of(context)
-            .copyWith(iconTheme: IconThemeData(color: iconsColor), ),
+        data: Theme.of(context).copyWith(
+          iconTheme: IconThemeData(color: iconsColor),
+        ),
         child: CurvedNavigationBar(
           items: items,
           height: MediaQuery.of(context).size.height * 0.08,

@@ -1,9 +1,9 @@
 // ignore_for_file: deprecated_member_use, prefer_const_constructors
 
-import 'package:auth_test/components/rounded_button.dart';
-import 'package:auth_test/constants.dart';
-import 'package:auth_test/screens/auth_screen.dart';
-import 'package:auth_test/widgets/welcome/background.dart';
+import 'package:teddy_the_tracker/components/rounded_button.dart';
+import 'package:teddy_the_tracker/constants.dart';
+import 'package:teddy_the_tracker/screens/auth_screen.dart';
+import 'package:teddy_the_tracker/widgets/welcome/background.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
@@ -39,23 +39,21 @@ class Body extends StatelessWidget {
             ),
             RoundedButton(
               text: 'Login',
-              pressed: () {
+              onClicked: () {
                 Navigator.of(context).push(
                   MaterialPageRoute(
                     builder: (context) => (AuthScreen(true)),
                   ),
                 );
               },
-              color: mainColorList[2],
               textColor: Colors.white,
             ),
             RoundedButton(
               text: 'Register',
-              pressed: () {
+              onClicked: () {
                 Navigator.of(context).push(
                     MaterialPageRoute(builder: (context) => AuthScreen(false)));
               },
-              color: mainColorList[4],
               textColor: Colors.black,
             ),
           ],

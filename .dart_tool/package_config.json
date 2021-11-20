@@ -86,6 +86,12 @@
       "languageVersion": "2.12"
     },
     {
+      "name": "eva_icons_flutter",
+      "rootUri": "file:///C:/Users/George/Documents/flutter/.pub-cache/hosted/pub.dartlang.org/eva_icons_flutter-3.0.2",
+      "packageUri": "lib/",
+      "languageVersion": "2.12"
+    },
+    {
       "name": "fake_async",
       "rootUri": "file:///C:/Users/George/Documents/flutter/.pub-cache/hosted/pub.dartlang.org/fake_async-1.2.0",
       "packageUri": "lib/",
@@ -302,13 +308,13 @@
       "languageVersion": "2.12"
     },
     {
-      "name": "teddy_categories",
+      "name": "teddy_the_tracker",
       "rootUri": "../",
       "packageUri": "lib/",
       "languageVersion": "2.12"
     }
   ],
-  "generated": "2021-11-20T13:43:16.008338Z",
+  "generated": "2021-11-20T23:10:46.079482Z",
   "generator": "pub",
   "generatorVersion": "2.14.3"
 }

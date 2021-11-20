@@ -4,7 +4,7 @@
     "type": "PACKAGED_MANIFESTS",
     "kind": "Directory"
   },
-  "applicationId": "com.example.auth_test",
+  "applicationId": "com.example.teddy_categories",
   "variantName": "debug",
   "elements": [
     {

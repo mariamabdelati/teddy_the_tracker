@@ -11,11 +11,7 @@
 	<key>CFBundleInfoDictionaryVersion</key>
 	<string>6.0</string>
 	<key>CFBundleName</key>
-<<<<<<< HEAD
-	<string>auth_test</string>
-=======
 	<string>Teddy the Tracker</string>
->>>>>>> 81e15421d895fbe0cc4d9b92137aceaa31319c4e
 	<key>CFBundlePackageType</key>
 	<string>APPL</string>
 	<key>CFBundleShortVersionString</key>

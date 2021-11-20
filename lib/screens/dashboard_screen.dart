@@ -1,11 +1,11 @@
-import 'package:auth_test/components/rounded_button.dart';
-import 'package:auth_test/constants.dart';
-import 'package:auth_test/screens/blank_screen.dart';
-import 'package:auth_test/screens/chat_screen.dart';
-import 'package:auth_test/screens/welcome_screen.dart';
+import 'package:teddy_the_tracker/components/rounded_button.dart';
+import 'package:teddy_the_tracker/constants.dart';
+import 'package:teddy_the_tracker/screens/blank_screen.dart';
+import 'package:teddy_the_tracker/screens/chat_screen.dart';
+import 'package:teddy_the_tracker/screens/welcome_screen.dart';
 import "package:flutter/material.dart";
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:auth_test/components/rounded_button.dart';
+import 'package:teddy_the_tracker/components/rounded_button.dart';
 import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 
 class DashboardScreen extends StatefulWidget {

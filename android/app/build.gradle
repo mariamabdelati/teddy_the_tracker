@@ -8,11 +8,7 @@ if (localPropertiesFile.exists()) {
 
 def flutterRoot = localProperties.getProperty('flutter.sdk')
 if (flutterRoot == null) {
-<<<<<<< HEAD
-    throw new GradleException("Flutter SDK not found. Define location with flutter.sdk in the local.properties file.")
-=======
     throw new FileNotFoundException("Flutter SDK not found. Define location with flutter.sdk in the local.properties file.")
->>>>>>> 81e15421d895fbe0cc4d9b92137aceaa31319c4e
 }
 
 def flutterVersionCode = localProperties.getProperty('flutter.versionCode')
@@ -31,28 +27,16 @@ apply plugin: 'com.google.gms.google-services'
 apply from: "$flutterRoot/packages/flutter_tools/gradle/flutter.gradle"
 
 android {
-<<<<<<< HEAD
-    compileSdkVersion 30
-
-=======
     compileSdkVersion 31
->>>>>>> 81e15421d895fbe0cc4d9b92137aceaa31319c4e
 
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
     }
-<<<<<<< HEAD
-/*
-    kotlinOptions {
-        jvmTarget = '1.8'
-    }*/
-=======
 
    kotlinOptions {
         jvmTarget = '1.8'
     }
->>>>>>> 81e15421d895fbe0cc4d9b92137aceaa31319c4e
 
     sourceSets {
         main.java.srcDirs += 'src/main/kotlin'
@@ -60,22 +44,12 @@ android {
 
     defaultConfig {
         // TODO: Specify your own unique Application ID (https://developer.android.com/studio/build/application-id.html).
-<<<<<<< HEAD
-        applicationId "com.example.auth_test"
-        minSdkVersion 21
-        targetSdkVersion 30
-        versionCode flutterVersionCode.toInteger()
-        versionName flutterVersionName
-        multiDexEnabled true
-        
-=======
         applicationId "com.example.teddy_categories"
         minSdkVersion 21
         targetSdkVersion 31
         versionCode flutterVersionCode.toInteger()
         versionName flutterVersionName
         multiDexEnabled true
->>>>>>> 81e15421d895fbe0cc4d9b92137aceaa31319c4e
     }
 
     buildTypes {
@@ -93,13 +67,6 @@ flutter {
 
 dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
-<<<<<<< HEAD
-    implementation 'com.google.firebase:firebase-analytics'
-    implementation("com.android.support:multidex:1.0.3")
-    androidTestImplementation 'androidx.test:runner:1.2.0'
-    androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
-=======
     //implementation 'com.google.firebase:firebase-analytics'
 
->>>>>>> 81e15421d895fbe0cc4d9b92137aceaa31319c4e
 }

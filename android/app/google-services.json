@@ -9,9 +9,6 @@
       "client_info": {
         "mobilesdk_app_id": "1:662021328130:android:1e84b509d6d4558756461b",
         "android_client_info": {
-<<<<<<< HEAD
-          "package_name": "com.example.auth_test"
-=======
           "package_name": "com.example.teddy_categories"
         }
       },
@@ -42,7 +39,6 @@
         "mobilesdk_app_id": "1:662021328130:android:1b45b3dccf1429a056461b",
         "android_client_info": {
           "package_name": "vcvcxvcx.sfsd"
->>>>>>> 81e15421d895fbe0cc4d9b92137aceaa31319c4e
         }
       },
       "oauth_client": [

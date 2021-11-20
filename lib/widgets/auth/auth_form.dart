@@ -1,7 +1,7 @@
 // ignore_for_file: deprecated_member_use, must_be_immutable
 
-import 'package:auth_test/constants.dart';
-import 'package:auth_test/main.dart';
+import 'package:teddy_the_tracker/constants.dart';
+import 'package:teddy_the_tracker/main.dart';
 import 'package:flutter/material.dart';
 
 class AuthForm extends StatefulWidget {

@@ -1,11 +1,11 @@
 // ignore_for_file: deprecated_member_use, avoid_print
 
-import 'package:auth_test/screens/dashboard_screen.dart';
+import 'package:teddy_the_tracker/screens/dashboard_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:auth_test/constants.dart';
-import 'package:auth_test/widgets/auth/auth_form.dart';
+import 'package:teddy_the_tracker/constants.dart';
+import 'package:teddy_the_tracker/widgets/auth/auth_form.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 class AuthScreen extends StatefulWidget {

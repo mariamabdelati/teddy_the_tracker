@@ -1,4 +1,4 @@
 io/flutter/plugins/GeneratedPluginRegistrant.java
  io.flutter.plugins.GeneratedPluginRegistrant
-com/example/auth_test/BuildConfig.java
- com.example.auth_test.BuildConfig
+com/example/teddy_categories/BuildConfig.java
+ com.example.teddy_categories.BuildConfig
