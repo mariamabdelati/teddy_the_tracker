@@ -1,6 +1,11 @@
 {
+<<<<<<< HEAD
     "name": "auth_test",
     "short_name": "auth_test",
+=======
+    "name": "teddy_categories",
+    "short_name": "teddy_categories",
+>>>>>>> 81e15421d895fbe0cc4d9b92137aceaa31319c4e
     "start_url": ".",
     "display": "standalone",
     "background_color": "#0175C2",
