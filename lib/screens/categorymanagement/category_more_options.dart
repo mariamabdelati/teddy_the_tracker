@@ -3,9 +3,9 @@ import '../../constants.dart';
 import 'create_new_category.dart';
 
 class Options extends StatefulWidget {
- final String title;
+  final String title;
 
- const Options(this.title, {
+  const Options(this.title, {
     Key? key,
   }) : super(key: key);
   @override

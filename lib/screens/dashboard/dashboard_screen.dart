@@ -1,6 +1,6 @@
-import 'package:teddy_the_tracker/screens/dashboard/blank.dart';
 import '../../screens/entrymanagement/add_entries_page.dart';
 import '../../screens/entrymanagement/view_entries_page.dart';
+import '../../screens/profilemanagement/profile.dart';
 import '../../constants.dart';
 import "package:flutter/material.dart";
 import 'package:firebase_auth/firebase_auth.dart';
@@ -48,7 +48,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
       ViewEntriesPage(title: "View All Entries"),
       AddNewEntryPage(title: 'Create New Entry',),
       Blank(),
-      Blank(),
+      Profile(),
     ];
     return Scaffold(
       /*appBar: AppBar(
@@ -57,9 +57,9 @@ class _DashboardScreenState extends State<DashboardScreen> {
         centerTitle: true,
       ),*/
       body: pages[selected],
-      backgroundColor: mainColorList[3],
-      extendBodyBehindAppBar: true,
-      extendBody: true,
+      //backgroundColor: mainColorList[4],
+      //extendBodyBehindAppBar: true,
+      //extendBody: true,
       bottomNavigationBar: Theme(
         data: Theme.of(context)
             .copyWith(iconTheme: IconThemeData(color: iconsColor), ),

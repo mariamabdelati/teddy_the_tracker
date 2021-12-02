@@ -9,7 +9,6 @@ class SubmitButtonWidget extends StatelessWidget {
     Key? key,
   }) : super(key: key);
 
-
   @override
   Widget build(BuildContext context) {
     return ElevatedButton(

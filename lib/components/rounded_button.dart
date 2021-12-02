@@ -1,11 +1,12 @@
 // ignore_for_file: deprecated_member_use
+
 import 'package:teddy_the_tracker/constants.dart';
 import 'package:flutter/material.dart';
 
 class RoundedButton extends StatelessWidget {
   final String text;
   final VoidCallback onClicked;
-  final Color textColor; //color,
+  final Color textColor; //color
   const RoundedButton({
     Key? key,
     required this.text,

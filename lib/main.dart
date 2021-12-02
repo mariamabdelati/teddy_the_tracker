@@ -27,8 +27,8 @@ class MyApp extends StatelessWidget {
           backgroundColor: const Color(0xFFECF4FB),//
           primarySwatch: MaterialColor(0xFF164CC4, color),
           visualDensity: VisualDensity.adaptivePlatformDensity,
-          //bottomSheetTheme: BottomSheetThemeData(
-          //backgroundColor: Colors.black.withOpacity(0)),
+          bottomSheetTheme: BottomSheetThemeData(
+          backgroundColor: Colors.black.withOpacity(0)),
           //canvasColor: Colors.transparent,
           buttonTheme: ButtonTheme.of(context).copyWith(
               buttonColor: const Color(0xFFF6BAB5),

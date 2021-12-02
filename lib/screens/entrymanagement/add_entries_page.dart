@@ -1,3 +1,4 @@
+import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/services.dart';
@@ -34,18 +35,29 @@ class AddNewEntryPageState extends State<AddNewEntryPage> {
   }
 
   final formKey = GlobalKey<FormState>();
+  bool catSelect = true;
   //variable used to save the new title
   String newTitle = "";
   //variable used to save the new amount
   String amount = "";
+  String recurring = "";
+  String type = "";
+  bool isExpense = false;
+  bool validType = true;
+  bool validReccuring = true;
 
   final _titletext = TextEditingController();
   final _amounttext = TextEditingController();
 
   var initialDate = DateTime.now();
   bool isChecked = false;
+
+
   CollectionReference expenseRef = FirebaseFirestore.instance
       .collection('/expenses/cFqsqHPIscrC6cY9iPs6/expense');
+
+  CollectionReference incomeRef = FirebaseFirestore.instance
+      .collection('/expenses/cFqsqHPIscrC6cY9iPs6/income');
 
   var _dateTime = DateTime.now();
   String dateText = '';
@@ -54,7 +66,7 @@ class AddNewEntryPageState extends State<AddNewEntryPage> {
     if (dateText == '') {
       return 'Date';
     }else{
-      return DateFormat('dd-MM-yyyy').format(_dateTime);
+      return DateFormat('yyyy-MM-dd').format(_dateTime);
     }
   }
 
@@ -67,7 +79,7 @@ class AddNewEntryPageState extends State<AddNewEntryPage> {
         .then((value) {
       setState(() {
         _dateTime = value!;
-        dateText = DateFormat('dd-MM-yyyy').format(value);
+        dateText = DateFormat('yyyy-MM-dd').format(value);
       });
     });
   }
@@ -105,6 +117,9 @@ class AddNewEntryPageState extends State<AddNewEntryPage> {
               ),
             ),
             const SizedBox(height: 16),
+            buildType(),
+            validateType(!validType, "type"),
+            const SizedBox(height: 16),
             buildTitle(),
             const SizedBox(height: 16),
             buildAmount(),
@@ -112,8 +127,10 @@ class AddNewEntryPageState extends State<AddNewEntryPage> {
             buildDate(),
             const SizedBox(height: 16),
             buildRecurring(),
+            validateType(!validReccuring, "recurrence"),
             const SizedBox(height: 16),
-            const CategoryExpansionTile(),
+            CategoryExpansionTile(catSelect),
+            //validateType(!catSelect, "category"),
             const SizedBox(height: 32),
             const Divider(
               color: Color(0xFF67B5FD),
@@ -234,26 +251,182 @@ class AddNewEntryPageState extends State<AddNewEntryPage> {
     );
   }
 
+  buildType() {
+    return Container(
+      padding: const EdgeInsets.symmetric(vertical: 6),
+      decoration: BoxDecoration(
+          border: Border.all(
+            color: validType ? Colors.grey : const Color(0xFFD32F2F),
+            width: 1,
+          ),
+          borderRadius: BorderRadius.circular(20)
+      ),
+      child: Row(
+        children: [
+          SizedBox(
+            width: 60,
+            child: Icon(EvaIcons.creditCardOutline, color: iconsColor, size: 26),
+          ),
+          OutlinedButton(
+            style: OutlinedButton.styleFrom(shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(20)),
+              side: BorderSide(color: (type == "Expense")
+                  ? mainColorList[8]
+                  : iconsColor, width: 2),
+              primary: (type == "Expense")
+                  ? mainColorList[8]
+                  : iconsColor,
+              //backgroundColor: (recurring == "Yes") ? Colors.grey: null,
+            ),
+            onPressed: () {
+              setState(() {
+                type = "Expense";
+                isExpense = true;
+                validType =  true;
+              });
+            },
+            child: Center(
+              child: Text(
+                "Expense",
+                style: TextStyle(
+                    color: (type == "Expense")
+                        ? mainColorList[8]
+                        : iconsColor,
+                    fontSize: 16
+                ),
+              ),
+            ),
+          ),
+          const SizedBox(width: 15,),
+          OutlinedButton(
+            style: OutlinedButton.styleFrom(shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(20)),
+              side: BorderSide(color: (type == "Income")
+                  ? progressbarColorWhite
+                  : iconsColor, width: 2),
+              primary: (type == "Income") ? progressbarColorWhite : iconsColor,
+              //backgroundColor: (recurring == "No") ? Colors.grey[100]: null,
+            ),
+            onPressed: () {
+              setState(() {
+                type = "Income";
+                validType =  true;
+              });
+            },
+            child: Center(
+              child: Text(
+                "Income",
+                style: TextStyle(
+                    color: (type == "Income")
+                        ? progressbarColorWhite
+                        : iconsColor,
+                    fontSize: 16
+                ),
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  validateType(bool x, String w) {
+    return Visibility(
+        visible: x,
+        child: Padding(
+          padding: const EdgeInsets.only(top: 8, left: 12),
+          child: Text("Please select the $w of your entry", style: const TextStyle(fontSize: 12,  color: Color(0xFFD32F2F)),),)
+    );
+  }
+
   buildRecurring() {
-    return Row(children: [
-      const Text(
-        "Recurring?        ",
-        textAlign: TextAlign.left,
-        style: TextStyle(
-            fontSize: 17,
-            fontWeight: FontWeight.bold,
-            color: Color(0xFF5689B9)),
+    return Container(
+      //margin: const EdgeInsets.symmetric(vertical: 2),
+      padding: const EdgeInsets.symmetric(vertical: 6),
+      decoration: BoxDecoration(
+          border: Border.all(
+            color: validReccuring ? Colors.grey : const Color(0xFFD32F2F),
+            width: 1,
+          ),
+          borderRadius: BorderRadius.circular(20)
       ),
-      Checkbox(
-        checkColor: Colors.white,
-        value: isChecked,
-        onChanged: (bool? value) {
-          setState(() {
-            isChecked = value!;
-          });
-        },
+      child: Row(
+        children: [
+          SizedBox(
+            width: 60,
+            child: Icon(Icons.autorenew_rounded, color: iconsColor, size: 25),
+          ),
+          const Text(
+            "Recurring?",
+            textAlign: TextAlign.left,
+            style: TextStyle(
+                fontSize: 17,
+                fontWeight: FontWeight.bold,
+                color: Colors.black54),
+          ),
+          const SizedBox(width: 30,),
+          OutlinedButton(
+            style: OutlinedButton.styleFrom(shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(20)),
+              side: BorderSide(color: (recurring == "Yes")
+                  ? mainColorList[8]
+                  : iconsColor, width: 2),
+              primary: (recurring == "Yes")
+                  ? mainColorList[8]
+                  : iconsColor,
+              //backgroundColor: (recurring == "Yes") ? Colors.grey: null,
+            ),
+            onPressed: () {
+              setState(() {
+                recurring = "Yes";
+                isChecked = true;
+                validReccuring = true;
+              });
+            },
+            child: Center(
+              child: Text(
+                "Yes",
+                style: TextStyle(
+                    color: (recurring == "Yes")
+                        ? mainColorList[8]
+                        : iconsColor,
+                    fontSize: 16
+                ),
+              ),
+            ),
+          ),
+          const SizedBox(width: 15,),
+          OutlinedButton(
+            style: OutlinedButton.styleFrom(shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(20)),
+              side: BorderSide(color: (recurring == "No")
+                  ? progressbarColorWhite
+                  : iconsColor, width: 2),
+              primary: (recurring == "No") ? progressbarColorWhite : iconsColor,
+              //backgroundColor: (recurring == "No") ? Colors.grey[100]: null,
+            ),
+            onPressed: () {
+              setState(() {
+                recurring = "No";
+                isChecked = false;
+                validReccuring = true;
+              });
+            },
+            child: Center(
+              child: Text(
+                "No",
+                style: TextStyle(
+                    color: (recurring == "No")
+                        ? progressbarColorWhite
+                        : iconsColor,
+                    fontSize: 16
+                ),
+              ),
+            ),
+          ),
+        ],
       ),
-    ]);
+    );
   }
 
   Widget buildSubmit() {
@@ -265,20 +438,53 @@ class AddNewEntryPageState extends State<AddNewEntryPage> {
             //checks if the data is valid
             final isValid = formKey.currentState!.validate();
             FocusScope.of(context).unfocus();
+            var isSelected = true;
 
-            if (isValid) {
+            if (selectedCategoryID == 0){
+              setState(() {
+                catSelect = false;
+              });
+            }
+
+            if (recurring.isEmpty){
+              setState(() {
+                validReccuring = false;
+                isSelected = false;
+              });
+            }
+
+            if (type.isEmpty){
+              setState(() {
+                validType = false;
+                isSelected = false;
+              });
+            }
+
+            if (isValid && isSelected) {
               //saves the values (triggers onsaved)
               formKey.currentState!.save();
 
               //add to db
-              await expenseRef.add({
-                'amount': amount,
-                'categoryId': 1,
-                'date': DateFormat('dd-MM-yyyy').format(_dateTime),
-                'expenseId': 2,
-                'label': newTitle.toLowerCase(),
-                'recurring': isChecked,
-              });
+              if (isExpense){
+                await expenseRef.add({
+                  'amount': amount,
+                  'categoryId': selectedCategoryID,
+                  'date': DateFormat('yyyy-MM-dd').format(_dateTime),
+                  'expenseId': 2,
+                  'label': newTitle.toLowerCase(),
+                  'recurring': isChecked,
+                });
+              } else {
+                await incomeRef.add({
+                  'amount': amount,
+                  'categoryId': selectedCategoryID,
+                  'date': DateFormat('yyyy-MM-dd').format(_dateTime),
+                  'incomeId': 2,
+                  'label': newTitle.toLowerCase(),
+                  'recurring': isChecked,
+                });
+              }
+
 
               //shows snackbar with details upon adding
               final message =
@@ -300,3 +506,25 @@ class AddNewEntryPageState extends State<AddNewEntryPage> {
     );
   }
 }
+
+
+
+/*return Row(children: [
+      const Text(
+        "Recurring?        ",
+        textAlign: TextAlign.left,
+        style: TextStyle(
+            fontSize: 17,
+            fontWeight: FontWeight.bold,
+            color: Color(0xFF5689B9)),
+      ),
+      Checkbox(
+        checkColor: Colors.white,
+        value: isChecked,
+        onChanged: (bool? value) {
+          setState(() {
+            isChecked = value!;
+          });
+        },
+      ),
+    ]);*/

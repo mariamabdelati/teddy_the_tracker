@@ -10,6 +10,9 @@ var mainColorList = [
   const Color(0xFF67B5FD),
   const Color(0xFFFFFFFA),
   const Color(0xFFA6A6B2),
+  const Color(0xFF34C68E),
+  const Color(0xFF679DC9),
+  const Color(0xFF0AA599),
 ];
 
 var iconsColor = const Color(0xFF5689B9);
