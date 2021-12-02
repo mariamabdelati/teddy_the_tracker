@@ -81,44 +81,44 @@ class _CreateNewCategoryState extends State<CreateNewCategory> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-    appBar: AppBar(
-      title: Text(widget.title),
-      leading: IconButton(
-        onPressed: () {
-          Navigator.pop(context);
-        },
-        icon: const Icon(Icons.arrow_back_rounded),
-      ),
-    ),
-    body: Form(
-      key: formKey,
-      //autovalidateMode: AutovalidateMode.onUserInteraction,
-      child: ListView(
-        padding: const EdgeInsets.all(16),
-        children: [
-          const SizedBox(height: 16),
-          Text(
-            "Please input the new category data:", textAlign: TextAlign.center,
-            style: TextStyle(
-                fontSize: 17,
-                fontWeight: FontWeight.bold,
-                color: iconsColor),
+        appBar: AppBar(
+          title: Text(widget.title),
+          leading: IconButton(
+            onPressed: () {
+              Navigator.pop(context);
+            },
+            icon: const Icon(Icons.arrow_back_rounded),
           ),
-          const SizedBox(height: 32),
-          buildCategory(),
-          const SizedBox(height: 16),
-          buildBudget(),
-          const SizedBox(height: 32),
-          const Divider(
-            color: Color(0xFF67B5FD),
-            thickness: 0.5,
+        ),
+        body: Form(
+          key: formKey,
+          //autovalidateMode: AutovalidateMode.onUserInteraction,
+          child: ListView(
+            padding: const EdgeInsets.all(16),
+            children: [
+              const SizedBox(height: 16),
+              Text(
+                "Please input the new category data:", textAlign: TextAlign.center,
+                style: TextStyle(
+                    fontSize: 17,
+                    fontWeight: FontWeight.bold,
+                    color: iconsColor),
+              ),
+              const SizedBox(height: 32),
+              buildCategory(),
+              const SizedBox(height: 16),
+              buildBudget(),
+              const SizedBox(height: 32),
+              const Divider(
+                color: Color(0xFF67B5FD),
+                thickness: 0.5,
+              ),
+              const SizedBox(height: 32),
+              buildSubmit(),
+            ],
           ),
-          const SizedBox(height: 32),
-          buildSubmit(),
-        ],
-      ),
-    )
-  );
+        )
+    );
   }
 
   //
@@ -141,18 +141,18 @@ class _CreateNewCategoryState extends State<CreateNewCategory> {
 
 
 
-    validator: (value) {
-      connector(value!.toLowerCase().trim());
-      if (value.trim().isEmpty) {
-        return "Category cannot be empty";
-      } else if (_invalid){
-        return "Category already exists";
-      } else {
-        return null;
-      }
-    },
-    onSaved: (value) => setState(() => newCategory = value!.trim()),
-  );
+      validator: (value) {
+        connector(value!.toLowerCase().trim());
+        if (value.trim().isEmpty) {
+          return "Category cannot be empty";
+        } else if (_invalid){
+          return "Category already exists";
+        } else {
+          return null;
+        }
+      },
+      onSaved: (value) => setState(() => newCategory = value!.trim()),
+    );
   }
 
   Widget buildBudget() {
@@ -172,39 +172,39 @@ class _CreateNewCategoryState extends State<CreateNewCategory> {
             onPressed: _budgettext.clear,
           ),
         ),
-    ),
-    validator: (value) {
-      if (value! == ""){
-        return null;
-      } else if(zeroCheck(value) == "0") {
-        return "Budget must not be zero";
-      } else {
-        return null;
-      }
-    },
-    keyboardType: TextInputType.number,
-    inputFormatters: <TextInputFormatter>[
-      FilteringTextInputFormatter.allow(RegExp(r"^\d*\.?\d{0,2}"))
-    ],
-    onSaved: (value) => setState(() => budget = value!.isEmpty ? "-1" : zeroCheck(value)),
-  );
+      ),
+      validator: (value) {
+        if (value! == ""){
+          return null;
+        } else if(zeroCheck(value) == "0") {
+          return "Budget must not be zero";
+        } else {
+          return null;
+        }
+      },
+      keyboardType: TextInputType.number,
+      inputFormatters: <TextInputFormatter>[
+        FilteringTextInputFormatter.allow(RegExp(r"^\d*\.?\d{0,2}"))
+      ],
+      onSaved: (value) => setState(() => budget = value!.isEmpty ? "-1" : zeroCheck(value)),
+    );
   }
 
 
   Widget buildSubmit() {
     return Builder(
-    builder: (context) {
-      return SubmitButtonWidget(
-      onClicked: () {
+      builder: (context) {
+        return SubmitButtonWidget(
+          onClicked: () {
 
-        final isValid = formKey.currentState!.validate();
-        FocusScope.of(context).unfocus();
+            final isValid = formKey.currentState!.validate();
+            FocusScope.of(context).unfocus();
 
-        if (isValid) {
-          formKey.currentState!.save();
+            if (isValid) {
+              formKey.currentState!.save();
 
 
-          /*await FirebaseFirestore.instance
+              /*await FirebaseFirestore.instance
               .collection('categories/JBSahpmjY2TtK0gRdT4s/category')
               .doc(uid)
               .set({
@@ -212,27 +212,27 @@ class _CreateNewCategoryState extends State<CreateNewCategory> {
             "email": email,
           });*/
 
-          CollectionReference categoriesRef = FirebaseFirestore.instance.collection("categories/JBSahpmjY2TtK0gRdT4s/category");
+              CollectionReference categoriesRef = FirebaseFirestore.instance.collection("categories/JBSahpmjY2TtK0gRdT4s/category");
 
-          categoriesRef.add(
-              {"label": newCategory.toLowerCase().trim(), "budget": int.parse(budget), "parentId": 0, "categoryId": size + 1, "childIds": [], "expenseIds": []});
+              categoriesRef.add(
+                  {"label": newCategory.toLowerCase().trim(), "budget": int.parse(budget), "parentId": 0, "categoryId": size + 1, "childIds": [], "expenseIds": []});
 
-          final message =
-              "'$newCategory' has been successfully added to your categories";
-          final snackBar = SnackBar(
-            content: Text(
-              message,
-              style: const TextStyle(fontSize: 20),
-            ),
-            backgroundColor: Colors.green,
-          );
-          ScaffoldMessenger.of(context).showSnackBar(snackBar);
+              final message =
+                  "'$newCategory' has been successfully added to your categories";
+              final snackBar = SnackBar(
+                content: Text(
+                  message,
+                  style: const TextStyle(fontSize: 20),
+                ),
+                backgroundColor: Colors.green,
+              );
+              ScaffoldMessenger.of(context).showSnackBar(snackBar);
 
-          //Navigator.pop(context, MaterialPageRoute(builder: (context) => const CategoryExpansionTile()));
-        }
+              //Navigator.pop(context, MaterialPageRoute(builder: (context) => const CategoryExpansionTile()));
+            }
+          },
+        );
       },
     );
-    },
-  );
   }
 }

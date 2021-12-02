@@ -6,8 +6,11 @@ import 'subcategory_expansion_tile.dart';
 import 'category_more_options.dart';
 import 'create_new_category.dart';
 
+var selectedCategoryID = 0;
+
 class CategoryExpansionTile extends StatefulWidget {
-  const CategoryExpansionTile({Key? key}) : super(key: key);
+  final bool chosen; //CHANGED
+  CategoryExpansionTile(this.chosen, {Key? key}) : super(key: key);
 
   @override
   _CategoryExpansionTileState createState() => _CategoryExpansionTileState();
@@ -16,7 +19,6 @@ class CategoryExpansionTile extends StatefulWidget {
 class _CategoryExpansionTileState extends State<CategoryExpansionTile> {
   //this string is used to identify what category has been selected
   var selectedCategory = "";
-  var selectedCategoryID = 0;
   var isSelected = false;
 
   //this string will be used to take user input for the new category
@@ -49,7 +51,7 @@ class _CategoryExpansionTileState extends State<CategoryExpansionTile> {
         isExpanded = false;
         keyTile = UniqueKey();
       });
-  });
+    });
   }
 
   @override
@@ -57,18 +59,23 @@ class _CategoryExpansionTileState extends State<CategoryExpansionTile> {
     return Column(
       children: [
         Container(
-          margin: const EdgeInsets.symmetric(horizontal: 5, vertical: 5),
+          margin: const EdgeInsets.only(top: 5, bottom: 3),
+          padding: const EdgeInsets.symmetric(vertical: 2),
           decoration: BoxDecoration(
+              border:  widget.chosen ? null: Border.all(
+                color: const Color(0xFFD32F2F),
+                width: 1,
+              ),
               borderRadius: const BorderRadius.all(Radius.circular(radius)),
               color: mainColorList[1],
               boxShadow: [
                 BoxShadow(
-                    color: Colors.blue.withAlpha(100), blurRadius: 10.0),
+                    color: Colors.blue.withAlpha(100), blurRadius: 5.0),
               ]),
           child: ClipRRect(
             borderRadius: BorderRadius.circular(radius),
             child: SingleChildScrollView(
-              //scrollDirection: Axis.vertical,
+              scrollDirection: Axis.vertical,
               physics: const BouncingScrollPhysics(),
               child: Column(
                 children: [
@@ -78,6 +85,11 @@ class _CategoryExpansionTileState extends State<CategoryExpansionTile> {
             ),
           ),
         ),
+        validateCat(!widget.chosen),
+        if (isSelected)
+          const SizedBox(
+            height: 16,
+          ),
         SubcategoryExpansionTile(
             index: selectedCategoryID, visible: isSelected),
       ],
@@ -104,13 +116,13 @@ class _CategoryExpansionTileState extends State<CategoryExpansionTile> {
             shadowColor: Colors.blue.withAlpha(100),
             animationDuration: const Duration(milliseconds: 500),
             color: iconsColor.withOpacity(0.8),
-            elevation: 2,
+            //elevation: 2,
             shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(32)),
             child: Padding(
               padding: const EdgeInsets.all(4.0),
               child: Icon(Icons.category_rounded, color: mainColorList[1]),
-            )) : Icon(Icons.category_rounded, color: iconsColor),
+            )) : SizedBox(width: 32, child: Icon(Icons.category_rounded, color: iconsColor)),
         collapsedTextColor: iconsColor,
         //childrenPadding: const EdgeInsets.all(16).copyWith(top: 0),
         title: Text(
@@ -124,7 +136,7 @@ class _CategoryExpansionTileState extends State<CategoryExpansionTile> {
               builder: (BuildContext context,
                   AsyncSnapshot<QuerySnapshot> snapshot) {
                 if (snapshot.hasError) {
-                  return ErrorWidget("Something went wrong");
+                  return const Text("Something went wrong", style: TextStyle(color: Color(0xFFD32F2F)));
                 } else
                 if (snapshot.connectionState == ConnectionState.waiting) {
                   return const CircularProgressIndicator();
@@ -205,171 +217,17 @@ class _CategoryExpansionTileState extends State<CategoryExpansionTile> {
       ),
     );
   }
+
+  validateCat(bool x) {
+    return Visibility(
+        visible: x,
+        child: const Padding(
+          padding: EdgeInsets.only(top: 8, left: 12),
+          child: Align(alignment: Alignment.centerLeft, child: Text("Please select a category for your entry", style: TextStyle(fontSize: 12,  color: Color(0xFFD32F2F)),)),)
+    );
+  }
 }
 
 
 //on save then
 //set catID in expenses table to selectedCategoryID
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-  //takes a string and turns it into an action chip, the action chip changes colour when pressed and displays container
-  /*Widget buildChips(String chipName, int chipNumber) {
-    return ActionChip(
-        labelPadding: const EdgeInsets.all(6),
-        label: Text(chipName.capitalize),
-        labelStyle: const TextStyle(
-          fontWeight: FontWeight.bold,
-          color: Color(0xFFFFFFFA),
-        ),
-        avatar: CircleAvatar(radius: 16,
-          child: Text(chipName[0].toUpperCase()),
-          backgroundColor: Colors.white.withOpacity(0.8),
-        ),
-        backgroundColor: (chipName.compareTo(selectedCategory) == 0)
-            ? const Color(0xFFF6BAB5)
-            : const Color(0xFF67B5FD),
-        onPressed: () {
-          selectedCategory = "";
-          selectedCategoryID = 0;
-          // the for loop iterates over the categories list and sees if the the chip name is the same as the label for the category
-          //if the condition is met the selected category is made to equal chipname to  indicate selection (colour change)
-          for (var i = 0; i < entryCategories.length; i++) {
-            if (chipName == entryCategories[i].label) {
-              setState(() {
-                index = i;
-                selectedCategory = chipName;
-                selectedCategoryID = chipNumber;
-              });
-            }
-          }
-        });
-  }*/
-
-
-
-
-/*
-  Card(shadowColor: Colors.black.withAlpha(100),
-    shape: RoundedRectangleBorder(
-    borderRadius: BorderRadius.circular(radius),
-    side: BorderSide(color: Color(0xFF67B5FD), width: 2),
-  )
- */
-/*CircleAvatar(radius: 17,
-  child: Icon(categoryTiles[0].icon, color: mainColorList[1]),
-  backgroundColor: iconsColor.withOpacity(0.8),
-)*/
-
-/*return ListView.builder(
-                //scrollDirection: Axis.horizontal,
-                //scrollDirection: Axis.vertical,
-                shrinkWrap: true,
-                itemCount: data.size,
-                itemBuilder: (context, index) {
-                  var contents = <Widget>[];
-                  if (data.docs[index]["parentId"] == 0) {
-                    contents.add(buildChips(data.docs[index]["label"], data.docs[index]["categoryId"]));
-                  }
-                  return Wrap(
-                  direction: Axis.horizontal,
-                  spacing: 8,
-                  runSpacing: 8,
-                  alignment: WrapAlignment.center,
-                  children: contents,
-                );
-                });*/

@@ -2,7 +2,7 @@
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-
+import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
 //import 'package:keyboard_visibility/keyboard_visibility.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import '../../components/rounded_fill_button.dart';
@@ -18,7 +18,7 @@ class LoginPage extends StatefulWidget {
       String username,
       bool isLogin,
       BuildContext ctx,
-  ) submitFn;
+      ) submitFn;
 
   LoginPage(this.submitFn, this.isLoading, this.isLogged, {Key? key}) : super(key: key);
 
@@ -76,10 +76,20 @@ class _LoginPageState extends State<LoginPage> {
 
   bool _keyboardVisible = false;
 
+
   @override
   void initState() {
     super.initState();
     _passwordVisible = false;
+
+    var keyboardVisibilityController = KeyboardVisibilityController();
+
+
+    keyboardVisibilityController.onChange.listen((bool visible) {
+      setState(() {
+        _keyboardVisible = visible;
+      });
+    });
     /*KeyboardVisibilityNotification().addNewListener(
       onChange: (bool visible) {
         setState(() {
@@ -109,7 +119,7 @@ class _LoginPageState extends State<LoginPage> {
         _loginOpacity = 1;
 
         _loginYOffset = windowHeight;
-        //_loginHeight = _keyboardVisible ? windowHeight : windowHeight - 270;
+        _loginHeight = _keyboardVisible ? windowHeight : windowHeight - 270;
 
         _loginXOffset = 0;
         //_registerYOffset = windowHeight;
@@ -158,7 +168,7 @@ class _LoginPageState extends State<LoginPage> {
                           child: Text(
                             "Set Money Goals",
                             style:
-                                TextStyle(color: _headingColor, fontSize: 28),
+                            TextStyle(color: _headingColor, fontSize: 28),
                           ),
                         ),
                         Container(
@@ -168,20 +178,24 @@ class _LoginPageState extends State<LoginPage> {
                             "We make tracking your expenses easy. Join Teddy the Tracker now to manage your expenses.",
                             textAlign: TextAlign.center,
                             style:
-                                TextStyle(color: _headingColor, fontSize: 16),
+                            TextStyle(color: _headingColor, fontSize: 16),
                           ),
                         )
                       ],
                     ),
                   ),
                 ),
-                Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 32),
-                  child: Center(
-                    child: SvgPicture.asset(
-                      "assets/icons/Asset 1.svg",
-                      height: (windowHeight * 0.5),
-                      width: (windowWidth * 0.9),
+                Expanded(
+                  flex: 1,
+                  //padding: const EdgeInsets.symmetric(horizontal: 32),
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 25),
+                    child: Center(
+                      child: SvgPicture.asset(
+                        "assets/icons/Asset 1.svg",
+                        height: (windowHeight * 0.5),
+                        width: (windowWidth * 0.9),
+                      ),
                     ),
                   ),
                 ),
@@ -258,32 +272,35 @@ class _LoginPageState extends State<LoginPage> {
                                   height: 15,
                                 ),
                               buildPassword(),
+                              const SizedBox(
+                                height: 15,
+                              ),
                               //const InputWithIcon(icon: Icons.vpn_key, hint: "Enter Password...",),
                             ])),
                   ],
                 ),
                 Column(
                   children: <Widget>[
-                  if (widget.isLoading) const CircularProgressIndicator(),
-                  if (!widget.isLoading)
-                    RoundButton(
-                      text: _isLogin? "Login" : "Create Account",
-                      onClicked: _trySubmit,
-                    ),
+                    if (widget.isLoading) const CircularProgressIndicator(),
+                    if (!widget.isLoading)
+                      RoundButton(
+                        text: _isLogin? "Login" : "Create Account",
+                        onClicked: _trySubmit,
+                      ),
                     const SizedBox(
                       height: 10,
                     ),
-                 if (!widget.isLoading)
-                    GestureDetector(
-                      onTap: () {
-                        setState(() {
-                          _isLogin = !_isLogin;
-                        });
-                      },
-                      child: RoundOutlinedButton(
-                        text: _isLogin? "Create New Account" : "Back to Login",
-                      ),
-                    )
+                    if (!widget.isLoading)
+                      GestureDetector(
+                        onTap: () {
+                          setState(() {
+                            _isLogin = !_isLogin;
+                          });
+                        },
+                        child: RoundOutlinedButton(
+                          text: _isLogin? "Create New Account" : "Back to Login",
+                        ),
+                      )
                   ],
                 ),
               ],
@@ -401,4 +418,3 @@ class _LoginPageState extends State<LoginPage> {
     );
   }
 }
-

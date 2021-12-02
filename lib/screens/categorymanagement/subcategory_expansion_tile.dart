@@ -3,6 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import '../../constants.dart';
 //import 'category_more_options.dart';
+import 'category_more_options.dart';
 import 'create_new_category.dart';
 
 
@@ -26,7 +27,8 @@ class SubcategoryExpansionTile extends StatefulWidget {
 class _SubcategoryExpansionTileState extends State<SubcategoryExpansionTile> {
   //this string is used to identify what subcategory has been selected
   var selectedSubcategory = "";
-  var selectedCategoryID = 0;
+  var selectedSubCategoryID = 0;
+
 
   Future<List<DocumentSnapshot>> categoryCheck(int id) async {
     final QuerySnapshot result = await FirebaseFirestore.instance
@@ -39,21 +41,38 @@ class _SubcategoryExpansionTileState extends State<SubcategoryExpansionTile> {
 
   static const double radius = 20;
 
-  bool isExpanded = false;
+  bool _isExpanded = false;
 
   UniqueKey keyTile = UniqueKey();
+
+  void expandTile() {
+    setState(() {
+      _isExpanded = true;
+      keyTile = UniqueKey();
+    });
+  }
+
+  void shrinkTile() {
+    Future.delayed(const Duration(milliseconds: 300), (){
+      setState(() {
+        _isExpanded = false;
+        keyTile = UniqueKey();
+      });
+    });
+  }
 
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: const EdgeInsets.symmetric(horizontal: 5, vertical: 5),
+      margin: const EdgeInsets.only(top: 5),
+      padding: const EdgeInsets.symmetric(vertical: 2),
       decoration: BoxDecoration(
           borderRadius: const BorderRadius.all(Radius.circular(radius)),
           color: mainColorList[1],
           boxShadow: [
             BoxShadow(
-                color: Colors.blue.withAlpha(100), blurRadius: 10.0),
+                color: Colors.blue.withAlpha(100), blurRadius: 5.0),
           ]),
       child: Visibility(visible: widget.visible,
         child: ClipRRect(
@@ -62,14 +81,14 @@ class _SubcategoryExpansionTileState extends State<SubcategoryExpansionTile> {
             scrollDirection: Axis.vertical,
             physics: const BouncingScrollPhysics(),
             child: Column(
-                children: [
-                  buildTile(context),
-                ],
-              ),
+              children: [
+                buildTile(context),
+              ],
             ),
           ),
         ),
-      );
+      ),
+    );
   }
 
   Widget buildTile(BuildContext context) {
@@ -79,13 +98,13 @@ class _SubcategoryExpansionTileState extends State<SubcategoryExpansionTile> {
       data: Theme.of(context).copyWith(dividerColor: Colors.transparent),
       child: ExpansionTile(
         key: keyTile,
-        initiallyExpanded: isExpanded,
+        initiallyExpanded: _isExpanded,
         leading:
         selectedSubcategory != "" ? Material(
             shadowColor: Colors.blue.withAlpha(100),
             animationDuration: const Duration(milliseconds: 500),
             color: iconsColor.withOpacity(0.8),
-            elevation: 2,
+            //elevation: 2,
             shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(32)),
             child: Padding(
@@ -105,7 +124,7 @@ class _SubcategoryExpansionTileState extends State<SubcategoryExpansionTile> {
               builder: (BuildContext context,
                   AsyncSnapshot<QuerySnapshot> snapshot) {
                 if (snapshot.hasError) {
-                  return ErrorWidget("Something went wrong");
+                  return const Text("Something went wrong", style: TextStyle(color: Color(0xFFD32F2F)),);
                 } else
                 if (snapshot.connectionState == ConnectionState.waiting) {
                   return const CircularProgressIndicator();
@@ -138,12 +157,12 @@ class _SubcategoryExpansionTileState extends State<SubcategoryExpansionTile> {
                               if (selectedSubcategory != chipName) {
                                 setState(() {
                                   selectedSubcategory = chipName;
-                                  selectedCategoryID = chipID;
+                                  selectedSubCategoryID = chipID;
                                 });
                               } else {
                                 setState(() {
                                   selectedSubcategory = "";
-                                  selectedCategoryID = 0;
+                                  selectedSubCategoryID = 0;
                                 });
                               }
                             }
@@ -173,7 +192,7 @@ class _SubcategoryExpansionTileState extends State<SubcategoryExpansionTile> {
                 elevation: 20.0,
                 context: context,
                 builder: (BuildContext context) {
-                  return Container();
+                  return const Options("Subcategory"); //CHANGED
                 },
               );
             },

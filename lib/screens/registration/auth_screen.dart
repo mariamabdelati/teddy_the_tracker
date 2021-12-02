@@ -3,6 +3,7 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import '../../screens/dashboard/dashboard_screen.dart';
 import '../../screens/welcome/welcome_page.dart';
 
 class AuthScreen extends StatefulWidget {
@@ -44,14 +45,15 @@ class _AuthScreenState extends State<AuthScreen> {
           "email": email,
         });
       }
+      Navigator.of(context).pushAndRemoveUntil(
+          MaterialPageRoute(builder: (context) => const DashboardScreen()),
+              (route) => false);
     } on FirebaseAuthException catch (err) {
       var msg = "Error occurred, please check your credentials";
 
       if (err.message != null) {
         msg = err.message as String;
       }
-
-
 
       Scaffold.of(ctx).showSnackBar(
         SnackBar(
