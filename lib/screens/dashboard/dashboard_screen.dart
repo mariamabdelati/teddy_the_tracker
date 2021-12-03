@@ -45,7 +45,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
       ),
     ];
     const pages = [
-      Blank(),
+      LineGraph(),
       ViewEntriesPage(title: "View All Entries"),
       AddNewEntryPage(
         title: 'Create New Entry',
@@ -75,6 +75,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
           index: selected,
           animationDuration: const Duration(milliseconds: 350),
           onTap: (index) => setState(() => selected = index),
+          buttonBackgroundColor: mainColorList[0],
         ),
       ),
     );
