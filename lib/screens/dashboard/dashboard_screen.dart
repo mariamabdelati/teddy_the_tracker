@@ -45,7 +45,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
       ),
     ];
     const pages = [
-      LineGraph(),
+      TestDashBoard(),
       ViewEntriesPage(title: "View All Entries"),
       AddNewEntryPage(
         title: 'Create New Entry',

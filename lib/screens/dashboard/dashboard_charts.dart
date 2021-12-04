@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:syncfusion_flutter_charts/charts.dart';
 import "package:cloud_firestore/cloud_firestore.dart";
+import 'package:fl_chart/fl_chart.dart';
 
 class LineGraph extends StatefulWidget {
   const LineGraph({Key? key}) : super(key: key);
@@ -10,43 +10,119 @@ class LineGraph extends StatefulWidget {
 }
 
 class _LineGraphState extends State<LineGraph> {
-  late List<EntriesData> _chartdata;
+  late List<Entries> _chartdata;
   @override
   Widget build(BuildContext context) {
-    _chartdata = getChartData();
-    return SafeArea(
-      child: Scaffold(
-        body: SfCartesianChart(
-          series: <ChartSeries>[
-            LineSeries<EntriesData, double>(
-                dataSource: _chartdata,
-                xValueMapper: (EntriesData entry, _) => entry.date,
-                yValueMapper: (EntriesData entry, _) => entry.amount)
-          ],
-          primaryXAxis:
-              NumericAxis(edgeLabelPlacement: EdgeLabelPlacement.shift),
+    _chartdata = [Entries("date", "20", "label")];
+    return Column(
+      children: [
+        const SizedBox(
+          height: 200,
         ),
-      ),
+        SizedBox(
+          width: 400,
+          height: 400,
+          child: LineChart(
+            LineChartData(
+              minX: 0, minY: 0, maxX: 10, maxY: 10,
+              // lineBarsData: [
+              //   LineChartBarData(spots: []
+              // ),
+            ),
+          ),
+        ),
+      ],
     );
   }
 
-  List<EntriesData> getChartData() {
-    final List<EntriesData> chartData = [
-      EntriesData(2017, 465),
-      EntriesData(2020, 500),
-      EntriesData(2021, 600),
-      EntriesData(2022, 200),
-    ];
+  // List<Entries> getChartData() {
+  //   QuerySnapshot data = FirebaseFirestore.instance
+  //       .collection("expenses/cFqsqHPIscrC6cY9iPs6/expense")
+  //       .orderBy("date", descending: true);
+  //   return data;}
+}
 
-    Query data = FirebaseFirestore.instance
-        .collection("expenses/cFqsqHPIscrC6cY9iPs6/expense")
-        .orderBy("date", descending: true);
-    return chartData;
+class Entries {
+  Entries(this.date, this.amount, this.label);
+  String? date;
+  String? amount;
+  String? label;
+  DocumentReference? reference;
+
+  int year = 2021;
+  int month = 12;
+  int day = 10;
+
+  void cleanDate() {
+    var data = date!.split("-");
+    year = int.parse(data[0]);
+    month = int.parse(data[1]);
+    day = int.parse(data[2]);
+  }
+
+  Entries.fromMap(Map<String, dynamic> map, {this.reference}) {
+    date = map["date"];
+    amount = map["amount"];
+    label = map["label"];
+    cleanDate();
+  }
+
+  @override
+  String toString() => "Entry<$label : $year,$month,$day : $amount\$";
+}
+
+Widget _buildBody(context) {
+  return StreamBuilder<QuerySnapshot>(
+      stream: FirebaseFirestore.instance
+          .collection("expenses/cFqsqHPIscrC6cY9iPs6/expense")
+          .orderBy("date", descending: true)
+          .snapshots(),
+      builder: (context, snapshot) {
+        if (!snapshot.hasData) {
+          return const LinearProgressIndicator();
+        } else {
+          List<Entries> entries = snapshot.data!.docs
+              .map((docSnapshot) =>
+                  Entries.fromMap(docSnapshot.data() as Map<String, dynamic>))
+              .toList();
+          return ListView.builder(
+              padding: const EdgeInsets.all(8),
+              itemCount: entries.length,
+              itemBuilder: (BuildContext context, int index) {
+                return Text(entries[index].toString());
+              });
+        }
+      });
+}
+
+class TestDashBoard extends StatefulWidget {
+  const TestDashBoard({Key? key}) : super(key: key);
+
+  @override
+  TtestDashBoardState createState() => TtestDashBoardState();
+}
+
+class TtestDashBoardState extends State<TestDashBoard> {
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      child: _buildBody(context),
+    );
   }
 }
-
-class EntriesData {
-  EntriesData(this.date, this.amount);
-  final double date;
-  final double amount;
-}
+// Widget _buildBody(context) {
+//   return StreamBuilder<QuerySnapshot>(
+//       stream: FirebaseFirestore.instance
+//           .collection("expenses/cFqsqHPIscrC6cY9iPs6/expense")
+//           .snapshots(),
+//       builder: (context, snapshot) {
+//         if (!snapshot.hasData) {
+//           return const LinearProgressIndicator();
+//         } else {
+//           List<Entries> entries = snapshot.data!.docs
+//               .map((docSnapshot) =>
+//                   Entries.fromMap(docSnapshot.data() as Map<String, dynamic>))
+//               .toList();
+//         }
+//       });
+// }
