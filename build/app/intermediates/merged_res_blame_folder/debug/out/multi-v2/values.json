@@ -1,7 +1,7 @@
 {
     "logs": [
         {
-            "outputFile": "C:\\Users\\alypr\\StudioProjects\\teddy-the-tracker\\build\\app\\intermediates\\incremental\\mergeDebugResources\\merged.dir\\values\\values.xml",
+            "outputFile": "C:\\Users\\alypr\\StudioProjects\\new_merged\\build\\app\\intermediates\\incremental\\mergeDebugResources\\merged.dir\\values\\values.xml",
             "map": [
                 {
                     "source": "C:\\Users\\alypr\\.gradle\\caches\\transforms-2\\files-2.1\\f55a0c545b31b95ae181790b2bcd500b\\jetified-play-services-base-17.1.0\\res\\values\\values.xml",
@@ -23,23 +23,6 @@
                     }
                 },
                 {
-                    "source": "C:\\Users\\alypr\\StudioProjects\\teddy-the-tracker\\build\\app\\generated\\res\\google-services\\debug\\values\\values.xml",
-                    "from": {
-                        "startLines": "2,3,4,5,6,7,8",
-                        "startColumns": "4,4,4,4,4,4,4",
-                        "startOffsets": "55,199,281,385,494,614,713",
-                        "endColumns": "143,81,103,108,119,98,75",
-                        "endOffsets": "194,276,380,489,609,708,784"
-                    },
-                    "to": {
-                        "startLines": "112,113,114,115,116,117,118",
-                        "startColumns": "4,4,4,4,4,4,4",
-                        "startOffsets": "8240,8384,8466,8570,8679,8799,8898",
-                        "endColumns": "143,81,103,108,119,98,75",
-                        "endOffsets": "8379,8461,8565,8674,8794,8893,8969"
-                    }
-                },
-                {
                     "source": "C:\\Users\\alypr\\.gradle\\caches\\transforms-2\\files-2.1\\d30bd78f85a4293b98780e7f434b7d55\\jetified-play-services-basement-17.1.0\\res\\values\\values.xml",
                     "from": {
                         "startLines": "4,7",
@@ -57,7 +40,7 @@
                     }
                 },
                 {
-                    "source": "C:\\Users\\alypr\\StudioProjects\\teddy-the-tracker\\android\\app\\src\\main\\res\\values\\styles.xml",
+                    "source": "C:\\Users\\alypr\\StudioProjects\\new_merged\\android\\app\\src\\main\\res\\values\\styles.xml",
                     "from": {
                         "startLines": "3,14",
                         "startColumns": "4,4",
@@ -73,23 +56,6 @@
                         "endLines": "124,127",
                         "endColumns": "12,12",
                         "endOffsets": "9337,9506"
-                    }
-                },
-                {
-                    "source": "C:\\Users\\alypr\\StudioProjects\\teddy-the-tracker\\android\\app\\src\\main\\res\\values\\colors.xml",
-                    "from": {
-                        "startLines": "2",
-                        "startColumns": "4",
-                        "startOffsets": "57",
-                        "endColumns": "56",
-                        "endOffsets": "109"
-                    },
-                    "to": {
-                        "startLines": "15",
-                        "startColumns": "4",
-                        "startOffsets": "1086",
-                        "endColumns": "56",
-                        "endOffsets": "1138"
                     }
                 },
                 {
@@ -109,6 +75,23 @@
                         "endLines": "2,143,160,249",
                         "endColumns": "60,12,24,24",
                         "endOffsets": "161,10548,11454,16665"
+                    }
+                },
+                {
+                    "source": "C:\\Users\\alypr\\StudioProjects\\new_merged\\android\\app\\src\\main\\res\\values\\colors.xml",
+                    "from": {
+                        "startLines": "2",
+                        "startColumns": "4",
+                        "startOffsets": "55",
+                        "endColumns": "56",
+                        "endOffsets": "107"
+                    },
+                    "to": {
+                        "startLines": "15",
+                        "startColumns": "4",
+                        "startOffsets": "1086",
+                        "endColumns": "56",
+                        "endOffsets": "1138"
                     }
                 },
                 {
@@ -145,6 +128,23 @@
                         "endLines": "16,17,18,19,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50,51,52,53,54,55,56,57,58,59,60,61,62,63,64,65,66,67,68,69,70,71,72,73,74,75,76,77,78,79,80,81,82,83,84,85,86,87,88,89,90,91,93,119,128,132,133,137,138,139,140,150,292,324,361,368",
                         "endColumns": "68,62,57,73,69,67,71,69,60,73,72,60,60,61,63,61,60,67,99,59,65,72,68,56,51,61,71,75,64,58,58,59,59,59,59,59,59,59,59,59,59,58,59,59,59,59,59,59,59,59,59,59,58,59,59,58,58,58,58,58,58,34,34,54,62,54,57,56,49,60,56,33,34,34,69,70,116,12,109,12,128,71,66,24,24,24,24,24",
                         "endOffsets": "1207,1270,1328,1402,1615,1683,1755,1825,1886,1960,2033,2094,2155,2217,2281,2343,2404,2472,2572,2632,2698,2771,2840,2897,2949,3011,3083,3159,3224,3283,3342,3402,3462,3522,3582,3642,3702,3762,3822,3882,3942,4001,4061,4121,4181,4241,4301,4361,4421,4481,4541,4601,4660,4720,4780,4839,4898,4957,5016,5075,5134,5169,5204,5259,5322,5377,5435,5492,5542,5603,5660,5694,5729,5764,5902,9040,9623,9824,9934,10135,10264,10336,10403,10846,19571,21636,23396,23773"
+                    }
+                },
+                {
+                    "source": "C:\\Users\\alypr\\StudioProjects\\new_merged\\build\\app\\generated\\res\\google-services\\debug\\values\\values.xml",
+                    "from": {
+                        "startLines": "2,3,4,5,6,7,8",
+                        "startColumns": "4,4,4,4,4,4,4",
+                        "startOffsets": "55,199,281,385,494,614,713",
+                        "endColumns": "143,81,103,108,119,98,75",
+                        "endOffsets": "194,276,380,489,609,708,784"
+                    },
+                    "to": {
+                        "startLines": "112,113,114,115,116,117,118",
+                        "startColumns": "4,4,4,4,4,4,4",
+                        "startOffsets": "8240,8384,8466,8570,8679,8799,8898",
+                        "endColumns": "143,81,103,108,119,98,75",
+                        "endOffsets": "8379,8461,8565,8674,8794,8893,8969"
                     }
                 }
             ]

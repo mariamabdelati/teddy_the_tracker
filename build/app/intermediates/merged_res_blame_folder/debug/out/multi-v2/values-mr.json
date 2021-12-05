@@ -1,7 +1,7 @@
 {
     "logs": [
         {
-            "outputFile": "C:\\Users\\alypr\\StudioProjects\\teddy-the-tracker\\build\\app\\intermediates\\incremental\\mergeDebugResources\\merged.dir\\values-mr\\values-mr.xml",
+            "outputFile": "C:\\Users\\alypr\\StudioProjects\\new_merged\\build\\app\\intermediates\\incremental\\mergeDebugResources\\merged.dir\\values-mr\\values-mr.xml",
             "map": [
                 {
                     "source": "C:\\Users\\alypr\\.gradle\\caches\\transforms-2\\files-2.1\\42bd2d2c0e4737b992da175e0f08272f\\core-1.1.0\\res\\values-mr\\values-mr.xml",

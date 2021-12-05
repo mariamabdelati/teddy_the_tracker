@@ -1,7 +1,7 @@
 {
     "logs": [
         {
-            "outputFile": "C:\\Users\\alypr\\StudioProjects\\teddy-the-tracker\\build\\app\\intermediates\\incremental\\mergeDebugResources\\merged.dir\\values-iw\\values-iw.xml",
+            "outputFile": "C:\\Users\\alypr\\StudioProjects\\new_merged\\build\\app\\intermediates\\incremental\\mergeDebugResources\\merged.dir\\values-iw\\values-iw.xml",
             "map": [
                 {
                     "source": "C:\\Users\\alypr\\.gradle\\caches\\transforms-2\\files-2.1\\f55a0c545b31b95ae181790b2bcd500b\\jetified-play-services-base-17.1.0\\res\\values-iw\\values.xml",
