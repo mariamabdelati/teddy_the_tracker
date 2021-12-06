@@ -444,6 +444,10 @@ class AddNewEntryPageState extends State<AddNewEntryPage> {
               setState(() {
                 catSelect = false;
               });
+            } else {
+              setState(() {
+                catSelect = true;
+              });
             }
 
             if (recurring.isEmpty){
@@ -506,25 +510,3 @@ class AddNewEntryPageState extends State<AddNewEntryPage> {
     );
   }
 }
-
-
-
-/*return Row(children: [
-      const Text(
-        "Recurring?        ",
-        textAlign: TextAlign.left,
-        style: TextStyle(
-            fontSize: 17,
-            fontWeight: FontWeight.bold,
-            color: Color(0xFF5689B9)),
-      ),
-      Checkbox(
-        checkColor: Colors.white,
-        value: isChecked,
-        onChanged: (bool? value) {
-          setState(() {
-            isChecked = value!;
-          });
-        },
-      ),
-    ]);*/

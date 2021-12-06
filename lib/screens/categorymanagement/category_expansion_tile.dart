@@ -1,16 +1,18 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter/cupertino.dart';
+//import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import '../../constants.dart';
 import 'subcategory_expansion_tile.dart';
 import 'category_more_options.dart';
 import 'create_new_category.dart';
 
+//global variable used to save category id to wallet
 var selectedCategoryID = 0;
 
 class CategoryExpansionTile extends StatefulWidget {
+  //this boolean is used for verification and is  sent from the expenses form to validate the category selection
   final bool chosen; //CHANGED
-  CategoryExpansionTile(this.chosen, {Key? key}) : super(key: key);
+  const CategoryExpansionTile(this.chosen, {Key? key}) : super(key: key);
 
   @override
   _CategoryExpansionTileState createState() => _CategoryExpansionTileState();
@@ -19,6 +21,7 @@ class CategoryExpansionTile extends StatefulWidget {
 class _CategoryExpansionTileState extends State<CategoryExpansionTile> {
   //this string is used to identify what category has been selected
   var selectedCategory = "";
+  //this boolean is used for displaying the sucategories if a category is selected
   var isSelected = false;
 
   //this string will be used to take user input for the new category
@@ -29,11 +32,13 @@ class _CategoryExpansionTileState extends State<CategoryExpansionTile> {
 
   static const double radius = 20;
 
+  //boolean used for expansion tile  to indicate whether it is expanded
   bool isExpanded = false;
 
   UniqueKey keyTile = UniqueKey();
 
 
+  //expanding tile function
   void expandTile() {
     setState(() {
       isExpanded = true;
@@ -41,10 +46,11 @@ class _CategoryExpansionTileState extends State<CategoryExpansionTile> {
     });
   }
 
-  get catID{
+  /*get catID{
     return  selectedCategoryID;
-  }
+  }*/
 
+  //shrinks the tile with a delay so that user can see what tey have selected; this function is triggered upon category selection
   void shrinkTile() {
     Future.delayed(const Duration(milliseconds: 300), (){
       setState(() {
@@ -54,6 +60,7 @@ class _CategoryExpansionTileState extends State<CategoryExpansionTile> {
     });
   }
 
+  //builds the expansion tile container, builds the tiles and calls the validation function and subcategories based on category selection
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -90,6 +97,7 @@ class _CategoryExpansionTileState extends State<CategoryExpansionTile> {
           const SizedBox(
             height: 16,
           ),
+        //the selectedCategoryID is passed to the subcategory so that we can show the related subcategory
         SubcategoryExpansionTile(
             index: selectedCategoryID, visible: isSelected),
       ],
@@ -97,6 +105,7 @@ class _CategoryExpansionTileState extends State<CategoryExpansionTile> {
   }
 
   Widget buildTile(BuildContext context) {
+    //stream of categories from db
     final Stream<QuerySnapshot> categories = FirebaseFirestore.instance
         .collection("categories/JBSahpmjY2TtK0gRdT4s/category").snapshots();
     //var contents = <Widget>[];
@@ -131,6 +140,7 @@ class _CategoryExpansionTileState extends State<CategoryExpansionTile> {
               fontSize: 18, fontWeight: FontWeight.w500, color: iconsColor),
         ),
         children: [
+          //stream builder uses category stream and for each appends an action chip to a list
           StreamBuilder<QuerySnapshot>(
               stream: categories,
               builder: (BuildContext context,
@@ -166,6 +176,7 @@ class _CategoryExpansionTileState extends State<CategoryExpansionTile> {
                                 ? const Color(0xFFF6BAB5)
                                 : const Color(0xFF67B5FD),
                             onPressed: () {
+                              //this sets the state for selection
                               if (selectedCategory != chipName) {
                                 setState(() {
                                   selectedCategory = chipName;
@@ -186,6 +197,7 @@ class _CategoryExpansionTileState extends State<CategoryExpansionTile> {
                     }
                 );
 
+                //used to display the chips in the expansion tile
                 return Wrap(
                   spacing: 8,
                   runSpacing: 6,
@@ -194,6 +206,7 @@ class _CategoryExpansionTileState extends State<CategoryExpansionTile> {
                 );
               }),
 
+          //text button toggles a bottom sheet that gives the user options to  add category or delete
           TextButton.icon(
             label: const Text(
                 "options", style: TextStyle(color: Color(0xFF67B5FD))),
@@ -218,6 +231,7 @@ class _CategoryExpansionTileState extends State<CategoryExpansionTile> {
     );
   }
 
+  //validation function displays to show an error with no category selection when submitting form
   validateCat(bool x) {
     return Visibility(
         visible: x,

@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:teddy_the_tracker/constants.dart';
 
+/*
+button widget used for welcome, login and sign up pages
+ */
+
 class RoundButton extends StatefulWidget {
   final String text;
   final VoidCallback onClicked;

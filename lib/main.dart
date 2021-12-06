@@ -1,5 +1,5 @@
 import 'package:firebase_auth/firebase_auth.dart';
-import '../../screens/dashboard/dashboard_screen.dart';
+import '../../screens/dashboard/dashboard_navbar.dart';
 //import '../../screens/entrymanagement/view_entries.dart';
 import '../../screens/registration/auth_screen.dart';
 //import '../../screens/welcome/welcome_page.dart';
