@@ -1,128 +1,166 @@
 import 'package:flutter/material.dart';
-import "package:cloud_firestore/cloud_firestore.dart";
-import 'package:fl_chart/fl_chart.dart';
+import 'package:teddy_the_tracker/constants.dart';
+import '../../screens/dashboard/pie_chart.dart';
 
-class LineGraph extends StatefulWidget {
-  const LineGraph({Key? key}) : super(key: key);
+//import 'line_chart.dart';
+
+class ChartsPageView extends StatefulWidget {
+  const ChartsPageView({Key? key}) : super(key: key);
 
   @override
-  _LineGraphState createState() => _LineGraphState();
+  _ChartsPageViewState createState() => _ChartsPageViewState();
 }
 
-class _LineGraphState extends State<LineGraph> {
-  late List<Entries> _chartdata;
+class _ChartsPageViewState extends State<ChartsPageView> {
+  //int touchedIndex = -1;
+  String bal = '0';
+  int currentPage = 0;
+
   @override
   Widget build(BuildContext context) {
-    _chartdata = [Entries("date", "20", "label")];
-    return Column(
-      children: [
-        const SizedBox(
-          height: 200,
-        ),
-        SizedBox(
-          width: 400,
-          height: 400,
-          child: LineChart(
-            LineChartData(
-              minX: 0, minY: 0, maxX: 10, maxY: 10,
-              // lineBarsData: [
-              //   LineChartBarData(spots: []
-              // ),
-            ),
-          ),
-        ),
+    final charts = PageView(
+      onPageChanged: (int page) {
+        setState(() {
+          currentPage = page;
+        });
+      },
+      controller: PageController(initialPage: 0),
+      children: <Widget>[
+        PiechartPanel(),
+        Linechart(),
       ],
     );
+    return Stack(children: <Widget>[
+      charts,
+      Stack(
+        children: <Widget>[
+          Align(
+            alignment: Alignment.topCenter,
+            child: Container(
+              margin: const EdgeInsets.only(top: 300, bottom: 15),
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  for (int i = 0; i < 2; i++)
+                    (i == currentPage ? circleBar(true) : circleBar(false))
+                ],
+              ),
+            ),
+          ),
+        ],
+      ),
+    ]);
   }
 
-  // List<Entries> getChartData() {
-  //   QuerySnapshot data = FirebaseFirestore.instance
-  //       .collection("expenses/cFqsqHPIscrC6cY9iPs6/expense")
-  //       .orderBy("date", descending: true);
-  //   return data;}
-}
-
-class Entries {
-  Entries(this.date, this.amount, this.label);
-  String? date;
-  String? amount;
-  String? label;
-  DocumentReference? reference;
-
-  int year = 2021;
-  int month = 12;
-  int day = 10;
-
-  void cleanDate() {
-    var data = date!.split("-");
-    year = int.parse(data[0]);
-    month = int.parse(data[1]);
-    day = int.parse(data[2]);
-  }
-
-  Entries.fromMap(Map<String, dynamic> map, {this.reference}) {
-    date = map["date"];
-    amount = map["amount"];
-    label = map["label"];
-    cleanDate();
-  }
-
-  @override
-  String toString() => "Entry<$label : $year,$month,$day : $amount\$";
-}
-
-Widget _buildBody(context) {
-  return StreamBuilder<QuerySnapshot>(
-      stream: FirebaseFirestore.instance
-          .collection("expenses/cFqsqHPIscrC6cY9iPs6/expense")
-          .orderBy("date", descending: true)
-          .snapshots(),
-      builder: (context, snapshot) {
-        if (!snapshot.hasData) {
-          return const LinearProgressIndicator();
-        } else {
-          List<Entries> entries = snapshot.data!.docs
-              .map((docSnapshot) =>
-                  Entries.fromMap(docSnapshot.data() as Map<String, dynamic>))
-              .toList();
-          return ListView.builder(
-              padding: const EdgeInsets.all(8),
-              itemCount: entries.length,
-              itemBuilder: (BuildContext context, int index) {
-                return Text(entries[index].toString());
-              });
-        }
-      });
-}
-
-class TestDashBoard extends StatefulWidget {
-  const TestDashBoard({Key? key}) : super(key: key);
-
-  @override
-  TtestDashBoardState createState() => TtestDashBoardState();
-}
-
-class TtestDashBoardState extends State<TestDashBoard> {
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      child: _buildBody(context),
+  Widget circleBar(bool isActive) {
+    return AnimatedContainer(
+      duration: const Duration(milliseconds: 150),
+      margin: const EdgeInsets.symmetric(horizontal: 8),
+      height: isActive ? 11 : 8,
+      width: isActive ? 11 : 8,
+      decoration: BoxDecoration(
+          color: isActive ? mainColorList[4] : Colors.white.withOpacity(0.6),
+          borderRadius: const BorderRadius.all(Radius.circular(12))),
     );
   }
 }
-// Widget _buildBody(context) {
-//   return StreamBuilder<QuerySnapshot>(
-//       stream: FirebaseFirestore.instance
-//           .collection("expenses/cFqsqHPIscrC6cY9iPs6/expense")
-//           .snapshots(),
-//       builder: (context, snapshot) {
-//         if (!snapshot.hasData) {
-//           return const LinearProgressIndicator();
-//         } else {
-//           List<Entries> entries = snapshot.data!.docs
-//               .map((docSnapshot) =>
-//                   Entries.fromMap(docSnapshot.data() as Map<String, dynamic>))
-//               .toList();
-//         }
-//       });
-// }
+
+class PiechartPanel extends StatefulWidget {
+  const PiechartPanel({Key? key}) : super(key: key);
+
+  @override
+  _PiechartPanelState createState() => _PiechartPanelState();
+}
+
+class _PiechartPanelState extends State<PiechartPanel> {
+  @override
+  Widget build(BuildContext context) {
+    return Align(
+      alignment: Alignment.topCenter,
+      child: Container(
+        width: 400,
+        height: 330,
+        margin: const EdgeInsets.all(6),
+        decoration: BoxDecoration(
+          gradient: const RadialGradient(
+            colors: [
+              //Color(0xFF1D67A6),
+              //Color(0xFF3493E3),
+              //Color(0xFF61ADEB)
+              Color(0xFF0054DA),
+              Color(0xFF049BD6),
+              //Color(0xFF1E49C1),
+              //Color(0xFF67B5FD),
+            ],
+            center: Alignment(1.0, 2.0),
+            focal: Alignment(1.0,0.6),
+            focalRadius: 1.1,
+          ),
+          //border: Border.all(color: Colors.grey),
+          boxShadow: const <BoxShadow>[
+            BoxShadow(
+              color: Colors.grey,
+              offset: Offset(1.1, 1.1),
+              blurRadius: 5.0,
+            ),
+          ],
+          borderRadius: BorderRadius.circular(40),
+        ),
+        child: PieChartPage(),
+      ),
+    );
+  }
+}
+
+class Linechart extends StatefulWidget {
+  const Linechart({Key? key}) : super(key: key);
+
+  @override
+  _LinechartState createState() => _LinechartState();
+}
+
+class _LinechartState extends State<Linechart> {
+  @override
+  Widget build(BuildContext context) {
+    return Align(
+      alignment: Alignment.topCenter,
+      child: Container(
+        width: 400,
+        height: 330,
+        margin: const EdgeInsets.all(6),
+        decoration: BoxDecoration(
+          gradient: const RadialGradient(
+            colors: [
+              Color(0xFF0054DA),
+              Color(0xFF049BD6),
+              //Color(0xFF1D67A6),
+              //Color(0xFF3493E3),
+              //Color(0xFF0054DA),
+              //Color(0xFF3298D6),
+            ],
+            center: Alignment(1.0, 2.0),
+            focal: Alignment(1.0,0.6),
+            focalRadius: 1.1,
+            /*center: Alignment(0.3, 1.8),
+            focal: Alignment(-1.0, 0.6),
+            focalRadius: 1.4,*/
+          ),
+          //border: Border.all(color: Colors.grey),
+          boxShadow: const <BoxShadow>[
+            BoxShadow(
+              color: Colors.grey,
+              offset: Offset(1.1, 1.1),
+              blurRadius: 5.0,
+            ),
+          ],
+          borderRadius: BorderRadius.circular(40),
+        ),
+        child: const Center(
+          child: TestDashboard(),/*Text('PageView 2',
+              style: TextStyle(fontSize: 20, fontWeight: FontWeight.w700, color: Colors.white)),*/
+        ),
+      ),
+    );
+  }
+}

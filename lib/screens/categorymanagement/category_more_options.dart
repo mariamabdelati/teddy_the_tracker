@@ -2,10 +2,11 @@ import 'package:flutter/material.dart';
 import '../../constants.dart';
 import 'create_new_category.dart';
 
+//widget shows options in the bottom modal sheet
 class Options extends StatefulWidget {
- final String title;
+  final String title;
 
- const Options(this.title, {
+  const Options(this.title, {
     Key? key,
   }) : super(key: key);
   @override

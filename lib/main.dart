@@ -1,5 +1,5 @@
 import 'package:firebase_auth/firebase_auth.dart';
-import '../../screens/dashboard/dashboard_screen.dart';
+import '../../screens/dashboard/dashboard_navbar.dart';
 //import '../../screens/entrymanagement/view_entries.dart';
 import '../../screens/registration/auth_screen.dart';
 //import '../../screens/welcome/welcome_page.dart';
@@ -21,18 +21,19 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
         title: "Teddy the Tracker",
         debugShowCheckedModeBanner: false,
-        theme: ThemeData(
+        theme: ThemeData(//canvasColor: mainColorList[4],
           fontFamily: "Nunito",
           appBarTheme: AppBarTheme(color: mainColorList[2]),
-          backgroundColor: const Color(0xFFECF4FB), //
+          backgroundColor: const Color(0xFFECF4FB),//
           primarySwatch: MaterialColor(0xFF164CC4, color),
           visualDensity: VisualDensity.adaptivePlatformDensity,
-          //bottomSheetTheme: BottomSheetThemeData(
-          //backgroundColor: Colors.black.withOpacity(0)),
+          bottomSheetTheme: BottomSheetThemeData(
+              backgroundColor: Colors.black.withOpacity(0)),
           //canvasColor: Colors.transparent,
           buttonTheme: ButtonTheme.of(context).copyWith(
               buttonColor: const Color(0xFFF6BAB5),
               textTheme: ButtonTextTheme.primary,
+
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(20),
               )),
@@ -48,6 +49,7 @@ class MyApp extends StatelessWidget {
               body: AuthScreen(true),
             );
           },
-        ));
+        )
+    );
   }
 }

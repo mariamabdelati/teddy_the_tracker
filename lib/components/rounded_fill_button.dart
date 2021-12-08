@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:teddy_the_tracker/constants.dart';
 
+/*
+button widget used for welcome, login and sign up pages
+ */
+
 class RoundButton extends StatefulWidget {
   final String text;
   final VoidCallback onClicked;
@@ -43,3 +47,19 @@ class _RoundButtonState extends State<RoundButton> {
     );
   }
 }
+/*return Container(
+      decoration: BoxDecoration(
+          color: mainColorList[2],
+          borderRadius: BorderRadius.circular(50)
+      ),
+      padding: const EdgeInsets.all(20),
+      child: Center(
+        child: Text(
+          widget.text,
+          style: const TextStyle(
+              color: Colors.white,
+              fontSize: 16
+          ),
+        ),
+      ),
+    );*/

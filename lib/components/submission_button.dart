@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:teddy_the_tracker/constants.dart';
 
+/*
+button widget used for submitting forms
+ */
+
 class SubmitButtonWidget extends StatelessWidget {
   final VoidCallback onClicked;
 
@@ -8,7 +12,6 @@ class SubmitButtonWidget extends StatelessWidget {
     required this.onClicked,
     Key? key,
   }) : super(key: key);
-
 
   @override
   Widget build(BuildContext context) {
