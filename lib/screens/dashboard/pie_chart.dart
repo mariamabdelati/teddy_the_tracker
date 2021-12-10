@@ -1,3 +1,5 @@
+import 'dart:ffi';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 //import '../../data/categories.dart';
@@ -9,25 +11,36 @@ import 'package:teddy_the_tracker/constants.dart';
 //add another class named categories
 
 class Entries {
-  Entries(this.category, this.amount, this.label);
-  int? category;
+  Entries(this.date, this.amount, this.label);
+  String? date;
   String? amount;
   String? label;
   DocumentReference? reference;
 
+  int year = 2021;
+  int month = 12;
+  int day = 10;
+
+  void cleanDate() {
+    var data = date!.split("-");
+    year = int.parse(data[0]);
+    month = int.parse(data[1]);
+    day = int.parse(data[2]);
+  }
 
   Entries.fromMap(Map<String, dynamic> map, {this.reference}) {
-    category = map["categoryId"];
+    date = map["date"];
     amount = map["amount"];
     label = map["label"];
-
+    cleanDate();
   }
 
   @override
-  String toString() => "Entry<$category : $amount\$";
+  String toString() => "Entry<$label : $year,$month,$day : $amount\$";
 }
 
-Widget _buildBody(context) {
+// widget responsible for fetching the data from firebase and convert them to List <Entries>
+Widget _getData(context) {
   return StreamBuilder<QuerySnapshot>(
       stream: FirebaseFirestore.instance
           .collection("expenses/cFqsqHPIscrC6cY9iPs6/expense")
@@ -35,22 +48,109 @@ Widget _buildBody(context) {
           .snapshots(),
       builder: (context, snapshot) {
         if (snapshot.hasError) {
-          return const Text("Something went wrong", style: TextStyle(color: Colors.white));
+          return const Text("Something went wrong",
+              style: TextStyle(color: Colors.white));
         } else if (snapshot.connectionState == ConnectionState.waiting) {
           return const CircularProgressIndicator();
         } else {
           List<Entries> entries = snapshot.data!.docs
               .map((docSnapshot) =>
-              Entries.fromMap(docSnapshot.data() as Map<String, dynamic>))
+                  Entries.fromMap(docSnapshot.data() as Map<String, dynamic>))
               .toList();
-          return ListView.builder(
-              padding: const EdgeInsets.all(8),
-              itemCount: entries.length,
-              itemBuilder: (BuildContext context, int index) {
-                return Text(entries[index].toString());
-              });
+          return Container(
+            child: _buildBody(context, entries),
+          );
         }
       });
+}
+
+// Widget responsible for converting List <Entries> to List <FlSpot>
+Widget _buildBody(context, List<Entries> entries) {
+  Map data = {};
+  List dates = [];
+
+  for (var entry in entries.reversed.toList()) {
+    if (data.containsKey(entry.day)) {
+      data[entry.date] =
+          data[entry.date] + double.parse(entry.amount as String);
+    } else {
+      data[entry.date] = double.parse(entry.amount as String);
+    }
+  }
+  List<FlSpot> data_list = [];
+  // for (var i; i < data.keys.length; i++) {
+  //   data_list.add(FlSpot(i.toDouble(), data[data.keys.elementAt(i)]));
+  // }
+  int i = 0;
+  data.forEach((k, v) {
+    dates.add(k);
+    data_list.add(FlSpot(i.toDouble(), v));
+    i++;
+  });
+  return Container(
+    child: _buildChart(context, data_list, dates),
+  );
+}
+
+// Widget responsible for using List <FlSpots> passed to it and construct the graph
+Widget _buildChart(context, List<FlSpot> data_list, List<dynamic> dates) {
+  LineTitles lineTitle = LineTitles(dates);
+  return LineChart(LineChartData(
+      minX: 0,
+      maxX: dates.length - 1,
+      minY: 0,
+      maxY: 1000,
+      titlesData: lineTitle.getTitle(),
+      gridData: FlGridData(
+          show: true,
+          getDrawingHorizontalLine: (value) {
+            return FlLine(color: const Color(0x99CCEDFF), strokeWidth: 1);
+          },
+          drawVerticalLine: true,
+          getDrawingVerticalLine: (value) {
+            return FlLine(color: const Color(0x99CCEDFF), strokeWidth: 1);
+          }),
+      borderData: FlBorderData(
+        show: true,
+        border: Border.all(color: const Color(0xAACCEDFF), width: 1),
+      ),
+      lineBarsData: [
+        LineChartBarData(
+            spots: data_list,
+            isCurved: true,
+            colors: [Colors.orange, Colors.red],
+            barWidth: 5,
+            belowBarData: BarAreaData(
+                show: true,
+                colors: [Colors.orange, Colors.red]
+                    .map((color) => color.withOpacity(0.5))
+                    .toList()))
+      ]));
+
+//   ListView.builder(
+//       padding: const EdgeInsets.all(8),
+//       itemCount: entries.length,
+//       itemBuilder: (BuildContext context, int index) {
+//         return Text(entries[index].toString());
+//       });
+}
+
+class LineTitles {
+  List dates;
+  LineTitles(this.dates);
+  FlTitlesData getTitle() {
+    return FlTitlesData(
+        show: true,
+        bottomTitles: SideTitles(
+          showTitles: true,
+          getTitles: (val) => dates[val.toInt()].replaceAll("-", "\n"),
+          margin: 8,
+          reservedSize: 60,
+          rotateAngle: 30,
+        ),
+        rightTitles: SideTitles(showTitles: true, getTitles: (val) => ""),
+        topTitles: SideTitles(showTitles: true, getTitles: (val) => ""));
+  }
 }
 
 class TestDashboard extends StatefulWidget {
@@ -64,7 +164,7 @@ class TtestDashBoardState extends State<TestDashboard> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      child: _buildBody(context),
+      child: _getData(context),
     );
   }
 }
@@ -106,24 +206,24 @@ List<PieChartSectionData> getSections(int touchedIndex) {
   return PieData.data
       .asMap()
       .map<int, PieChartSectionData>((index, data) {
-    final isTouched = index == touchedIndex;
-    final double fontSize = isTouched ? 20 : 14;
-    final double radius = isTouched ? 80 : 60;
+        final isTouched = index == touchedIndex;
+        final double fontSize = isTouched ? 20 : 14;
+        final double radius = isTouched ? 80 : 60;
 
-    final value = PieChartSectionData(
-      color: data.color,
-      value: data.percent,
-      title: '${data.percent}%',
-      radius: radius,
-      titleStyle: TextStyle(
-        fontSize: fontSize,
-        fontWeight: FontWeight.bold,
-        color: Colors.black87,
-      ),
-    );
+        final value = PieChartSectionData(
+          color: data.color,
+          value: data.percent,
+          title: '${data.percent}%',
+          radius: radius,
+          titleStyle: TextStyle(
+            fontSize: fontSize,
+            fontWeight: FontWeight.bold,
+            color: Colors.black87,
+          ),
+        );
 
-    return MapEntry(index, value);
-  })
+        return MapEntry(index, value);
+      })
       .values
       .toList();
 }
@@ -149,13 +249,15 @@ class PieChartPageState extends State {
             child: PieChart(
               PieChartData(
                 pieTouchData: PieTouchData(
-                  touchCallback: (FlTouchEvent event, PieTouchResponse? response) {
+                  touchCallback:
+                      (FlTouchEvent event, PieTouchResponse? response) {
                     setState(() {
                       if (event is FlLongPressEnd || event is FlPanEndEvent) {
                         touchedIndex = -1;
                       } else {
                         if (response != null) {
-                          touchedIndex = response.touchedSection?.touchedSectionIndex as int;
+                          touchedIndex = response
+                              .touchedSection?.touchedSectionIndex as int;
                         }
                       }
                     });
@@ -178,7 +280,6 @@ class PieChartPageState extends State {
   }
 }
 
-
 class IndicatorsWidget extends StatelessWidget {
   const IndicatorsWidget({Key? key}) : super(key: key);
 
@@ -189,7 +290,7 @@ class IndicatorsWidget extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.center,
       crossAxisAlignment: CrossAxisAlignment.start,
       children: PieData.data.map(
-            (data) {
+        (data) {
           return Container(
               padding: const EdgeInsets.symmetric(vertical: 2),
               child: buildIndicator(

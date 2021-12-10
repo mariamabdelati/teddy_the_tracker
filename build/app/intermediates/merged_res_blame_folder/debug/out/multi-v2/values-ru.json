@@ -1,7 +1,7 @@
 {
     "logs": [
         {
-            "outputFile": "E:\\Coding projects\\Flutter projects\\teddy-the-tracker\\build\\app\\intermediates\\incremental\\mergeDebugResources\\merged.dir\\values-ru\\values-ru.xml",
+            "outputFile": "E:\\Coding projects\\Flutter projects\\teddy-the-tracker\\teddy_the_tracker\\build\\app\\intermediates\\incremental\\mergeDebugResources\\merged.dir\\values-ru\\values-ru.xml",
             "map": [
                 {
                     "source": "C:\\Users\\George\\.gradle\\caches\\transforms-2\\files-2.1\\42bd2d2c0e4737b992da175e0f08272f\\core-1.1.0\\res\\values-ru\\values-ru.xml",

@@ -10,7 +10,6 @@ import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 import 'blank.dart';
 import 'dashboard_screen.dart';
 
-
 class DashboardScreen extends StatefulWidget {
   const DashboardScreen({Key? key}) : super(key: key);
 
@@ -47,7 +46,9 @@ class _DashboardScreenState extends State<DashboardScreen> {
     const pages = [
       DashboardPage(),
       ViewEntriesPage(title: "View All Entries"),
-      AddNewEntryPage(title: 'Create New Entry',),
+      AddNewEntryPage(
+        title: 'Create New Entry',
+      ),
       Blank(),
       Profile(),
     ];
@@ -62,8 +63,9 @@ class _DashboardScreenState extends State<DashboardScreen> {
       //extendBodyBehindAppBar: true,
       //extendBody: true,
       bottomNavigationBar: Theme(
-        data: Theme.of(context)
-            .copyWith(iconTheme: IconThemeData(color: iconsColor), ),
+        data: Theme.of(context).copyWith(
+          iconTheme: IconThemeData(color: iconsColor),
+        ),
         child: CurvedNavigationBar(
           items: items,
           height: MediaQuery.of(context).size.height * 0.08,

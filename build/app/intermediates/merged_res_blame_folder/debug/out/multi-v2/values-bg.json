@@ -1,7 +1,7 @@
 {
     "logs": [
         {
-            "outputFile": "E:\\Coding projects\\Flutter projects\\teddy-the-tracker\\build\\app\\intermediates\\incremental\\mergeDebugResources\\merged.dir\\values-bg\\values-bg.xml",
+            "outputFile": "E:\\Coding projects\\Flutter projects\\teddy-the-tracker\\teddy_the_tracker\\build\\app\\intermediates\\incremental\\mergeDebugResources\\merged.dir\\values-bg\\values-bg.xml",
             "map": [
                 {
                     "source": "C:\\Users\\George\\.gradle\\caches\\transforms-2\\files-2.1\\f55a0c545b31b95ae181790b2bcd500b\\jetified-play-services-base-17.1.0\\res\\values-bg\\values.xml",

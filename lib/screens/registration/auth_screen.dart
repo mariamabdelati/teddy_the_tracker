@@ -84,6 +84,3 @@ class _AuthScreenState extends State<AuthScreen> {
     );
   }
 }
-
-
-// storing Extra user data 5:35;
