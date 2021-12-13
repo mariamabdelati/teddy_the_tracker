@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:teddy_the_tracker/constants.dart';
+import 'package:teddy_the_tracker/main.dart';
 
 class Profile extends StatelessWidget {
   const Profile({Key? key}) : super(key: key);
@@ -19,7 +20,8 @@ class Profile extends StatelessWidget {
           children: [
             CircleAvatar(
               radius: 70,
-              child: Icon(Icons.person_rounded, color: mainColorList[4], size: 60),
+              child:
+                  Icon(Icons.person_rounded, color: mainColorList[4], size: 60),
               backgroundColor: const Color(0xFF1D67A6),
             ),
             const SizedBox(height: 40),
@@ -32,7 +34,9 @@ class Profile extends StatelessWidget {
               ),
               press: () => {},
             ),
-            const SizedBox(height: 5,),
+            const SizedBox(
+              height: 5,
+            ),
             ProfileMenu(
               text: "Notifications",
               icon: const Icon(
@@ -42,7 +46,9 @@ class Profile extends StatelessWidget {
               ),
               press: () {},
             ),
-            const SizedBox(height: 5,),
+            const SizedBox(
+              height: 5,
+            ),
             ProfileMenu(
               text: "Settings",
               icon: const Icon(
@@ -52,7 +58,9 @@ class Profile extends StatelessWidget {
               ),
               press: () {},
             ),
-            const SizedBox(height: 5,),
+            const SizedBox(
+              height: 5,
+            ),
             ProfileMenu(
               text: "Help Center",
               icon: const Icon(
@@ -62,7 +70,9 @@ class Profile extends StatelessWidget {
               ),
               press: () {},
             ),
-            const SizedBox(height: 5,),
+            const SizedBox(
+              height: 5,
+            ),
             ProfileMenu(
               text: "Log Out",
               icon: const Icon(
@@ -72,14 +82,17 @@ class Profile extends StatelessWidget {
               ),
               press: () {
                 FirebaseAuth.instance.signOut();
+                Navigator.of(context).pushAndRemoveUntil(
+                    MaterialPageRoute(builder: (context) => MyApp()),
+                    (Route<dynamic> route) => false);
               },
             ),
           ],
         ),
-      ),);
+      ),
+    );
   }
 }
-
 
 /*Container(
       child: Scaffold(
@@ -93,7 +106,6 @@ class Profile extends StatelessWidget {
         ),
       ),
     );*/
-
 
 class ProfileMenu extends StatelessWidget {
   const ProfileMenu({
@@ -130,7 +142,7 @@ class ProfileMenu extends StatelessWidget {
           primary: const Color(0xFF1D67A6),
           padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 20),
           shape:
-          RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+              RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
           backgroundColor: mainColorList[1],
         ),
         onPressed: press,

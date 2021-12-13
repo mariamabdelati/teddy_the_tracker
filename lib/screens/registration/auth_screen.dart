@@ -44,6 +44,7 @@ class _AuthScreenState extends State<AuthScreen> {
           "username": username,
           "email": email,
         });
+        FirebaseAuth.instance.currentUser!.updateDisplayName(username);
       }
       Navigator.of(context).pushAndRemoveUntil(
           MaterialPageRoute(builder: (context) => const DashboardScreen()),

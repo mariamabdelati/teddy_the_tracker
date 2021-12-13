@@ -1,4 +1,7 @@
+import 'dart:collection';
 import 'dart:ffi';
+import 'dart:math';
+import 'dart:ui';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
@@ -40,7 +43,7 @@ class Entries {
 }
 
 // widget responsible for fetching the data from firebase and convert them to List <Entries>
-Widget _getData(context) {
+Widget _getExpenses(context) {
   return StreamBuilder<QuerySnapshot>(
       stream: FirebaseFirestore.instance
           .collection("expenses/cFqsqHPIscrC6cY9iPs6/expense")
@@ -53,53 +56,131 @@ Widget _getData(context) {
         } else if (snapshot.connectionState == ConnectionState.waiting) {
           return const CircularProgressIndicator();
         } else {
-          List<Entries> entries = snapshot.data!.docs
+          List<Entries> expenses = snapshot.data!.docs
               .map((docSnapshot) =>
                   Entries.fromMap(docSnapshot.data() as Map<String, dynamic>))
               .toList();
           return Container(
-            child: _buildBody(context, entries),
+            child: _getIncomes(context, expenses),
+          );
+        }
+      });
+}
+
+Widget _getIncomes(context, List<Entries> expenses) {
+  return StreamBuilder<QuerySnapshot>(
+      stream: FirebaseFirestore.instance
+          .collection("expenses/cFqsqHPIscrC6cY9iPs6/income")
+          .orderBy("date", descending: true)
+          .snapshots(),
+      builder: (context, snapshot) {
+        if (snapshot.hasError) {
+          print("error retreiving income");
+          return const Text("Something went wrong",
+              style: TextStyle(color: Colors.white));
+        } else if (snapshot.connectionState == ConnectionState.waiting) {
+          return const CircularProgressIndicator();
+        } else {
+          List<Entries> incomes = snapshot.data!.docs
+              .map((docSnapshot) =>
+                  Entries.fromMap(docSnapshot.data() as Map<String, dynamic>))
+              .toList();
+          return Container(
+            child: _buildBody(context, expenses, incomes),
           );
         }
       });
 }
 
 // Widget responsible for converting List <Entries> to List <FlSpot>
-Widget _buildBody(context, List<Entries> entries) {
-  Map data = {};
-  List dates = [];
+Widget _buildBody(context, List<Entries> expenses, List<Entries> incomes) {
+  Map expensesData = {};
+  Map incomesData = {};
 
-  for (var entry in entries.reversed.toList()) {
-    if (data.containsKey(entry.day)) {
-      data[entry.date] =
-          data[entry.date] + double.parse(entry.amount as String);
+  for (var entry in expenses.reversed.toList()) {
+    if (expensesData.containsKey(entry.date)) {
+      expensesData[entry.date] =
+          expensesData[entry.date] + double.parse(entry.amount as String);
     } else {
-      data[entry.date] = double.parse(entry.amount as String);
+      expensesData[entry.date] = double.parse(entry.amount as String);
     }
   }
-  List<FlSpot> data_list = [];
+  for (var entry in incomes.reversed.toList()) {
+    if (incomesData.containsKey(entry.date)) {
+      incomesData[entry.date] =
+          incomesData[entry.date] + double.parse(entry.amount as String);
+    } else {
+      incomesData[entry.date] = double.parse(entry.amount as String);
+    }
+  }
+  List<FlSpot> expensesList = [];
+  List<FlSpot> incomesList = [];
+  List<String> date = [];
   // for (var i; i < data.keys.length; i++) {
   //   data_list.add(FlSpot(i.toDouble(), data[data.keys.elementAt(i)]));
   // }
   int i = 0;
-  data.forEach((k, v) {
-    dates.add(k);
-    data_list.add(FlSpot(i.toDouble(), v));
-    i++;
+  int index = 0;
+  expensesData.forEach((k, v) {
+    if (!date.contains(k)) {
+      date.add(k);
+    }
+  });
+  incomesData.forEach((k, v) {
+    if (!date.contains(k)) {
+      date.add(k);
+    }
+  });
+  date.sort();
+  expensesData.forEach((k, v) {
+    expensesList
+        .add(FlSpot(date.indexWhere((element) => element == k).toDouble(), v));
+  });
+  incomesData.forEach((k, v) {
+    incomesList
+        .add(FlSpot(date.indexWhere((element) => element == k).toDouble(), v));
   });
   return Container(
-    child: _buildChart(context, data_list, dates),
+    child: _buildChart(context, expensesList, incomesList, date),
   );
 }
 
 // Widget responsible for using List <FlSpots> passed to it and construct the graph
-Widget _buildChart(context, List<FlSpot> data_list, List<dynamic> dates) {
+Widget _buildChart(context, List<FlSpot> expenses_list,
+    List<FlSpot> incomes_list, List<dynamic> dates) {
   LineTitles lineTitle = LineTitles(dates);
+  LineChartBarData expensesLine = LineChartBarData(
+      spots: expenses_list,
+      isCurved: true,
+      colors: [Colors.orange, Colors.red],
+      barWidth: 8,
+      belowBarData: BarAreaData(
+          show: true,
+          colors: [Colors.orange, Colors.red]
+              .map((color) => color.withOpacity(0.6))
+              .toList()));
+  LineChartBarData incomesLine = LineChartBarData(
+      spots: incomes_list,
+      isCurved: true,
+      colors: [Colors.blue, Colors.green],
+      barWidth: 8,
+      belowBarData: BarAreaData(
+          show: true,
+          colors: [Colors.blue, Colors.green]
+              .map((color) => color.withOpacity(0.6))
+              .toList()));
+  int maxY = 100;
+  expenses_list.forEach((spot) {
+    maxY = max(maxY, spot.y.ceil());
+  });
+  incomes_list.forEach((spot) {
+    maxY = max(maxY, spot.y.ceil());
+  });
   return LineChart(LineChartData(
       minX: 0,
       maxX: dates.length - 1,
       minY: 0,
-      maxY: 1000,
+      maxY: maxY.toDouble(),
       titlesData: lineTitle.getTitle(),
       gridData: FlGridData(
           show: true,
@@ -114,18 +195,7 @@ Widget _buildChart(context, List<FlSpot> data_list, List<dynamic> dates) {
         show: true,
         border: Border.all(color: const Color(0xAACCEDFF), width: 1),
       ),
-      lineBarsData: [
-        LineChartBarData(
-            spots: data_list,
-            isCurved: true,
-            colors: [Colors.orange, Colors.red],
-            barWidth: 5,
-            belowBarData: BarAreaData(
-                show: true,
-                colors: [Colors.orange, Colors.red]
-                    .map((color) => color.withOpacity(0.5))
-                    .toList()))
-      ]));
+      lineBarsData: <LineChartBarData>[expensesLine, incomesLine]));
 
 //   ListView.builder(
 //       padding: const EdgeInsets.all(8),
@@ -153,6 +223,7 @@ class LineTitles {
   }
 }
 
+//------line chart ends here---------
 class TestDashboard extends StatefulWidget {
   const TestDashboard({Key? key}) : super(key: key);
 
@@ -164,8 +235,30 @@ class TtestDashBoardState extends State<TestDashboard> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      child: _getData(context),
-    );
+        child: Stack(children: <Widget>[
+      Column(crossAxisAlignment: CrossAxisAlignment.stretch, children: <Widget>[
+        const SizedBox(
+          height: 37,
+        ),
+        const Text(
+          "Expenses vs Income",
+          style: TextStyle(
+              fontSize: 16, color: Colors.white, fontWeight: FontWeight.bold),
+          textAlign: TextAlign.center,
+        ),
+        const SizedBox(
+          height: 4,
+        ),
+        Expanded(
+            child: Padding(
+          padding: const EdgeInsets.only(right: 5, left: 2),
+          child: _getExpenses(context),
+        )),
+        const SizedBox(
+          height: 10,
+        )
+      ])
+    ]));
   }
 }
 //dummy data

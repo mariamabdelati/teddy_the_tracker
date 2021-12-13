@@ -1,4 +1,7 @@
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:teddy_the_tracker/screens/walletmanagement/wallet_screen.dart';
 //import 'package:teddy_categories/constants.dart';
 //import 'package:teddy_categories/screens/dashboard/pie_chart.dart';
 
@@ -32,6 +35,8 @@ class _DashboardPageState extends State<DashboardPage> {
         ));
   }
 
+  var x = FirebaseAuth.instance.currentUser!.reload();
+  var user_name = FirebaseAuth.instance.currentUser!.displayName;
   SliverToBoxAdapter _buildHeader(double screenHeight) {
     return SliverToBoxAdapter(
       child: Container(
@@ -56,8 +61,8 @@ class _DashboardPageState extends State<DashboardPage> {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: <Widget>[
-                const Text(
-                  'HI, MARIAM',
+                Text(
+                  'HI, $user_name',
                   style: TextStyle(
                     color: Color(0xFFFFD2CE), //const Color(0xFF1D67A6),
                     fontSize: 25.0,
@@ -79,13 +84,16 @@ class _DashboardPageState extends State<DashboardPage> {
                         primary: const Color(0xFFFFEFC7),
                       ),
                       onPressed: () {
-                        Navigator.push(context, MaterialPageRoute(builder: (context) => const CreateNewCategory(title: 'Create New Category',)));
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => WalletChoosing()));
                       },
                       child: const Center(
                         child: Text(
                           "Switch Wallet",
                           style:
-                          TextStyle(color: Color(0xFF1D67A6), fontSize: 14),
+                              TextStyle(color: Color(0xFF1D67A6), fontSize: 14),
                         ),
                       ),
                     ),
