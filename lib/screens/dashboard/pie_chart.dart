@@ -140,6 +140,15 @@ Widget _buildBody(context, List<Entries> expenses, List<Entries> incomes) {
     incomesList
         .add(FlSpot(date.indexWhere((element) => element == k).toDouble(), v));
   });
+  if (expensesList[0].x != 0) {
+    expensesList = [FlSpot(0, 0), ...expensesList];
+  }
+  if (expensesList.last.x != date.length - 1)
+    expensesList.add(FlSpot(date.length - 1, 0));
+  if (incomesList[0].x != 0) incomesList = [FlSpot(0, 0), ...incomesList];
+  if (incomesList.last.x != date.length - 1)
+    incomesList.add(FlSpot(date.length - 1, 0));
+
   return Container(
     child: _buildChart(context, expensesList, incomesList, date),
   );

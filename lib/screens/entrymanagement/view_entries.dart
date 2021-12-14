@@ -4,7 +4,8 @@ import 'add_entries_page.dart';
 import 'user_transactions.dart';
 
 class ViewEntries extends StatefulWidget {
-  const ViewEntries({Key? key}) : super(key: key);
+  final ScrollController controller;
+  const ViewEntries({Key? key, required this.controller}) : super(key: key);
 
   @override
   ViewEntriesState createState() => ViewEntriesState();
@@ -44,8 +45,10 @@ class ViewEntriesState extends State<ViewEntries> {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                          builder: (context) => const AddNewEntryPage(
-                              title: 'Create a New Entry')),
+                          builder: (context) => AddNewEntryPage(
+                                title: 'Create a New Entry',
+                                controller: widget.controller,
+                              )),
                     );
                   }),
             ),
@@ -58,8 +61,8 @@ class ViewEntriesState extends State<ViewEntries> {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                          builder: (context) => const ViewEntriesPage(
-                              title: 'View Expenses')),
+                          builder: (context) =>
+                              const ViewEntriesPage(title: 'View Expenses')),
                     );
                   }),
             )

@@ -1,3 +1,4 @@
+import 'package:teddy_the_tracker/screens/dashboard/hide_navbar.dart';
 import 'package:teddy_the_tracker/screens/walletmanagement/wallet_screen.dart';
 
 import '../../screens/entrymanagement/add_entries_page.dart';
@@ -20,6 +21,19 @@ class DashboardScreen extends StatefulWidget {
 }
 
 class _DashboardScreenState extends State<DashboardScreen> {
+  late ScrollController controller;
+  @override
+  void initState() {
+    super.initState();
+    controller = ScrollController();
+  }
+
+  @override
+  void dispose() {
+    controller.dispose();
+    super.dispose();
+  }
+
   int selected = 0;
   @override
   Widget build(BuildContext context) {
@@ -45,37 +59,33 @@ class _DashboardScreenState extends State<DashboardScreen> {
         child: Icon(Icons.person_outline_rounded, size: 27),
       ),
     ];
-    const pages = [
-      DashboardPage(),
-      ViewEntriesPage(title: "View All Entries"),
+    List<Widget> pages = [
+      const DashboardPage(),
+      const ViewEntriesPage(title: "View All Entries"),
       AddNewEntryPage(
+        controller: controller,
         title: 'Create New Entry',
       ),
-      WalletChoosing(),
-      Profile(),
+      const WalletChoosing(),
+      const Profile(),
     ];
     return Scaffold(
-      /*appBar: AppBar(
-        title: const Text("Dashboard"),
-        elevation: 0,
-        centerTitle: true,
-      ),*/
       body: pages[selected],
-      //backgroundColor: mainColorList[4],
-      //extendBodyBehindAppBar: true,
-      //extendBody: true,
-      bottomNavigationBar: Theme(
-        data: Theme.of(context).copyWith(
-          iconTheme: IconThemeData(color: iconsColor),
-        ),
-        child: CurvedNavigationBar(
-          items: items,
-          height: MediaQuery.of(context).size.height * 0.08,
-          color: mainColorList[1],
-          backgroundColor: Colors.transparent,
-          index: selected,
-          animationDuration: const Duration(milliseconds: 350),
-          onTap: (index) => setState(() => selected = index),
+      bottomNavigationBar: HideWidget(
+        controller: controller,
+        child: Theme(
+          data: Theme.of(context).copyWith(
+            iconTheme: IconThemeData(color: iconsColor),
+          ),
+          child: CurvedNavigationBar(
+            items: items,
+            height: MediaQuery.of(context).size.height * 0.08,
+            color: mainColorList[1],
+            backgroundColor: Colors.transparent,
+            index: selected,
+            animationDuration: const Duration(milliseconds: 350),
+            onTap: (index) => setState(() => selected = index),
+          ),
         ),
       ),
     );
