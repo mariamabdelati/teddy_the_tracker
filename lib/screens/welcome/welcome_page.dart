@@ -2,7 +2,7 @@
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-
+import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
 //import 'package:keyboard_visibility/keyboard_visibility.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import '../../components/rounded_fill_button.dart';
@@ -76,10 +76,20 @@ class _LoginPageState extends State<LoginPage> {
 
   bool _keyboardVisible = false;
 
+
   @override
   void initState() {
     super.initState();
     _passwordVisible = false;
+
+    var keyboardVisibilityController = KeyboardVisibilityController();
+
+
+    keyboardVisibilityController.onChange.listen((bool visible) {
+      setState(() {
+        _keyboardVisible = visible;
+      });
+    });
     /*KeyboardVisibilityNotification().addNewListener(
       onChange: (bool visible) {
         setState(() {
@@ -109,7 +119,7 @@ class _LoginPageState extends State<LoginPage> {
         _loginOpacity = 1;
 
         _loginYOffset = windowHeight;
-        //_loginHeight = _keyboardVisible ? windowHeight : windowHeight - 270;
+        _loginHeight = _keyboardVisible ? windowHeight : windowHeight - 270;
 
         _loginXOffset = 0;
         //_registerYOffset = windowHeight;
@@ -175,13 +185,17 @@ class _LoginPageState extends State<LoginPage> {
                     ),
                   ),
                 ),
-                Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 32),
-                  child: Center(
-                    child: SvgPicture.asset(
-                      "assets/icons/Asset 1.svg",
-                      height: (windowHeight * 0.5),
-                      width: (windowWidth * 0.9),
+                Expanded(
+                  flex: 1,
+                  //padding: const EdgeInsets.symmetric(horizontal: 32),
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 25),
+                    child: Center(
+                      child: SvgPicture.asset(
+                        "assets/icons/Asset 1.svg",
+                        height: (windowHeight * 0.5),
+                        width: (windowWidth * 0.9),
+                      ),
                     ),
                   ),
                 ),
@@ -258,6 +272,9 @@ class _LoginPageState extends State<LoginPage> {
                                   height: 15,
                                 ),
                               buildPassword(),
+                              const SizedBox(
+                                height: 15,
+                              ),
                               //const InputWithIcon(icon: Icons.vpn_key, hint: "Enter Password...",),
                             ])),
                   ],

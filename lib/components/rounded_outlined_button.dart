@@ -1,5 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:new_merged/constants.dart';
+import 'package:new_project/constants.dart';
+
+/*
+button widget used for welcome, login and sign up pages
+ */
 
 class RoundOutlinedButton extends StatefulWidget {
   final String text;

@@ -86,6 +86,12 @@
       "languageVersion": "2.12"
     },
     {
+      "name": "equatable",
+      "rootUri": "file:///C:/flutter/.pub-cache/hosted/pub.dartlang.org/equatable-2.0.3",
+      "packageUri": "lib/",
+      "languageVersion": "2.12"
+    },
+    {
       "name": "eva_icons_flutter",
       "rootUri": "file:///C:/flutter/.pub-cache/hosted/pub.dartlang.org/eva_icons_flutter-3.0.2",
       "packageUri": "lib/",
@@ -134,8 +140,32 @@
       "languageVersion": "2.12"
     },
     {
+      "name": "fl_chart",
+      "rootUri": "file:///C:/flutter/.pub-cache/hosted/pub.dartlang.org/fl_chart-0.40.2",
+      "packageUri": "lib/",
+      "languageVersion": "2.12"
+    },
+    {
       "name": "flutter",
       "rootUri": "file:///C:/flutter/packages/flutter",
+      "packageUri": "lib/",
+      "languageVersion": "2.12"
+    },
+    {
+      "name": "flutter_keyboard_visibility",
+      "rootUri": "file:///C:/flutter/.pub-cache/hosted/pub.dartlang.org/flutter_keyboard_visibility-5.1.0",
+      "packageUri": "lib/",
+      "languageVersion": "2.12"
+    },
+    {
+      "name": "flutter_keyboard_visibility_platform_interface",
+      "rootUri": "file:///C:/flutter/.pub-cache/hosted/pub.dartlang.org/flutter_keyboard_visibility_platform_interface-2.0.0",
+      "packageUri": "lib/",
+      "languageVersion": "2.12"
+    },
+    {
+      "name": "flutter_keyboard_visibility_web",
+      "rootUri": "file:///C:/flutter/.pub-cache/hosted/pub.dartlang.org/flutter_keyboard_visibility_web-2.0.0",
       "packageUri": "lib/",
       "languageVersion": "2.12"
     },
@@ -153,7 +183,7 @@
     },
     {
       "name": "flutter_svg",
-      "rootUri": "file:///C:/flutter/.pub-cache/hosted/pub.dartlang.org/flutter_svg-0.20.0-nullsafety.3",
+      "rootUri": "file:///C:/flutter/.pub-cache/hosted/pub.dartlang.org/flutter_svg-0.23.0+1",
       "packageUri": "lib/",
       "languageVersion": "2.12"
     },
@@ -177,7 +207,7 @@
     },
     {
       "name": "image",
-      "rootUri": "file:///C:/flutter/.pub-cache/hosted/pub.dartlang.org/image-3.0.8",
+      "rootUri": "file:///C:/flutter/.pub-cache/hosted/pub.dartlang.org/image-3.1.0",
       "packageUri": "lib/",
       "languageVersion": "2.12"
     },
@@ -308,13 +338,13 @@
       "languageVersion": "2.12"
     },
     {
-      "name": "new_merged",
+      "name": "new_project",
       "rootUri": "../",
       "packageUri": "lib/",
       "languageVersion": "2.12"
     }
   ],
-  "generated": "2021-11-22T14:26:18.348784Z",
+  "generated": "2021-12-06T22:19:32.245189Z",
   "generator": "pub",
   "generatorVersion": "2.14.3"
 }

@@ -1,5 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:new_merged/constants.dart';
+import 'package:new_project/constants.dart';
+
+/*
+button widget used for submitting forms
+ */
 
 class SubmitButtonWidget extends StatelessWidget {
   final VoidCallback onClicked;
@@ -8,7 +12,6 @@ class SubmitButtonWidget extends StatelessWidget {
     required this.onClicked,
     Key? key,
   }) : super(key: key);
-
 
   @override
   Widget build(BuildContext context) {

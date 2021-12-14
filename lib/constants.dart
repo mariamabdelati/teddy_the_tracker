@@ -1,20 +1,36 @@
 import 'package:flutter/material.dart';
 
 //const kPrimaryColor = Color(0xFF6F35A5);
-const kPrimaryLightColor = Color(0xFFF1E6FF);
+//const kPrimaryLightColor = Color(0xFFF1E6FF);
 
 var mainColorList = [
   const Color(0xFF92CCFE),
+  //const Color(0xFFD1EAFF),
   const Color(0xFFECF4FB),
-  const Color(0xFF0938B6),
+  //const Color(0xFF0054DA),
+  const Color(0xFF0C41CD),
+  //const Color(0xFF0938B6),
   const Color(0xFF67B5FD),
   const Color(0xFFFFFFFA),
   const Color(0xFFA6A6B2),
+  const Color(0xFF34C68E),
+  const Color(0xFF679DC9),
+  const Color(0xFF0AA599),
+
+  const Color(0xFF3493E3),
+  const Color(0xFF97C7EF),
+  const Color(0xFF61ADEB),
+  const Color(0xFF388EE3),
+  const Color(0xFF3498F7),
+  const Color(0xFF1491FF),
+  const Color(0xFFD1EAFF),
+  const Color(0xFFE8F5FE),
+  const Color(0xFF1D67A6),
 ];
 
 var iconsColor = const Color(0xFF5689B9);
 var progressBarColorDark = const Color(0xFFF6BAB5);
-var progressbarColorWhite = const Color(0xFFED7470);
+var progressbarColorWhite = const Color(0xFFFE6A68);
 
 //padding
 var  buttonPadding = const EdgeInsets.symmetric(vertical: 15, horizontal: 100);

@@ -34,6 +34,7 @@ class _CreateNewCategoryState extends State<CreateNewCategory> {
     return y;
   }*/
 
+  //this function is used to remove the extra zeros from the beginning of the budget entered
   String zeroCheck(String x){
     String y = "";
     for (int i = 0; i < x.length; i++){
@@ -52,15 +53,18 @@ class _CreateNewCategoryState extends State<CreateNewCategory> {
   }
 
   final formKey = GlobalKey<FormState>();
+  //string to save new  category entered into
   String newCategory = "";
+  //string to save new budget entered into
   String budget = "";
 
   final _categorytext = TextEditingController();
   final _budgettext = TextEditingController();
 
+  //used to determine if a category exists or not
   late bool _invalid;
 
-
+  //checks if a category exists or not
   Future<bool> categoryCheck(String newCat) async {
     final QuerySnapshot result = await FirebaseFirestore.instance
         .collection('categories/JBSahpmjY2TtK0gRdT4s/category')
@@ -71,6 +75,7 @@ class _CreateNewCategoryState extends State<CreateNewCategory> {
     return (documents.length == 1);
   }
 
+  //converts future<bool> to bool
   void connector(String v) async {
     bool value = await categoryCheck(v);
     setState(() {
@@ -81,47 +86,49 @@ class _CreateNewCategoryState extends State<CreateNewCategory> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-    appBar: AppBar(
-      title: Text(widget.title),
-      leading: IconButton(
-        onPressed: () {
-          Navigator.pop(context);
-        },
-        icon: const Icon(Icons.arrow_back_rounded),
-      ),
-    ),
-    body: Form(
-      key: formKey,
-      //autovalidateMode: AutovalidateMode.onUserInteraction,
-      child: ListView(
-        padding: const EdgeInsets.all(16),
-        children: [
-          const SizedBox(height: 16),
-          Text(
-            "Please input the new category data:", textAlign: TextAlign.center,
-            style: TextStyle(
-                fontSize: 17,
-                fontWeight: FontWeight.bold,
-                color: iconsColor),
+        appBar: AppBar(
+          title: Text(widget.title),
+          leading: IconButton(
+            onPressed: () {
+              Navigator.pop(context);
+            },
+            icon: const Icon(Icons.arrow_back_rounded),
           ),
-          const SizedBox(height: 32),
-          buildCategory(),
-          const SizedBox(height: 16),
-          buildBudget(),
-          const SizedBox(height: 32),
-          const Divider(
-            color: Color(0xFF67B5FD),
-            thickness: 0.5,
+        ),
+
+        //form for new category
+        body: Form(
+          key: formKey,
+          //autovalidateMode: AutovalidateMode.onUserInteraction,
+          child: ListView(
+            padding: const EdgeInsets.all(16),
+            children: [
+              const SizedBox(height: 16),
+              Text(
+                "Please input the new category data:", textAlign: TextAlign.center,
+                style: TextStyle(
+                    fontSize: 17,
+                    fontWeight: FontWeight.bold,
+                    color: iconsColor),
+              ),
+              const SizedBox(height: 32),
+              buildCategory(),
+              const SizedBox(height: 16),
+              buildBudget(),
+              const SizedBox(height: 32),
+              const Divider(
+                color: Color(0xFF67B5FD),
+                thickness: 0.5,
+              ),
+              const SizedBox(height: 32),
+              buildSubmit(),
+            ],
           ),
-          const SizedBox(height: 32),
-          buildSubmit(),
-        ],
-      ),
-    )
-  );
+        )
+    );
   }
 
-  //
+  //builds new category textformfield
   Widget buildCategory() {
     return TextFormField(
       controller: _categorytext,
@@ -139,20 +146,20 @@ class _CreateNewCategoryState extends State<CreateNewCategory> {
         ),
       ),
 
-
-
-    validator: (value) {
-      connector(value!.toLowerCase().trim());
-      if (value.trim().isEmpty) {
-        return "Category cannot be empty";
-      } else if (_invalid){
-        return "Category already exists";
-      } else {
-        return null;
-      }
-    },
-    onSaved: (value) => setState(() => newCategory = value!.trim()),
-  );
+      //validates field  value
+      validator: (value) {
+        connector(value!.toLowerCase().trim());
+        if (value.trim().isEmpty) {
+          return "Category cannot be empty";
+        } else if (_invalid){
+          return "Category already exists";
+        } else {
+          return null;
+        }
+      },
+      //triggered on submission
+      onSaved: (value) => setState(() => newCategory = value!.trim()),
+    );
   }
 
   Widget buildBudget() {
@@ -172,39 +179,44 @@ class _CreateNewCategoryState extends State<CreateNewCategory> {
             onPressed: _budgettext.clear,
           ),
         ),
-    ),
-    validator: (value) {
-      if (value! == ""){
-        return null;
-      } else if(zeroCheck(value) == "0") {
-        return "Budget must not be zero";
-      } else {
-        return null;
-      }
-    },
-    keyboardType: TextInputType.number,
-    inputFormatters: <TextInputFormatter>[
-      FilteringTextInputFormatter.allow(RegExp(r"^\d*\.?\d{0,2}"))
-    ],
-    onSaved: (value) => setState(() => budget = value!.isEmpty ? "-1" : zeroCheck(value)),
-  );
+      ),
+
+      //validates field  value
+      validator: (value) {
+        if (value! == ""){
+          return null;
+        } else if(zeroCheck(value) == "0") {
+          return "Budget must not be zero";
+        } else {
+          return null;
+        }
+      },
+      keyboardType: TextInputType.number,
+
+      //accepts only up to two decimals
+      inputFormatters: <TextInputFormatter>[
+        FilteringTextInputFormatter.allow(RegExp(r"^\d*\.?\d{0,2}"))
+      ],
+      //triggered on submission
+      onSaved: (value) => setState(() => budget = value!.isEmpty ? "-1" : zeroCheck(value)),
+    );
   }
 
 
   Widget buildSubmit() {
     return Builder(
-    builder: (context) {
-      return SubmitButtonWidget(
-      onClicked: () {
+      builder: (context) {
+        return SubmitButtonWidget(
+          onClicked: () {
 
-        final isValid = formKey.currentState!.validate();
-        FocusScope.of(context).unfocus();
+            final isValid = formKey.currentState!.validate();
+            FocusScope.of(context).unfocus();
 
-        if (isValid) {
-          formKey.currentState!.save();
+            if (isValid) {
+              formKey.currentState!.save();
 
 
-          /*await FirebaseFirestore.instance
+              /*await FirebaseFirestore.instance
               .collection('categories/JBSahpmjY2TtK0gRdT4s/category')
               .doc(uid)
               .set({
@@ -212,27 +224,31 @@ class _CreateNewCategoryState extends State<CreateNewCategory> {
             "email": email,
           });*/
 
-          CollectionReference categoriesRef = FirebaseFirestore.instance.collection("categories/JBSahpmjY2TtK0gRdT4s/category");
+              //reference to category instance
+              CollectionReference categoriesRef = FirebaseFirestore.instance.collection("categories/JBSahpmjY2TtK0gRdT4s/category");
 
-          categoriesRef.add(
-              {"label": newCategory.toLowerCase().trim(), "budget": int.parse(budget), "parentId": 0, "categoryId": size + 1, "childIds": [], "expenseIds": []});
 
-          final message =
-              "'$newCategory' has been successfully added to your categories";
-          final snackBar = SnackBar(
-            content: Text(
-              message,
-              style: const TextStyle(fontSize: 20),
-            ),
-            backgroundColor: Colors.green,
-          );
-          ScaffoldMessenger.of(context).showSnackBar(snackBar);
+              //adds new  document to db
+              categoriesRef.add(
+                  {"label": newCategory.toLowerCase().trim(), "budget": int.parse(budget), "parentId": 0, "categoryId": size + 1, "childIds": [], "expenseIds": []});
 
-          //Navigator.pop(context, MaterialPageRoute(builder: (context) => const CategoryExpansionTile()));
-        }
+              //message showing verification
+              final message =
+                  "'$newCategory' has been successfully added to your categories";
+              final snackBar = SnackBar(
+                content: Text(
+                  message,
+                  style: const TextStyle(fontSize: 20),
+                ),
+                backgroundColor: Colors.green,
+              );
+              ScaffoldMessenger.of(context).showSnackBar(snackBar);
+
+              //Navigator.pop(context, MaterialPageRoute(builder: (context) => const CategoryExpansionTile()));
+            }
+          },
+        );
       },
     );
-    },
-  );
   }
 }
