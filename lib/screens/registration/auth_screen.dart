@@ -7,7 +7,10 @@ import '../../screens/dashboard/dashboard_navbar.dart';
 import '../../screens/welcome/welcome_page.dart';
 
 class AuthScreen extends StatefulWidget {
-  const AuthScreen(this._isLogin);
+
+  const AuthScreen(this._isLogin, {Key? key}) : super(key: key);
+
+  //const AuthScreen(this._isLogin);
   final bool _isLogin;
 
   @override
@@ -44,6 +47,7 @@ class _AuthScreenState extends State<AuthScreen> {
           "username": username,
           "email": email,
         });
+        FirebaseAuth.instance.currentUser!.updateDisplayName(username);
       }
       Navigator.of(context).pushAndRemoveUntil(
           MaterialPageRoute(builder: (context) => const DashboardScreen()),

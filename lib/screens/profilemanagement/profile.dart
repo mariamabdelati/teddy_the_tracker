@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:teddy_the_tracker/constants.dart';
+import '../../constants.dart';
+
+import '../../main.dart';
 
 class Profile extends StatelessWidget {
   const Profile({Key? key}) : super(key: key);
@@ -72,6 +74,9 @@ class Profile extends StatelessWidget {
               ),
               press: () {
                 FirebaseAuth.instance.signOut();
+                Navigator.of(context).pushAndRemoveUntil(
+                    MaterialPageRoute(builder: (context) => const MyApp()),
+                        (Route<dynamic> route) => false);
               },
             ),
           ],

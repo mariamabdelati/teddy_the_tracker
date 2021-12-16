@@ -7,9 +7,9 @@ import "package:flutter/material.dart";
 import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 
-import 'blank.dart';
+import '../walletsmanagement/add_new_wallet.dart';
+//import 'blank.dart';
 import 'dashboard_screen.dart';
-
 
 class DashboardScreen extends StatefulWidget {
   const DashboardScreen({Key? key}) : super(key: key);
@@ -45,10 +45,10 @@ class _DashboardScreenState extends State<DashboardScreen> {
       ),
     ];
     const pages = [
-      DashboardPage(),
+      DashboardPage()/*withSwitch()*/,
       ViewEntriesPage(title: "View All Entries"),
       AddNewEntryPage(title: 'Create New Entry',),
-      Blank(),
+      AddWalletButton(),
       Profile(),
     ];
     return Scaffold(

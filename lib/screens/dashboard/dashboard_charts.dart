@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:teddy_the_tracker/constants.dart';
+import '../../constants.dart';
 import '../../screens/dashboard/pie_chart.dart';
+
+import 'line_chart.dart';
 
 //import 'line_chart.dart';
 
@@ -25,7 +27,7 @@ class _ChartsPageViewState extends State<ChartsPageView> {
         });
       },
       controller: PageController(initialPage: 0),
-      children: <Widget>[
+      children: const <Widget>[
         PiechartPanel(),
         Linechart(),
       ],
@@ -37,7 +39,7 @@ class _ChartsPageViewState extends State<ChartsPageView> {
           Align(
             alignment: Alignment.topCenter,
             child: Container(
-              margin: const EdgeInsets.only(top: 300, bottom: 15),
+              margin: const EdgeInsets.only(top: 375, bottom: 15),
               child: Row(
                 mainAxisSize: MainAxisSize.min,
                 mainAxisAlignment: MainAxisAlignment.center,
@@ -80,7 +82,7 @@ class _PiechartPanelState extends State<PiechartPanel> {
       alignment: Alignment.topCenter,
       child: Container(
         width: 400,
-        height: 330,
+        height: 400,
         margin: const EdgeInsets.all(6),
         decoration: BoxDecoration(
           gradient: const RadialGradient(
@@ -107,7 +109,7 @@ class _PiechartPanelState extends State<PiechartPanel> {
           ],
           borderRadius: BorderRadius.circular(40),
         ),
-        child: PieChartPage(),
+        child: const TtestDashboard(),
       ),
     );
   }
@@ -127,7 +129,7 @@ class _LinechartState extends State<Linechart> {
       alignment: Alignment.topCenter,
       child: Container(
         width: 400,
-        height: 330,
+        height: 400,
         margin: const EdgeInsets.all(6),
         decoration: BoxDecoration(
           gradient: const RadialGradient(
