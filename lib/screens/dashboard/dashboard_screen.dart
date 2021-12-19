@@ -8,6 +8,7 @@ import 'package:teddy_the_tracker/screens/walletmanagement/wallet_screen.dart';
 import '../categorymanagement/create_new_category.dart';
 import 'balance_progress_bar.dart';
 import 'dashboard_charts.dart';
+import 'globals.dart';
 
 class DashboardPage extends StatefulWidget {
   const DashboardPage({Key? key}) : super(key: key);
@@ -37,6 +38,7 @@ class _DashboardPageState extends State<DashboardPage> {
 
   var x = FirebaseAuth.instance.currentUser!.reload();
   var user_name = FirebaseAuth.instance.currentUser!.displayName;
+  var wallet_name = globals.getWallet()["name"] ?? "George";
   SliverToBoxAdapter _buildHeader(double screenHeight) {
     return SliverToBoxAdapter(
       child: Container(
@@ -101,8 +103,8 @@ class _DashboardPageState extends State<DashboardPage> {
                 ),
               ],
             ),
-            const Text(
-              'VIEWING YOUR WALLET',
+            Text(
+              'VIEWING $wallet_name ',
               style: TextStyle(
                   fontSize: 12.0, color: Color(0xFFFFBDB8), letterSpacing: 1.5),
             ),

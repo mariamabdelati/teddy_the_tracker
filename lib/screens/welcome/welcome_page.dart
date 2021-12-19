@@ -13,18 +13,18 @@ class LoginPage extends StatefulWidget {
   bool isLoading;
   bool isLogged;
   final void Function(
-      String email,
-      String password,
-      String username,
-      bool isLogin,
-      BuildContext ctx,
-      ) submitFn;
+    String email,
+    String password,
+    String username,
+    bool isLogin,
+    BuildContext ctx,
+  ) submitFn;
 
-  LoginPage(this.submitFn, this.isLoading, this.isLogged, {Key? key}) : super(key: key);
+  LoginPage(this.submitFn, this.isLoading, this.isLogged, {Key? key})
+      : super(key: key);
 
   @override
   _LoginPageState createState() => _LoginPageState();
-
 }
 
 class _LoginPageState extends State<LoginPage> {
@@ -76,14 +76,12 @@ class _LoginPageState extends State<LoginPage> {
 
   bool _keyboardVisible = false;
 
-
   @override
   void initState() {
     super.initState();
     _passwordVisible = false;
 
     var keyboardVisibilityController = KeyboardVisibilityController();
-
 
     keyboardVisibilityController.onChange.listen((bool visible) {
       setState(() {
@@ -168,7 +166,7 @@ class _LoginPageState extends State<LoginPage> {
                           child: Text(
                             "Set Money Goals",
                             style:
-                            TextStyle(color: _headingColor, fontSize: 28),
+                                TextStyle(color: _headingColor, fontSize: 28),
                           ),
                         ),
                         Container(
@@ -178,7 +176,7 @@ class _LoginPageState extends State<LoginPage> {
                             "We make tracking your expenses easy. Join Teddy the Tracker now to manage your expenses.",
                             textAlign: TextAlign.center,
                             style:
-                            TextStyle(color: _headingColor, fontSize: 16),
+                                TextStyle(color: _headingColor, fontSize: 16),
                           ),
                         )
                       ],
@@ -253,7 +251,10 @@ class _LoginPageState extends State<LoginPage> {
                             children: [
                               Container(
                                 margin: const EdgeInsets.only(bottom: 20),
-                                child: Text(_isLogin? "Login To Continue" : "Create New Account",
+                                child: Text(
+                                  _isLogin
+                                      ? "Login To Continue"
+                                      : "Create New Account",
                                   style: const TextStyle(fontSize: 20),
                                   textAlign: TextAlign.center,
                                 ),
@@ -265,8 +266,7 @@ class _LoginPageState extends State<LoginPage> {
                               const SizedBox(
                                 height: 15,
                               ),
-                              if (!_isLogin)
-                                buildUsername(),
+                              if (!_isLogin) buildUsername(),
                               if (!_isLogin)
                                 const SizedBox(
                                   height: 15,
@@ -284,7 +284,7 @@ class _LoginPageState extends State<LoginPage> {
                     if (widget.isLoading) const CircularProgressIndicator(),
                     if (!widget.isLoading)
                       RoundButton(
-                        text: _isLogin? "Login" : "Create Account",
+                        text: _isLogin ? "Login" : "Create Account",
                         onClicked: _trySubmit,
                       ),
                     const SizedBox(
@@ -298,7 +298,8 @@ class _LoginPageState extends State<LoginPage> {
                           });
                         },
                         child: RoundOutlinedButton(
-                          text: _isLogin? "Create New Account" : "Back to Login",
+                          text:
+                              _isLogin ? "Create New Account" : "Back to Login",
                         ),
                       )
                   ],
@@ -318,7 +319,10 @@ class _LoginPageState extends State<LoginPage> {
       decoration: InputDecoration(
         prefixIcon: SizedBox(
           width: 60,
-          child: Icon(Icons.email, color: iconsColor, ),
+          child: Icon(
+            Icons.email,
+            color: iconsColor,
+          ),
         ),
         hintText: "Enter Email...",
         labelText: "Email",
@@ -326,10 +330,7 @@ class _LoginPageState extends State<LoginPage> {
         suffixIcon: SizedBox(
           width: 60,
           child: IconButton(
-            icon: Icon(
-                Icons.clear_rounded,
-                size: 20,
-                color: iconsColor),
+            icon: Icon(Icons.clear_rounded, size: 20, color: iconsColor),
             onPressed: _emailtext.clear,
           ),
         ),
@@ -341,7 +342,9 @@ class _LoginPageState extends State<LoginPage> {
         return null;
       },
       keyboardType: TextInputType.emailAddress,
-      onSaved: (value) { _userEmail = value as String; },
+      onSaved: (value) {
+        _userEmail = value as String;
+      },
     );
   }
 
@@ -352,7 +355,10 @@ class _LoginPageState extends State<LoginPage> {
       decoration: InputDecoration(
         prefixIcon: SizedBox(
           width: 60,
-          child: Icon(Icons.vpn_key, color: iconsColor, ),
+          child: Icon(
+            Icons.vpn_key,
+            color: iconsColor,
+          ),
         ),
         hintText: "Enter Password...",
         labelText: "Password",
@@ -380,7 +386,9 @@ class _LoginPageState extends State<LoginPage> {
         return null;
       },
       keyboardType: TextInputType.text,
-      onSaved: (value) { _userPassword = value as String; },
+      onSaved: (value) {
+        _userPassword = value as String;
+      },
     );
   }
 
@@ -391,7 +399,10 @@ class _LoginPageState extends State<LoginPage> {
       decoration: InputDecoration(
         prefixIcon: SizedBox(
           width: 60,
-          child: Icon(Icons.account_circle_rounded, color: iconsColor, ),
+          child: Icon(
+            Icons.account_circle_rounded,
+            color: iconsColor,
+          ),
         ),
         hintText: "Enter Username...",
         labelText: "Username",
@@ -399,10 +410,7 @@ class _LoginPageState extends State<LoginPage> {
         suffixIcon: SizedBox(
           width: 60,
           child: IconButton(
-            icon: Icon(
-                Icons.clear_rounded,
-                size: 20,
-                color: iconsColor),
+            icon: Icon(Icons.clear_rounded, size: 20, color: iconsColor),
             onPressed: _usernametext.clear,
           ),
         ),
@@ -414,7 +422,9 @@ class _LoginPageState extends State<LoginPage> {
         return null;
       },
       keyboardType: TextInputType.text,
-      onSaved: (value) { _userUsername = value as String;},
+      onSaved: (value) {
+        _userUsername = value as String;
+      },
     );
   }
 }

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:teddy_the_tracker/constants.dart';
 import 'package:teddy_the_tracker/main.dart';
+import 'package:teddy_the_tracker/screens/dashboard/globals.dart';
 
 class Profile extends StatelessWidget {
   const Profile({Key? key}) : super(key: key);
@@ -82,6 +83,7 @@ class Profile extends StatelessWidget {
               ),
               press: () {
                 FirebaseAuth.instance.signOut();
+                globals.setWallet(null);
                 Navigator.of(context).pushAndRemoveUntil(
                     MaterialPageRoute(builder: (context) => MyApp()),
                     (Route<dynamic> route) => false);

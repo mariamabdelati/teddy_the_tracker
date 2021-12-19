@@ -61,7 +61,10 @@ class _DashboardScreenState extends State<DashboardScreen> {
     ];
     List<Widget> pages = [
       const DashboardPage(),
-      const ViewEntriesPage(title: "View All Entries"),
+      ViewEntriesPage(
+        title: "View All Entries",
+        controller: controller,
+      ),
       AddNewEntryPage(
         controller: controller,
         title: 'Create New Entry',

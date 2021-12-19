@@ -2,6 +2,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:teddy_the_tracker/screens/dashboard/dashboard_navbar.dart';
+import 'package:teddy_the_tracker/screens/walletmanagement/add_new_wallet.dart';
 import '../dashboard/globals.dart';
 
 class WalletChoosing extends StatefulWidget {
@@ -14,7 +16,11 @@ class WalletChoosing extends StatefulWidget {
 class _WalletChoosingState extends State<WalletChoosing> {
   @override
   Widget build(BuildContext context) {
-    return _getwallets();
+    return Scaffold(
+      body: Column(
+        children: [_getwallets(), const AddWalletButton()],
+      ),
+    );
   }
 
   Widget _getwallets() {
@@ -32,19 +38,21 @@ class _WalletChoosingState extends State<WalletChoosing> {
             return const CircularProgressIndicator();
           } else {
             List wallets = snapshot.data!.docs.toList();
-            return Scaffold(
-              body: ListView.builder(
-                  padding: const EdgeInsets.all(20),
-                  itemCount: wallets.length,
-                  itemBuilder: (BuildContext context, int index) {
-                    return _createButton(wallets, index);
-                  }),
-            );
+            return ListView.builder(
+                shrinkWrap: true,
+                padding: const EdgeInsets.all(20),
+                itemCount: wallets.length,
+                itemBuilder: (BuildContext context, int index) {
+                  return showWallet(
+                    wallets,
+                    index,
+                  );
+                });
           }
         });
   }
 
-  Widget _createButton(List<dynamic> wallets, int index) {
+  Widget showWallet(List<dynamic> wallets, int index) {
     return ClipRRect(
       borderRadius: BorderRadius.circular(50),
       child: ElevatedButton(
@@ -53,7 +61,10 @@ class _WalletChoosingState extends State<WalletChoosing> {
         ),
         onPressed: () {
           globals.setWallet(wallets[index]);
-          Navigator.pop(context);
+          Navigator.of(context).pushAndRemoveUntil(
+              MaterialPageRoute(builder: (context) => const DashboardScreen()),
+              (route) => false);
+          // Navigator.pop(context);
         },
         child: Center(
           child: Text(

@@ -6,8 +6,10 @@ import '../../constants.dart';
 
 class ViewEntriesPage extends StatefulWidget {
   final String title;
+  final ScrollController controller;
 
-  const ViewEntriesPage({Key? key, required this.title}) : super(key: key);
+  ViewEntriesPage({Key? key, required this.title, required this.controller})
+      : super(key: key);
 
   @override
   _ViewEntriesPageState createState() => _ViewEntriesPageState();
@@ -42,6 +44,7 @@ class _ViewEntriesPageState extends State<ViewEntriesPage> {
           }
           final data = snapshot.requireData;
           return ListView.builder(
+            controller: widget.controller,
             itemCount: data.size,
             itemBuilder: (context, index) {
               DocumentSnapshot ds = snapshot.data!.docs[index];
@@ -57,10 +60,11 @@ class _ViewEntriesPageState extends State<ViewEntriesPage> {
                   children: <Widget>[
                     Container(
                       /*width: 100,*/
-                      margin: const EdgeInsets.symmetric(vertical: 10, horizontal: 16),
+                      margin: const EdgeInsets.symmetric(
+                          vertical: 10, horizontal: 16),
                       decoration: BoxDecoration(
                           borderRadius:
-                          const BorderRadius.all(Radius.circular(15.0)),
+                              const BorderRadius.all(Radius.circular(15.0)),
                           border: Border.all(
                             color: const Color(0xFF5689B9),
                             width: 2,
@@ -132,7 +136,7 @@ class _ViewEntriesPageState extends State<ViewEntriesPage> {
                                       TextButton(
                                         onPressed: () async {
                                           final expensePath =
-                                          expenseRef.doc(ds.id);
+                                              expenseRef.doc(ds.id);
                                           await expensePath.delete();
                                           Navigator.pop(context, 'Cancel');
                                         },
