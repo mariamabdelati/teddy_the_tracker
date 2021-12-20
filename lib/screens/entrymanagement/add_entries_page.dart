@@ -9,8 +9,9 @@ import '../../constants.dart';
 
 class AddNewEntryPage extends StatefulWidget {
   final String title;
+  final ScrollController controller;
 
-  const AddNewEntryPage({Key? key, required this.title}) : super(key: key);
+  const AddNewEntryPage({Key? key, required this.title, required this.controller}) : super(key: key);
 
   @override
   AddNewEntryPageState createState() => AddNewEntryPageState();
@@ -100,6 +101,7 @@ class AddNewEntryPageState extends State<AddNewEntryPage> {
       body: Form(
         key: formKey,
         child: ListView(
+          controller: widget.controller,
           scrollDirection: Axis.vertical,
           shrinkWrap: true,
           padding: const EdgeInsets.all(16),

@@ -4,6 +4,7 @@ import "package:cloud_firestore/cloud_firestore.dart";
 import '../../screens/categorymanagement/subcategory_expansion_tile.dart';
 import '../../screens/dashboard/globals.dart';
 import '../../constants.dart';
+import '../dashboard/dashboard_navbar.dart';
 
 class SelectWallet extends StatefulWidget {
   const SelectWallet({Key? key,}) : super(key: key);
@@ -17,7 +18,7 @@ class _SelectWalletState extends State<SelectWallet> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Select Wallet"),
+        title: Text("Select Wallet"),
       ),
       body: _buildBody(context),
     );
@@ -61,7 +62,9 @@ class _SelectWalletState extends State<SelectWallet> {
         //where wallet is switched
         /*print("wallet switched to " + (wallets[index].name as String));*/
         globals.setWallet(wallets[index]);
-        Navigator.pop(context);
+        Navigator.of(context).pushAndRemoveUntil(
+            MaterialPageRoute(builder: (context) => const DashboardScreen()),
+                (route) => false);
       },
       child: Card(
         elevation: 4,
@@ -111,44 +114,3 @@ class _SelectWalletState extends State<SelectWallet> {
     );
   }
 }
-/*Scaffold(
-      appBar: AppBar(
-        title: const Text('Switch Wallet'),
-        centerTitle: true,
-        leading: IconButton(
-          onPressed: () {
-            Navigator.pop(context);
-          },
-          icon: const Icon(Icons.arrow_back_rounded),
-        ),
-        //elevation: 0,
-      ),
-      body: buildBody(context),*/
-
-/*return AnimatedContainer(
-      padding: const EdgeInsets.all(32),
-      width: widget.width,
-      height: widget.height,
-      curve: Curves.fastLinearToSlowEaseIn,
-      duration: const Duration(milliseconds: 1000),
-      transform: Matrix4.translationValues(widget.xoffset, widget.yoffset, 1),
-      decoration: BoxDecoration(
-          color: Colors.white.withOpacity(widget.opacity),
-          borderRadius: const BorderRadius.only(
-              topLeft: Radius.circular(25), topRight: Radius.circular(25))),
-      child: buildBody(context));*/
-
-/*return Scaffold(
-      appBar: AppBar(
-        title: const Text('Switch Wallet'),
-        centerTitle: true,
-        leading: IconButton(
-          onPressed: () {
-            Navigator.pop(context);
-          },
-          icon: const Icon(Icons.arrow_back_rounded),
-        ),
-        //elevation: 0,
-      ),
-      body: _buildBody(context),
-    );}*/

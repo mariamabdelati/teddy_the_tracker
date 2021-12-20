@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:fl_chart/fl_chart.dart';
 import '../../constants.dart';
 import '../../screens/categorymanagement/subcategory_expansion_tile.dart';
-
+import 'globals.dart';
 //add another class named categories
 
 class Entries {
@@ -70,8 +70,10 @@ Widget _getCategories(context, List<Entries> expenses) {
   return StreamBuilder<QuerySnapshot>(
       stream: FirebaseFirestore.instance
           .collection("/categories/JBSahpmjY2TtK0gRdT4s/category")
-          .orderBy("categoryId", descending: false)
-          .snapshots(),
+          .where("walletId", isEqualTo: globals.getWallet()["walletID"]).snapshots(),
+      /*.orderBy("categoryId", descending: false)*/
+
+
       builder: (context, snapshot) {
         if (snapshot.hasError) {
           print("error retreiving categories");
@@ -107,11 +109,12 @@ Widget _buildBody(context, List<Entries> expenses, List<Categories> categories) 
     }
   }
 
-  //print(expensesData);
+  print(expensesData);
 
   for (var category in categories.toList()) {
     categoriesData[category.catID] = category.label;
   }
+  print(categoriesData);
 
   double total = 0;
   expensesData.forEach((k, v) {
@@ -123,14 +126,15 @@ Widget _buildBody(context, List<Entries> expenses, List<Categories> categories) 
     ..sort((k1, k2) => expensesData[k2].compareTo(expensesData[k1]));
   LinkedHashMap sortedExpensesData = LinkedHashMap
       .fromIterable(sortedExpensesKeys, key: (k) => k, value: (k) => expensesData[k]);
-  //print(sortedExpensesData);
+  print(sortedExpensesData);
 
   Map expensesDataTrimmed = {};
   Map expensesDataNoOther = {};
   int index = 0;
 
   var list = sortedExpensesData.keys.toList(growable:false);
-  var other = list.indexOf(13);
+  var other = list.indexOf(2);
+  print(other);
 
   int count = 0;
   var key;
@@ -148,34 +152,40 @@ Widget _buildBody(context, List<Entries> expenses, List<Categories> categories) 
     });
     expensesDataNoOther[key] = value;
   }
-  //print(expensesDataNoOther);
+  print(expensesDataNoOther);
 
-  expensesDataNoOther.forEach((k, v) {
-    if (index < 9) {
-      if (k == 13){
-        expensesDataTrimmed["other categories"] = v;
-      } else{
-        expensesDataTrimmed[k] = v;
-        index++;
-        //print(index);
-      }
-    } else {
-      if (index == 9){
-        if (expensesDataTrimmed["other categories"] == null){
+  if(expensesDataNoOther.isNotEmpty) {
+    expensesDataNoOther.forEach((k, v) {
+      if (index < 9) {
+        if (k == 13){
           expensesDataTrimmed["other categories"] = v;
+        } else{
+          expensesDataTrimmed[k] = v;
           index++;
-        }  else{
+          //print(index);
+        }
+      } else {
+        if (index == 9){
+          if (expensesDataTrimmed["other categories"] == null){
+            expensesDataTrimmed["other categories"] = v;
+            index++;
+          }  else{
+            expensesDataTrimmed["other categories"] = expensesDataTrimmed["other categories"] + v;
+            index++;
+          }
+        } else{
           expensesDataTrimmed["other categories"] = expensesDataTrimmed["other categories"] + v;
           index++;
         }
-      } else{
-        expensesDataTrimmed["other categories"] = expensesDataTrimmed["other categories"] + v;
-        index++;
       }
-    }
-  });
+    });
+  } else {
+    sortedExpensesData.forEach((k, v){
+      expensesDataTrimmed[k] = v;
+    });
+  }
 
-  //print(expensesDataTrimmed);
+  print(expensesDataTrimmed);
 
 
   int i = 0;
@@ -186,8 +196,10 @@ Widget _buildBody(context, List<Entries> expenses, List<Categories> categories) 
         i++;
       }
     });
-    if (expensesDataTrimmed.keys.last == k){
-      data.add(Data(name: k, percent: double.parse(((v/total)*100).toStringAsFixed(2)), color: pieChartColors[i]));
+    if (expensesDataTrimmed.length > 9){
+      if (expensesDataTrimmed.keys.last == k){
+        data.add(Data(name: k, percent: double.parse(((v/total)*100).toStringAsFixed(2)), color: pieChartColors[i]));
+      }
     }
   });
 

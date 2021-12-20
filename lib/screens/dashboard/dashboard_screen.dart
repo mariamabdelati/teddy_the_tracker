@@ -1,14 +1,16 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-//import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
+import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
+import '../../screens/categorymanagement/subcategory_expansion_tile.dart';
 //import 'package:teddy_categories/constants.dart';
 //import 'package:teddy_categories/screens/dashboard/pie_chart.dart';
 
-//import '../../constants.dart';
-//import '../categorymanagement/create_new_category.dart';
+import '../../constants.dart';
+import '../categorymanagement/create_new_category.dart';
 import '../walletsmanagement/switch_wallet_screen.dart';
 import 'balance_progress_bar.dart';
 import 'dashboard_charts.dart';
+import 'globals.dart';
 
 class DashboardPage extends StatefulWidget {
   const DashboardPage({Key? key}) : super(key: key);
@@ -43,6 +45,7 @@ class _DashboardPageState extends State<DashboardPage> {
 
   var x = FirebaseAuth.instance.currentUser!.reload();
   var user_name = FirebaseAuth.instance.currentUser!.displayName;
+  var wallet_name = globals.getWallet()["name"] ?? "George";
   SliverToBoxAdapter _buildHeader(double screenHeight) {
     return SliverToBoxAdapter(
       child: Container(
@@ -91,7 +94,7 @@ class _DashboardPageState extends State<DashboardPage> {
                 //mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: <Widget>[
                   Text(
-                    'HI, $user_name',
+                    'HI, $user_name'.toUpperCase(),
                     style: const TextStyle(
                       color: Color(0xFFFFD2CE), //const Color(0xFF1D67A6),
                       fontSize: 25.0,
@@ -110,9 +113,9 @@ class _DashboardPageState extends State<DashboardPage> {
                 ],
               ),
             ),
-            const Text(
-              'VIEWING YOUR WALLET',
-              style: TextStyle(
+            Text(
+              'VIEWING $wallet_name'.toUpperCase(),
+              style: const TextStyle(
                   fontSize: 12.0, color: Color(0xFFFFBDB8), letterSpacing: 1.5),
             ),
             SizedBox(height: screenHeight * 0.03),

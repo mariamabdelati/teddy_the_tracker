@@ -6,8 +6,9 @@ import '../../constants.dart';
 
 class ViewEntriesPage extends StatefulWidget {
   final String title;
+  final ScrollController controller;
 
-  const ViewEntriesPage({Key? key, required this.title}) : super(key: key);
+  const ViewEntriesPage({Key? key, required this.title, required this.controller}) : super(key: key);
 
   @override
   _ViewEntriesPageState createState() => _ViewEntriesPageState();
@@ -42,6 +43,7 @@ class _ViewEntriesPageState extends State<ViewEntriesPage> {
           }
           final data = snapshot.requireData;
           return ListView.builder(
+            controller: widget.controller,
             itemCount: data.size,
             itemBuilder: (context, index) {
               DocumentSnapshot ds = snapshot.data!.docs[index];

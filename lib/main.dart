@@ -1,4 +1,5 @@
 import 'package:firebase_auth/firebase_auth.dart';
+import '../../screens/walletsmanagement/wallet_selection_screen.dart';
 import '../../screens/dashboard/dashboard_navbar.dart';
 //import '../../screens/entrymanagement/view_entries.dart';
 import '../../screens/registration/auth_screen.dart';
@@ -6,6 +7,7 @@ import '../../screens/registration/auth_screen.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'constants.dart';
+import '../../screens/dashboard/globals.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -41,8 +43,8 @@ class MyApp extends StatelessWidget {
         home: StreamBuilder(
           stream: FirebaseAuth.instance.authStateChanges(),
           builder: (ctx, userSnapshot) {
-            if (userSnapshot.hasData) {
-              return const DashboardScreen();
+            if (userSnapshot.hasData && globals.getWallet() == null) {
+              return const SelectWallet();
             }
             return const Scaffold(
               resizeToAvoidBottomInset: false,

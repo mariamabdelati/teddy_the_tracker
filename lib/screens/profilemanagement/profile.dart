@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import '../../constants.dart';
 
+import '../../screens/dashboard/globals.dart';
 import '../../main.dart';
 
 class Profile extends StatelessWidget {
@@ -74,8 +75,9 @@ class Profile extends StatelessWidget {
               ),
               press: () {
                 FirebaseAuth.instance.signOut();
+                globals.setWallet(null);
                 Navigator.of(context).pushAndRemoveUntil(
-                    MaterialPageRoute(builder: (context) => const MyApp()),
+                    MaterialPageRoute(builder: (context) => MyApp()),
                         (Route<dynamic> route) => false);
               },
             ),

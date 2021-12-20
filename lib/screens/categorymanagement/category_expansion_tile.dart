@@ -118,8 +118,9 @@ class _CategoryExpansionTileState extends State<CategoryExpansionTile> {
     //stream of categories from db
     final Stream<QuerySnapshot> categories = FirebaseFirestore.instance
         .collection("categories/JBSahpmjY2TtK0gRdT4s/category")
-        .orderBy("categoryId", descending: true)
-    /*.where("categoryId", whereIn: (globals.getWallet()["categoryIds"]))*/.snapshots();
+        .where("walletId", isEqualTo: globals.getWallet()["walletID"]).snapshots();
+    //.orderBy("categoryId", descending: true)
+    /*.where("categoryId", whereIn: (globals.getWallet()["categoryIds"]))*/
     //var contents = <Widget>[];
     /*entryCategories.map((item) {
       if (item.parentID == -1) {

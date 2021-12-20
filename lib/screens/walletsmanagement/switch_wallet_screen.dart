@@ -4,37 +4,11 @@ import "package:cloud_firestore/cloud_firestore.dart";
 import '../../screens/categorymanagement/subcategory_expansion_tile.dart';
 import '../../screens/dashboard/globals.dart';
 import '../../constants.dart';
-
-/*class Wallets {
-  Wallets(this.walletId, this.name, this.userIds);
-  int? walletId;
-  String? name;
-  List? userIds;
-  DocumentReference? reference;
-
-  Wallets.fromMap(Map<String, dynamic> map, {this.reference}) {
-    walletId = map["walletID"];
-    name = map["name"];
-    userIds = map["usersIDS"];
-  }
-
-  @override
-  String toString() => "Wallet<$walletId : $name\$";
-}*/
-
-
-
-
-
+import '../dashboard/dashboard_navbar.dart';
 
 class SwitchWallet extends StatefulWidget {
-  /*final double width;
-  final double height;
-  final double xoffset;
-  final double yoffset;
-  final double opacity;*/
 
-  const SwitchWallet({Key? key, /*required this.width, required this.height, required this.xoffset, required this.yoffset, required this.opacity*/}) : super(key: key);
+  const SwitchWallet({Key? key, }) : super(key: key);
 
   @override
   _SwitchWalletState createState() => _SwitchWalletState();
@@ -88,7 +62,10 @@ class _SwitchWalletState extends State<SwitchWallet> {
         //where wallet is switched
         /*print("wallet switched to " + (wallets[index].name as String));*/
         globals.setWallet(wallets[index]);
-        Navigator.pop(context);
+        Navigator.of(context).pushAndRemoveUntil(
+            MaterialPageRoute(builder: (context) => const DashboardScreen()),
+                (route) => false);
+        //Navigator.pop(context);
       },
       child: Card(
         elevation: 4,
@@ -138,44 +115,3 @@ class _SwitchWalletState extends State<SwitchWallet> {
     );
   }
 }
-    /*Scaffold(
-      appBar: AppBar(
-        title: const Text('Switch Wallet'),
-        centerTitle: true,
-        leading: IconButton(
-          onPressed: () {
-            Navigator.pop(context);
-          },
-          icon: const Icon(Icons.arrow_back_rounded),
-        ),
-        //elevation: 0,
-      ),
-      body: buildBody(context),*/
-
-    /*return AnimatedContainer(
-      padding: const EdgeInsets.all(32),
-      width: widget.width,
-      height: widget.height,
-      curve: Curves.fastLinearToSlowEaseIn,
-      duration: const Duration(milliseconds: 1000),
-      transform: Matrix4.translationValues(widget.xoffset, widget.yoffset, 1),
-      decoration: BoxDecoration(
-          color: Colors.white.withOpacity(widget.opacity),
-          borderRadius: const BorderRadius.only(
-              topLeft: Radius.circular(25), topRight: Radius.circular(25))),
-      child: buildBody(context));*/
-
-    /*return Scaffold(
-      appBar: AppBar(
-        title: const Text('Switch Wallet'),
-        centerTitle: true,
-        leading: IconButton(
-          onPressed: () {
-            Navigator.pop(context);
-          },
-          icon: const Icon(Icons.arrow_back_rounded),
-        ),
-        //elevation: 0,
-      ),
-      body: _buildBody(context),
-    );}*/
