@@ -3,9 +3,10 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:teddy_the_tracker/screens/walletmanagement/wallet_screen.dart';
+//import '../../screens/walletmanagement/wallet_screen.dart';
 import '../../screens/dashboard/dashboard_navbar.dart';
 import '../../screens/welcome/welcome_page.dart';
+import '../walletsmanagement/switch_wallet_screen.dart';
 
 class AuthScreen extends StatefulWidget {
   const AuthScreen(this._isLogin);
@@ -48,7 +49,7 @@ class _AuthScreenState extends State<AuthScreen> {
         FirebaseAuth.instance.currentUser!.updateDisplayName(username);
       }
       Navigator.of(context).pushAndRemoveUntil(
-          MaterialPageRoute(builder: (context) => const WalletChoosing()),
+          MaterialPageRoute(builder: (context) => const SwitchWallet()),
           (route) => false);
     } on FirebaseAuthException catch (err) {
       var msg = "Error occurred, please check your credentials";

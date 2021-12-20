@@ -1,45 +1,52 @@
 import 'dart:collection';
-import 'dart:ffi';
-import 'dart:math';
-import 'dart:ui';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-//import '../../data/categories.dart';
-//import '../../data/expenses.dart';
-//import 'package:pie_chart/pie_chart.dart';
 import 'package:fl_chart/fl_chart.dart';
-import 'package:teddy_the_tracker/constants.dart';
-
+import '../../constants.dart';
+import '../../screens/categorymanagement/subcategory_expansion_tile.dart';
+import 'globals.dart';
 //add another class named categories
 
 class Entries {
-  Entries(this.date, this.amount, this.label);
-  String? date;
+  Entries(
+    this.catID,
+    this.amount,
+    this.label,
+  );
+  int? catID;
   String? amount;
   String? label;
   DocumentReference? reference;
 
-  int year = 2021;
-  int month = 12;
-  int day = 10;
-
-  void cleanDate() {
-    var data = date!.split("-");
-    year = int.parse(data[0]);
-    month = int.parse(data[1]);
-    day = int.parse(data[2]);
-  }
-
   Entries.fromMap(Map<String, dynamic> map, {this.reference}) {
-    date = map["date"];
+    catID = map["categoryId"];
     amount = map["amount"];
     label = map["label"];
-    cleanDate();
   }
 
   @override
-  String toString() => "Entry<$label : $year,$month,$day : $amount\$";
+  String toString() => "Entry<$label : $catID : $amount\$";
+}
+
+class Categories {
+  Categories(
+    this.catID,
+    this.subcats,
+    this.label,
+  );
+  int? catID;
+  List? subcats;
+  String? label;
+  DocumentReference? reference;
+
+  Categories.fromMap(Map<String, dynamic> map, {this.reference}) {
+    catID = map["categoryId"];
+    subcats = map["childIds"];
+    label = map["label"];
+  }
+
+  @override
+  String toString() => "Entry<$label : $catID : $subcats\$";
 }
 
 // widget responsible for fetching the data from firebase and convert them to List <Entries>
@@ -47,7 +54,7 @@ Widget _getExpenses(context) {
   return StreamBuilder<QuerySnapshot>(
       stream: FirebaseFirestore.instance
           .collection("expenses/cFqsqHPIscrC6cY9iPs6/expense")
-          .orderBy("date", descending: true)
+          .orderBy("categoryId", descending: false)
           .snapshots(),
       builder: (context, snapshot) {
         if (snapshot.hasError) {
@@ -61,237 +68,223 @@ Widget _getExpenses(context) {
                   Entries.fromMap(docSnapshot.data() as Map<String, dynamic>))
               .toList();
           return Container(
-            child: _getIncomes(context, expenses),
+            child: _getCategories(context, expenses),
           );
         }
       });
 }
 
-Widget _getIncomes(context, List<Entries> expenses) {
+Widget _getCategories(context, List<Entries> expenses) {
   return StreamBuilder<QuerySnapshot>(
       stream: FirebaseFirestore.instance
-          .collection("expenses/cFqsqHPIscrC6cY9iPs6/income")
-          .orderBy("date", descending: true)
+          .collection("/categories/JBSahpmjY2TtK0gRdT4s/category")
+          .where("walletId", isEqualTo: globals.getWallet()["walletID"])
           .snapshots(),
+      /*.orderBy("categoryId", descending: false)*/
+
       builder: (context, snapshot) {
         if (snapshot.hasError) {
-          print("error retreiving income");
+          print("error retreiving categories");
           return const Text("Something went wrong",
               style: TextStyle(color: Colors.white));
         } else if (snapshot.connectionState == ConnectionState.waiting) {
           return const CircularProgressIndicator();
         } else {
-          List<Entries> incomes = snapshot.data!.docs
-              .map((docSnapshot) =>
-                  Entries.fromMap(docSnapshot.data() as Map<String, dynamic>))
+          List<Categories> categories = snapshot.data!.docs
+              .map((docSnapshot) => Categories.fromMap(
+                  docSnapshot.data() as Map<String, dynamic>))
               .toList();
           return Container(
-            child: _buildBody(context, expenses, incomes),
+            child: _buildBody(context, expenses, categories),
           );
         }
       });
 }
 
 // Widget responsible for converting List <Entries> to List <FlSpot>
-Widget _buildBody(context, List<Entries> expenses, List<Entries> incomes) {
+Widget _buildBody(
+    context, List<Entries> expenses, List<Categories> categories) {
   Map expensesData = {};
-  Map incomesData = {};
+  Map categoriesData = {};
+  //Map categoryNames = {};
+  List<Data> data = [];
 
-  for (var entry in expenses.reversed.toList()) {
-    if (expensesData.containsKey(entry.date)) {
-      expensesData[entry.date] =
-          expensesData[entry.date] + double.parse(entry.amount as String);
+  for (var entry in expenses.toList()) {
+    if (expensesData.containsKey(entry.catID)) {
+      expensesData[entry.catID] =
+          expensesData[entry.catID] + double.parse(entry.amount as String);
     } else {
-      expensesData[entry.date] = double.parse(entry.amount as String);
+      expensesData[entry.catID] = double.parse(entry.amount as String);
     }
   }
-  for (var entry in incomes.reversed.toList()) {
-    if (incomesData.containsKey(entry.date)) {
-      incomesData[entry.date] =
-          incomesData[entry.date] + double.parse(entry.amount as String);
-    } else {
-      incomesData[entry.date] = double.parse(entry.amount as String);
-    }
+
+  print(expensesData);
+
+  for (var category in categories.toList()) {
+    categoriesData[category.catID] = category.label;
   }
-  List<FlSpot> expensesList = [];
-  List<FlSpot> incomesList = [];
-  List<String> date = [];
-  // for (var i; i < data.keys.length; i++) {
-  //   data_list.add(FlSpot(i.toDouble(), data[data.keys.elementAt(i)]));
-  // }
-  int i = 0;
+  print(categoriesData);
+
+  double total = 0;
+  expensesData.forEach((k, v) {
+    total += v;
+    //print(total);
+  });
+
+  var sortedExpensesKeys = expensesData.keys.toList(growable: false)
+    ..sort((k1, k2) => expensesData[k2].compareTo(expensesData[k1]));
+  LinkedHashMap sortedExpensesData = LinkedHashMap.fromIterable(
+      sortedExpensesKeys,
+      key: (k) => k,
+      value: (k) => expensesData[k]);
+  print(sortedExpensesData);
+
+  Map expensesDataTrimmed = {};
+  Map expensesDataNoOther = {};
   int index = 0;
-  expensesData.forEach((k, v) {
-    if (!date.contains(k)) {
-      date.add(k);
+
+  var list = sortedExpensesData.keys.toList(growable: false);
+  var other = list.indexOf(2);
+  print(other);
+
+  int count = 0;
+  var key;
+  var value;
+  if (other < 9 && other > -1) {
+    sortedExpensesData.forEach((k, v) {
+      if (count != other) {
+        expensesDataNoOther[k] = v;
+        count++;
+      } else {
+        key = k;
+        value = v;
+        count++;
+      }
+    });
+    expensesDataNoOther[key] = value;
+  }
+  print(expensesDataNoOther);
+
+  if (expensesDataNoOther.isNotEmpty) {
+    expensesDataNoOther.forEach((k, v) {
+      if (index < 9) {
+        if (k == 13) {
+          expensesDataTrimmed["other categories"] = v;
+        } else {
+          expensesDataTrimmed[k] = v;
+          index++;
+          //print(index);
+        }
+      } else {
+        if (index == 9) {
+          if (expensesDataTrimmed["other categories"] == null) {
+            expensesDataTrimmed["other categories"] = v;
+            index++;
+          } else {
+            expensesDataTrimmed["other categories"] =
+                expensesDataTrimmed["other categories"] + v;
+            index++;
+          }
+        } else {
+          expensesDataTrimmed["other categories"] =
+              expensesDataTrimmed["other categories"] + v;
+          index++;
+        }
+      }
+    });
+  } else {
+    sortedExpensesData.forEach((k, v) {
+      expensesDataTrimmed[k] = v;
+    });
+  }
+
+  print(expensesDataTrimmed);
+
+  int i = 0;
+  expensesDataTrimmed.forEach((k, v) {
+    categoriesData.forEach((key, value) {
+      if (k == key) {
+        data.add(Data(
+            name: value,
+            percent: double.parse(((v / total) * 100).toStringAsFixed(2)),
+            color: pieChartColors[i]));
+        i++;
+      }
+    });
+    if (expensesDataTrimmed.length > 9) {
+      if (expensesDataTrimmed.keys.last == k) {
+        data.add(Data(
+            name: k,
+            percent: double.parse(((v / total) * 100).toStringAsFixed(2)),
+            color: pieChartColors[i]));
+      }
     }
   });
-  incomesData.forEach((k, v) {
-    if (!date.contains(k)) {
-      date.add(k);
+
+  //print(data);
+
+  //print(categoryNames);
+  /*expensesData.forEach((k, v) {
+    if (!total.contains(k)) {
+      total[0] += v;
     }
-  });
-  date.sort();
-  expensesData.forEach((k, v) {
+  });*/
+  //date.sort();
+  /*expensesData.forEach((k, v) {
     expensesList
         .add(FlSpot(date.indexWhere((element) => element == k).toDouble(), v));
   });
   incomesData.forEach((k, v) {
     incomesList
         .add(FlSpot(date.indexWhere((element) => element == k).toDouble(), v));
-  });
-  if (expensesList[0].x != 0) {
-    expensesList = [FlSpot(0, 0), ...expensesList];
-  }
-  if (expensesList.last.x != date.length - 1)
-    expensesList.add(FlSpot(date.length - 1, 0));
-  if (incomesList[0].x != 0) incomesList = [FlSpot(0, 0), ...incomesList];
-  if (incomesList.last.x != date.length - 1)
-    incomesList.add(FlSpot(date.length - 1, 0));
-
+  });*/
   return Container(
-    child: _buildChart(context, expensesList, incomesList, date),
-  );
-}
-
-// Widget responsible for using List <FlSpots> passed to it and construct the graph
-Widget _buildChart(context, List<FlSpot> expenses_list,
-    List<FlSpot> incomes_list, List<dynamic> dates) {
-  LineTitles lineTitle = LineTitles(dates);
-  LineChartBarData expensesLine = LineChartBarData(
-      spots: expenses_list,
-      isCurved: true,
-      colors: [Colors.orange, Colors.red],
-      barWidth: 8,
-      belowBarData: BarAreaData(
-          show: true,
-          colors: [Colors.orange, Colors.red]
-              .map((color) => color.withOpacity(0.6))
-              .toList()));
-  LineChartBarData incomesLine = LineChartBarData(
-      spots: incomes_list,
-      isCurved: true,
-      colors: [Colors.blue, Colors.green],
-      barWidth: 8,
-      belowBarData: BarAreaData(
-          show: true,
-          colors: [Colors.blue, Colors.green]
-              .map((color) => color.withOpacity(0.6))
-              .toList()));
-  int maxY = 100;
-  expenses_list.forEach((spot) {
-    maxY = max(maxY, spot.y.ceil());
-  });
-  incomes_list.forEach((spot) {
-    maxY = max(maxY, spot.y.ceil());
-  });
-  return LineChart(LineChartData(
-      minX: 0,
-      maxX: dates.length - 1,
-      minY: 0,
-      maxY: maxY.toDouble(),
-      titlesData: lineTitle.getTitle(),
-      gridData: FlGridData(
-          show: true,
-          getDrawingHorizontalLine: (value) {
-            return FlLine(color: const Color(0x99CCEDFF), strokeWidth: 1);
-          },
-          drawVerticalLine: true,
-          getDrawingVerticalLine: (value) {
-            return FlLine(color: const Color(0x99CCEDFF), strokeWidth: 1);
-          }),
-      borderData: FlBorderData(
-        show: true,
-        border: Border.all(color: const Color(0xAACCEDFF), width: 1),
+      child: Stack(children: <Widget>[
+    Column(crossAxisAlignment: CrossAxisAlignment.stretch, children: <Widget>[
+      const SizedBox(
+        height: 37,
       ),
-      lineBarsData: <LineChartBarData>[expensesLine, incomesLine]));
-
-//   ListView.builder(
-//       padding: const EdgeInsets.all(8),
-//       itemCount: entries.length,
-//       itemBuilder: (BuildContext context, int index) {
-//         return Text(entries[index].toString());
-//       });
+      const Text(
+        "Expenses by Category Distribution",
+        style: TextStyle(
+            fontSize: 16, color: Colors.white, fontWeight: FontWeight.bold),
+        textAlign: TextAlign.center,
+      ),
+      const SizedBox(
+        height: 4,
+      ),
+      Expanded(
+          child: Padding(
+        padding: const EdgeInsets.only(right: 5, left: 2, bottom: 20),
+        child: PieChartPage(data),
+      )),
+      const SizedBox(
+        height: 10,
+      )
+    ])
+  ]));
+  /*return Container(
+   child: PieChartPage(data),
+  );*/
 }
 
-class LineTitles {
-  List dates;
-  LineTitles(this.dates);
-  FlTitlesData getTitle() {
-    return FlTitlesData(
-        show: true,
-        bottomTitles: SideTitles(
-          showTitles: true,
-          getTitles: (val) => dates[val.toInt()].replaceAll("-", "\n"),
-          margin: 8,
-          reservedSize: 60,
-          rotateAngle: 30,
-        ),
-        rightTitles: SideTitles(showTitles: true, getTitles: (val) => ""),
-        topTitles: SideTitles(showTitles: true, getTitles: (val) => ""));
-  }
-}
+/*_buildChart(context, Map<dynamic, dynamic> categoryNames) {
 
-//------line chart ends here---------
-class TestDashboard extends StatefulWidget {
-  const TestDashboard({Key? key}) : super(key: key);
+} */
+
+class TtestDashboard extends StatefulWidget {
+  const TtestDashboard({Key? key}) : super(key: key);
 
   @override
   TtestDashBoardState createState() => TtestDashBoardState();
 }
 
-class TtestDashBoardState extends State<TestDashboard> {
+class TtestDashBoardState extends State<TtestDashboard> {
   @override
   Widget build(BuildContext context) {
-    return Container(
-        child: Stack(children: <Widget>[
-      Column(crossAxisAlignment: CrossAxisAlignment.stretch, children: <Widget>[
-        const SizedBox(
-          height: 37,
-        ),
-        const Text(
-          "Expenses vs Income",
-          style: TextStyle(
-              fontSize: 16, color: Colors.white, fontWeight: FontWeight.bold),
-          textAlign: TextAlign.center,
-        ),
-        const SizedBox(
-          height: 4,
-        ),
-        Expanded(
-            child: Padding(
-          padding: const EdgeInsets.only(right: 5, left: 2),
-          child: _getExpenses(context),
-        )),
-        const SizedBox(
-          height: 10,
-        )
-      ])
-    ]));
+    return Container(child: _getExpenses(context) //_buildBody(context),
+        );
   }
-}
-//dummy data
-/*class PieData {
-  final List<Data> data = [];
-
-
-}
-
-class Data {
-  final int catID;
-
-  final double amount;
-
-  Data({required this.catID, required this.amount});
-}*/
-
-class PieData {
-  static List<Data> data = [
-    Data(name: 'Food', percent: 40, color: const Color(0xFFCCEDFF)),
-    Data(name: 'Groceries', percent: 30, color: const Color(0xffbdedff)),
-    Data(name: 'Shopping', percent: 15, color: const Color(0xffa8e5ff)),
-    Data(name: 'Utilities', percent: 15, color: const Color(0xff9bdbff)),
-  ];
 }
 
 class Data {
@@ -304,24 +297,40 @@ class Data {
   Data({required this.name, required this.percent, required this.color});
 }
 
-List<PieChartSectionData> getSections(int touchedIndex) {
-  return PieData.data
+List<PieChartSectionData> getSections(
+    int touchedIndex, List<Data> piechartData) {
+  return piechartData
       .asMap()
       .map<int, PieChartSectionData>((index, data) {
         final isTouched = index == touchedIndex;
-        final double fontSize = isTouched ? 20 : 14;
-        final double radius = isTouched ? 80 : 60;
+        final opacity = isTouched ? 1.0 : 0.9;
+        //final widgetSize = isTouched ? 55.0 : 40.0;
+        //final double fontSize = isTouched ? 20 : 16;
+        final double radius = isTouched ? 70 : 60;
 
         final value = PieChartSectionData(
-          color: data.color,
+          color: data.color.withOpacity(opacity),
           value: data.percent,
           title: '${data.percent}%',
           radius: radius,
-          titleStyle: TextStyle(
-            fontSize: fontSize,
+          titleStyle: const TextStyle(
+            fontSize: 18,
             fontWeight: FontWeight.bold,
-            color: Colors.black87,
+            color: Color(0xff044d7c),
           ),
+          badgeWidget: isTouched
+              ? _Badge(
+                  text: '${data.percent}%',
+                  borderColor: data.color,
+                  size: 37,
+                )
+              : null,
+          badgePositionPercentageOffset: .65,
+          showTitle: false, //isTouched,
+          titlePositionPercentageOffset: 0.60,
+          borderSide: isTouched
+              ? const BorderSide(color: Color(0xff0293ee), width: 4)
+              : null,
         );
 
         return MapEntry(index, value);
@@ -331,107 +340,191 @@ List<PieChartSectionData> getSections(int touchedIndex) {
 }
 
 class PieChartPage extends StatefulWidget {
-  PieChartPage({Key? key}) : super(key: key);
+  final List<Data> list;
+  const PieChartPage(this.list, {Key? key}) : super(key: key);
 
   @override
-  State<StatefulWidget> createState() => PieChartPageState();
+  State<PieChartPage> createState() => _PieChartPageState();
 }
 
-class PieChartPageState extends State {
+class _PieChartPageState extends State<PieChartPage> {
   int touchedIndex = -1;
 
   @override
   Widget build(BuildContext context) {
-    return Row(
+    return /*buildPieChart(widget.list);*/ Row(
       children: <Widget>[
         Expanded(
           flex: 1,
           child: AspectRatio(
             aspectRatio: 1,
-            child: PieChart(
-              PieChartData(
-                pieTouchData: PieTouchData(
-                  touchCallback:
-                      (FlTouchEvent event, PieTouchResponse? response) {
-                    setState(() {
-                      if (event is FlLongPressEnd || event is FlPanEndEvent) {
-                        touchedIndex = -1;
-                      } else {
-                        if (response != null) {
-                          touchedIndex = response
-                              .touchedSection?.touchedSectionIndex as int;
-                        }
-                      }
-                    });
-                  },
-                ),
-                borderData: FlBorderData(show: false),
-                sectionsSpace: 2,
-                centerSpaceRadius: 35,
-                sections: getSections(touchedIndex),
-              ),
-            ),
+            child: buildPieChart(widget.list),
           ),
         ),
-        const Padding(
-          padding: EdgeInsets.all(20),
-          child: IndicatorsWidget(),
+        Padding(
+          padding: const EdgeInsets.all(20),
+          child: IndicatorsWidget(widget.list, touchedIndex),
         ),
       ],
     );
   }
+
+  Widget buildPieChart(List<Data> piechartData) {
+    return PieChart(
+      PieChartData(
+        pieTouchData: PieTouchData(
+          touchCallback: (FlTouchEvent event, PieTouchResponse? response) {
+            setState(() {
+              if (!event.isInterestedForInteractions ||
+                  response == null ||
+                  response.touchedSection == null) {
+                touchedIndex = -1;
+                return;
+              }
+              if (event is FlLongPressEnd || event is FlPanEndEvent) {
+                touchedIndex = -1;
+              }
+              touchedIndex = response.touchedSection!.touchedSectionIndex;
+            });
+          },
+        ),
+        borderData: FlBorderData(show: false),
+        sectionsSpace: 2,
+        centerSpaceRadius: 35,
+        sections: getSections(touchedIndex, piechartData),
+      ),
+    );
+  }
 }
 
-class IndicatorsWidget extends StatelessWidget {
-  const IndicatorsWidget({Key? key}) : super(key: key);
+class IndicatorsWidget extends StatefulWidget {
+  final List<Data> list;
+  final int touchedIndex;
+  const IndicatorsWidget(this.list, this.touchedIndex, {Key? key})
+      : super(key: key);
 
+  @override
+  State<IndicatorsWidget> createState() => _IndicatorsWidgetState();
+}
+
+class _IndicatorsWidgetState extends State<IndicatorsWidget> {
   @override
   Widget build(BuildContext context) {
     return Column(
-      mainAxisSize: MainAxisSize.max,
-      mainAxisAlignment: MainAxisAlignment.center,
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: PieData.data.map(
-        (data) {
-          return Container(
-              padding: const EdgeInsets.symmetric(vertical: 2),
-              child: buildIndicator(
-                color: data.color,
-                text: data.name,
-                // isSquare: true,
-              ));
+        mainAxisSize: MainAxisSize.min,
+        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: List.generate(widget.list.length, (index) {
+          return Expanded(
+            flex: 1,
+            child: Container(
+                padding: const EdgeInsets.symmetric(vertical: 2),
+                child: buildIndicator(
+                  touched: widget.touchedIndex == index,
+                  color: widget.list[index].color,
+                  text: (widget.list[index].name).capitalize,
+                  // isSquare: true,
+                )),
+          );
+        })
+
+        /*widget.list.map(
+            (data) {
+          return Expanded(
+            flex: 1,
+            child: Container(
+                padding: const EdgeInsets.symmetric(vertical: 2),
+                child: buildIndicator(
+                  touched: widget.touchedIndex,
+                  color: data.color,
+                  text: (data.name).capitalize,
+                  // isSquare: true,
+                )),
+          );
         },
-      ).toList(),
-    );
+      ).toList(),*/
+        );
   }
 
   Widget buildIndicator({
     required Color color,
     required String text,
+    required bool touched,
     bool isSquare = false,
-    double size = 16,
+    //double size = touched ? 18: 16,
     Color textColor = const Color(0xFFFFFFFA),
   }) {
     return Row(
       children: <Widget>[
         Container(
-          width: size,
-          height: size,
+          width: touched ? 18 : 16,
+          height: touched ? 18 : 16,
           decoration: BoxDecoration(
             shape: isSquare ? BoxShape.rectangle : BoxShape.circle,
             color: color,
           ),
         ),
         const SizedBox(width: 8),
-        Text(
-          text,
-          style: TextStyle(
-            fontSize: 16,
-            fontWeight: FontWeight.bold,
-            color: textColor,
-          ),
+        Column(
+          children: [
+            Flexible(
+              child: SizedBox(
+                width: 80,
+                child: Text(
+                  text,
+                  style: TextStyle(
+                    fontSize: 16,
+                    fontWeight: touched ? FontWeight.w900 : FontWeight.w100,
+                    color: touched ? const Color(0xFFFEC768) : textColor,
+                  ),
+                ),
+              ),
+            ),
+          ],
         )
       ],
+    );
+  }
+}
+
+class _Badge extends StatelessWidget {
+  final String text;
+  final double size;
+  final Color borderColor;
+
+  const _Badge({
+    Key? key,
+    required this.text,
+    required this.size,
+    required this.borderColor,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return AnimatedContainer(
+      duration: PieChart.defaultDuration,
+      width: size * 2,
+      height: size,
+      decoration: BoxDecoration(
+        color: Colors.white,
+        shape: BoxShape.rectangle,
+        borderRadius: const BorderRadius.all(Radius.circular(15)),
+        border: Border.all(
+          color: borderColor,
+          width: 4,
+        ),
+        boxShadow: <BoxShadow>[
+          BoxShadow(
+            color: Colors.black.withOpacity(.5),
+            offset: const Offset(3, 3),
+            blurRadius: 3,
+          ),
+        ],
+      ),
+      padding: EdgeInsets.all(size * .15),
+      child: Center(
+        child: Text(text),
+      ),
     );
   }
 }

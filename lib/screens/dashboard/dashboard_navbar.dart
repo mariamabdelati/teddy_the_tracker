@@ -10,8 +10,10 @@ import "package:flutter/material.dart";
 import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 
+import '../walletsmanagement/add_new_wallet.dart';
 import 'blank.dart';
 import 'dashboard_screen.dart';
+import 'hide_navbar.dart';
 
 class DashboardScreen extends StatefulWidget {
   const DashboardScreen({Key? key}) : super(key: key);
@@ -35,6 +37,20 @@ class _DashboardScreenState extends State<DashboardScreen> {
   }
 
   int selected = 0;
+
+  late ScrollController controller;
+  @override
+  void initState() {
+    super.initState();
+    controller = ScrollController();
+  }
+
+  @override
+  void dispose() {
+    controller.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     const items = <Widget>[
@@ -60,20 +76,23 @@ class _DashboardScreenState extends State<DashboardScreen> {
       ),
     ];
     List<Widget> pages = [
-      const DashboardPage(),
+      const DashboardPage() /*withSwitch()*/,
       ViewEntriesPage(
         title: "View All Entries",
         controller: controller,
       ),
       AddNewEntryPage(
-        controller: controller,
         title: 'Create New Entry',
+        controller: controller,
       ),
-      const WalletChoosing(),
+      const AddWalletButton(),
       const Profile(),
     ];
     return Scaffold(
       body: pages[selected],
+      //backgroundColor: mainColorList[4],
+      //extendBodyBehindAppBar: true,
+      //extendBody: true,
       bottomNavigationBar: HideWidget(
         controller: controller,
         child: Theme(

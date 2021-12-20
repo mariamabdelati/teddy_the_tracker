@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:teddy_the_tracker/constants.dart';
+import '../../constants.dart';
 
 /*
 button widget used for welcome, login and sign up pages

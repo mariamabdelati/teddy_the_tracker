@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:teddy_the_tracker/constants.dart';
-import 'package:teddy_the_tracker/main.dart';
-import 'package:teddy_the_tracker/screens/dashboard/globals.dart';
+import '../../constants.dart';
+
+import '../../screens/dashboard/globals.dart';
+import '../../main.dart';
 
 class Profile extends StatelessWidget {
   const Profile({Key? key}) : super(key: key);

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:teddy_the_tracker/constants.dart';
+//import '../../constants.dart';
 
 /*
 button widget used for submitting forms
@@ -18,7 +18,7 @@ class SubmitButtonWidget extends StatelessWidget {
     return ElevatedButton(
       onPressed: onClicked,
       style: ElevatedButton.styleFrom(
-        primary: Color(0xFF164CC4),
+        primary: const Color(0xFF164CC4),
         padding: const EdgeInsets.all(15),
         shape: const CircleBorder(),
       ), child: const Icon(Icons.arrow_forward_rounded,

@@ -8,7 +8,8 @@ class ViewEntriesPage extends StatefulWidget {
   final String title;
   final ScrollController controller;
 
-  ViewEntriesPage({Key? key, required this.title, required this.controller})
+  const ViewEntriesPage(
+      {Key? key, required this.title, required this.controller})
       : super(key: key);
 
   @override

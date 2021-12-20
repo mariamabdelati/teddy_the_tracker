@@ -2,6 +2,7 @@ import 'dart:async';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import '../../screens/dashboard/globals.dart';
 import '../../components/submission_button.dart';
 import '../../constants.dart';
 //import 'category_expansion_tile.dart';
@@ -65,7 +66,33 @@ class _CreateNewCategoryState extends State<CreateNewCategory> {
   late bool _invalid;
 
   //checks if a category exists or not
-  Future<bool> categoryCheck(String newCat) async {
+  var documents;
+
+  @override
+  void initState() {
+    super.initState();
+
+    _getCategories();
+  }
+
+  void _getCategories() async {
+    final QuerySnapshot result = await FirebaseFirestore.instance
+        .collection("categories/JBSahpmjY2TtK0gRdT4s/category")
+        .where("walletId", isEqualTo: globals.getWallet()["walletID"])
+        .get();
+
+    List<DocumentSnapshot> docs = result.docs;
+    documents = docs;
+  }
+
+  bool categoryCheck(String newCat) {
+    for (var document in documents) {
+      if (document["label"] == newCat) return false;
+    }
+    return true;
+  }
+
+  /*Future<bool> categoryCheck(String newCat) async {
     final QuerySnapshot result = await FirebaseFirestore.instance
         .collection('categories/JBSahpmjY2TtK0gRdT4s/category')
         .where('label', isEqualTo: newCat)
@@ -81,7 +108,7 @@ class _CreateNewCategoryState extends State<CreateNewCategory> {
     setState(() {
       _invalid = value;
     });
-  }
+  }*/
 
   @override
   Widget build(BuildContext context) {
@@ -148,10 +175,11 @@ class _CreateNewCategoryState extends State<CreateNewCategory> {
 
       //validates field  value
       validator: (value) {
-        connector(value!.toLowerCase().trim());
-        if (value.trim().isEmpty) {
+        //categoryCheck(value!.toLowerCase().trim());
+        //connector(value!.toLowerCase().trim());
+        if (value!.toLowerCase().trim().isEmpty) {
           return "Category cannot be empty";
-        } else if (_invalid){
+        } else if (!categoryCheck(value.toLowerCase().trim())){
           return "Category already exists";
         } else {
           return null;
@@ -230,7 +258,7 @@ class _CreateNewCategoryState extends State<CreateNewCategory> {
 
               //adds new  document to db
               categoriesRef.add(
-                  {"label": newCategory.toLowerCase().trim(), "budget": int.parse(budget), "parentId": 0, "categoryId": size + 1, "childIds": [], "expenseIds": []});
+                  {"label": newCategory.toLowerCase().trim(), "budget": int.parse(budget), "parentId": 0, "categoryId": size + 1, "childIds": [], "expenseIds": [], "walletId": globals.getWallet()["walletID"]});
 
               //message showing verification
               final message =

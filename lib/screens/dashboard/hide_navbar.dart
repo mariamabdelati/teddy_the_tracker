@@ -62,7 +62,7 @@ class Hide_widgetState extends State<HideWidget> {
     return AnimatedContainer(
       duration: widget.time,
       child: Wrap(children: [widget.child]),
-      height: isVisible ? 56.0 : 0,
+      height: isVisible ? 70.0 : 0,
     );
   }
 }

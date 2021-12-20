@@ -5,9 +5,14 @@ import '../../constants.dart';
 import 'subcategory_expansion_tile.dart';
 import 'category_more_options.dart';
 import 'create_new_category.dart';
+import '../../screens/dashboard/globals.dart';
+
 
 //global variable used to save category id to wallet
 var selectedCategoryID = 0;
+//var reset = false;
+//var selectedCategorySubs = [];
+//var different = false;
 
 class CategoryExpansionTile extends StatefulWidget {
   //this boolean is used for verification and is  sent from the expenses form to validate the category selection
@@ -23,6 +28,8 @@ class _CategoryExpansionTileState extends State<CategoryExpansionTile> {
   var selectedCategory = "";
   //this boolean is used for displaying the sucategories if a category is selected
   var isSelected = false;
+
+  var selectedCategorySubs = [];
 
   //this string will be used to take user input for the new category
   //var newCategoryTitle = "";
@@ -99,15 +106,21 @@ class _CategoryExpansionTileState extends State<CategoryExpansionTile> {
           ),
         //the selectedCategoryID is passed to the subcategory so that we can show the related subcategory
         SubcategoryExpansionTile(
-            index: selectedCategoryID, visible: isSelected),
+            index: selectedCategorySubs, visible: isSelected),
       ],
     );
   }
 
+
+
   Widget buildTile(BuildContext context) {
+    //var w = globals.getWallet();
     //stream of categories from db
     final Stream<QuerySnapshot> categories = FirebaseFirestore.instance
-        .collection("categories/JBSahpmjY2TtK0gRdT4s/category").snapshots();
+        .collection("categories/JBSahpmjY2TtK0gRdT4s/category")
+        .where("walletId", isEqualTo: globals.getWallet()["walletID"]).snapshots();
+    //.orderBy("categoryId", descending: true)
+    /*.where("categoryId", whereIn: (globals.getWallet()["categoryIds"]))*/
     //var contents = <Widget>[];
     /*entryCategories.map((item) {
       if (item.parentID == -1) {
@@ -152,14 +165,18 @@ class _CategoryExpansionTileState extends State<CategoryExpansionTile> {
                   return const CircularProgressIndicator();
                 }
                 final data = snapshot.requireData;
-                size = data.size;
+                //size = data.size;
                 var contents = <Widget>[];
                 List.generate(
                     data.size,
                         (index) {
+                      if (index == 0){
+                        size = data.docs[index]["categoryId"];
+                      }
                       if (data.docs[index]["parentId"] == 0) {
                         String chipName = data.docs[index]["label"];
                         int chipID = data.docs[index]["categoryId"];
+                        List chipSubCat = data.docs[index]["childIds"];
                         contents.add(ActionChip(
                             labelPadding: const EdgeInsets.all(5),
                             label: Text(chipName.capitalize),
@@ -181,6 +198,8 @@ class _CategoryExpansionTileState extends State<CategoryExpansionTile> {
                                 setState(() {
                                   selectedCategory = chipName;
                                   selectedCategoryID = chipID;
+                                  selectedCategorySubs = chipSubCat;
+                                  //reset = true;
                                   isSelected = true;
                                 });
                                 shrinkTile();
@@ -188,6 +207,7 @@ class _CategoryExpansionTileState extends State<CategoryExpansionTile> {
                                 setState(() {
                                   selectedCategory = "";
                                   selectedCategoryID = 0;
+                                  selectedCategorySubs = [];
                                   isSelected = false;
                                 });
                               }

@@ -1,6 +1,6 @@
 //import 'dart:async';
 
-import 'package:flutter/cupertino.dart';
+//import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
 //import 'package:keyboard_visibility/keyboard_visibility.dart';
@@ -183,47 +183,8 @@ class _LoginPageState extends State<LoginPage> {
                     ),
                   ),
                 ),
-                Expanded(
-                  flex: 1,
-                  //padding: const EdgeInsets.symmetric(horizontal: 32),
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 25),
-                    child: Center(
-                      child: SvgPicture.asset(
-                        "assets/icons/Asset 1.svg",
-                        height: (windowHeight * 0.5),
-                        width: (windowWidth * 0.9),
-                      ),
-                    ),
-                  ),
-                ),
-                Container(
-                  child: GestureDetector(
-                    onTap: () {
-                      setState(() {
-                        if (_pageState != 0) {
-                          _pageState = 0;
-                        } else {
-                          _pageState = 1;
-                        }
-                      });
-                    },
-                    child: Container(
-                      margin: const EdgeInsets.all(32),
-                      padding: const EdgeInsets.all(20),
-                      width: double.infinity,
-                      decoration: BoxDecoration(
-                          color: mainColorList[2],
-                          borderRadius: BorderRadius.circular(50)),
-                      child: const Center(
-                        child: Text(
-                          "Get Started",
-                          style: TextStyle(color: Colors.white, fontSize: 16),
-                        ),
-                      ),
-                    ),
-                  ),
-                )
+                buildImage(),
+                buildGetStartedButton()
               ],
             )),
         AnimatedContainer(
@@ -309,6 +270,53 @@ class _LoginPageState extends State<LoginPage> {
           ),
         ),
       ],
+    );
+  }
+
+  Widget buildImage() {
+    return Expanded(
+      flex: 1,
+      //padding: const EdgeInsets.symmetric(horizontal: 32),
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 25),
+        child: Center(
+          child: SvgPicture.asset(
+            "assets/icons/Asset 1.svg",
+            height: (windowHeight * 0.5),
+            width: (windowWidth * 0.9),
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget buildGetStartedButton() {
+    return Container(
+      child: GestureDetector(
+        onTap: () {
+          setState(() {
+            if (_pageState != 0) {
+              _pageState = 0;
+            } else {
+              _pageState = 1;
+            }
+          });
+        },
+        child: Container(
+          margin: const EdgeInsets.all(32),
+          padding: const EdgeInsets.all(20),
+          width: double.infinity,
+          decoration: BoxDecoration(
+              color: mainColorList[2],
+              borderRadius: BorderRadius.circular(50)),
+          child: const Center(
+            child: Text(
+              "Get Started",
+              style: TextStyle(color: Colors.white, fontSize: 16),
+            ),
+          ),
+        ),
+      ),
     );
   }
 

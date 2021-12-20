@@ -45,19 +45,19 @@
     },
     {
       "name": "cloud_firestore",
-      "rootUri": "file:///C:/Users/George/Documents/flutter/.pub-cache/hosted/pub.dartlang.org/cloud_firestore-2.5.4",
+      "rootUri": "file:///C:/Users/George/Documents/flutter/.pub-cache/hosted/pub.dartlang.org/cloud_firestore-3.1.5",
       "packageUri": "lib/",
       "languageVersion": "2.12"
     },
     {
       "name": "cloud_firestore_platform_interface",
-      "rootUri": "file:///C:/Users/George/Documents/flutter/.pub-cache/hosted/pub.dartlang.org/cloud_firestore_platform_interface-5.4.5",
+      "rootUri": "file:///C:/Users/George/Documents/flutter/.pub-cache/hosted/pub.dartlang.org/cloud_firestore_platform_interface-5.4.10",
       "packageUri": "lib/",
       "languageVersion": "2.12"
     },
     {
       "name": "cloud_firestore_web",
-      "rootUri": "file:///C:/Users/George/Documents/flutter/.pub-cache/hosted/pub.dartlang.org/cloud_firestore_web-2.5.0",
+      "rootUri": "file:///C:/Users/George/Documents/flutter/.pub-cache/hosted/pub.dartlang.org/cloud_firestore_web-2.6.5",
       "packageUri": "lib/",
       "languageVersion": "2.12"
     },
@@ -123,19 +123,19 @@
     },
     {
       "name": "firebase_core",
-      "rootUri": "file:///C:/Users/George/Documents/flutter/.pub-cache/hosted/pub.dartlang.org/firebase_core-1.10.0",
+      "rootUri": "file:///C:/Users/George/Documents/flutter/.pub-cache/hosted/pub.dartlang.org/firebase_core-1.10.6",
       "packageUri": "lib/",
       "languageVersion": "2.12"
     },
     {
       "name": "firebase_core_platform_interface",
-      "rootUri": "file:///C:/Users/George/Documents/flutter/.pub-cache/hosted/pub.dartlang.org/firebase_core_platform_interface-4.1.0",
+      "rootUri": "file:///C:/Users/George/Documents/flutter/.pub-cache/hosted/pub.dartlang.org/firebase_core_platform_interface-4.2.3",
       "packageUri": "lib/",
       "languageVersion": "2.12"
     },
     {
       "name": "firebase_core_web",
-      "rootUri": "file:///C:/Users/George/Documents/flutter/.pub-cache/hosted/pub.dartlang.org/firebase_core_web-1.2.0",
+      "rootUri": "file:///C:/Users/George/Documents/flutter/.pub-cache/hosted/pub.dartlang.org/firebase_core_web-1.5.3",
       "packageUri": "lib/",
       "languageVersion": "2.12"
     },
@@ -183,7 +183,7 @@
     },
     {
       "name": "flutter_svg",
-      "rootUri": "file:///C:/Users/George/Documents/flutter/.pub-cache/hosted/pub.dartlang.org/flutter_svg-0.23.0+1",
+      "rootUri": "file:///C:/Users/George/Documents/flutter/.pub-cache/hosted/pub.dartlang.org/flutter_svg-1.0.0",
       "packageUri": "lib/",
       "languageVersion": "2.12"
     },
@@ -249,13 +249,13 @@
     },
     {
       "name": "path_drawing",
-      "rootUri": "file:///C:/Users/George/Documents/flutter/.pub-cache/hosted/pub.dartlang.org/path_drawing-0.5.1+1",
+      "rootUri": "file:///C:/Users/George/Documents/flutter/.pub-cache/hosted/pub.dartlang.org/path_drawing-1.0.0",
       "packageUri": "lib/",
       "languageVersion": "2.12"
     },
     {
       "name": "path_parsing",
-      "rootUri": "file:///C:/Users/George/Documents/flutter/.pub-cache/hosted/pub.dartlang.org/path_parsing-0.2.1",
+      "rootUri": "file:///C:/Users/George/Documents/flutter/.pub-cache/hosted/pub.dartlang.org/path_parsing-1.0.0",
       "packageUri": "lib/",
       "languageVersion": "2.12"
     },
@@ -344,7 +344,7 @@
       "languageVersion": "2.12"
     }
   ],
-  "generated": "2021-12-20T11:52:44.698252Z",
+  "generated": "2021-12-20T11:53:48.016699Z",
   "generator": "pub",
   "generatorVersion": "2.14.3"
 }
