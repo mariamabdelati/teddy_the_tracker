@@ -1,5 +1,5 @@
 import '../../screens/entrymanagement/add_entries_page.dart';
-import '../../screens/entrymanagement/view_entries_page.dart';
+import '../../screens/entrymanagement/view_entries_page_new.dart';
 import '../../screens/profilemanagement/profile.dart';
 import '../../constants.dart';
 import "package:flutter/material.dart";

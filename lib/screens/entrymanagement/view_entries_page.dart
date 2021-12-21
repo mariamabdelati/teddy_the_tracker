@@ -1,7 +1,8 @@
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import './entries_class.dart';
-import '../../constants.dart';
+//import '../../constants.dart';
 //import 'package:firebase_core/firebase_core.dart';
 
 class ViewEntriesPage extends StatefulWidget {
@@ -14,14 +15,35 @@ class ViewEntriesPage extends StatefulWidget {
 }
 
 class ViewEntriesPageState extends State<ViewEntriesPage> {
-  final Query expenseRef = FirebaseFirestore.instance
-      .collection('/expenses/cFqsqHPIscrC6cY9iPs6/expense').orderBy('date',descending: true);
+  CollectionReference expenseRef = FirebaseFirestore.instance
+      .collection('/expenses/cFqsqHPIscrC6cY9iPs6/expense');
 
   entry entryHandling = entry('',0,'',0,'',false);
   List<entry> entriesList = [];
   List<String> entriesDates = [];
   List<String> datesAdded = [];
   List<String> labelsAdded = [];
+  
+  List<Widget> expansionChildren = [];
+  List<Widget> incomeChildren = [];
+
+  CollectionReference incomeRef =
+  FirebaseFirestore.instance.collection("expenses/cFqsqHPIscrC6cY9iPs6/income");
+
+  CollectionReference expensessRef =
+  FirebaseFirestore.instance.collection("expenses/cFqsqHPIscrC6cY9iPs6/expense");
+
+  Future<List> getIncome() async {
+    QuerySnapshot querySnapshot = await incomeRef.orderBy('date',descending: true).get();
+    final allData = querySnapshot.docs.map((doc) => doc.data()).toList();
+    return allData;
+  }
+
+  Future<List> getExpense() async {
+    QuerySnapshot querySnapshot = await expensessRef.orderBy('date',descending: true).get();
+    final allData = querySnapshot.docs.map((doc) => doc.data()).toList();
+    return allData;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -31,7 +53,7 @@ class ViewEntriesPageState extends State<ViewEntriesPage> {
       ),
       //form containing list view of the fields
       body: StreamBuilder(
-        stream: expenseRef.snapshots(),
+        stream: expenseRef.orderBy('date',descending: true).snapshots(),
         builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
           if (snapshot.hasError) {
             return const Center(
@@ -44,6 +66,8 @@ class ViewEntriesPageState extends State<ViewEntriesPage> {
           return ListView.builder(
             itemCount: data.size,
             itemBuilder: (context, index) {
+              Future <List<dynamic>> allIncom = getIncome();
+
               DocumentSnapshot ds = snapshot.data!.docs[index];
               entryHandling.amount = data.docs[index]['amount'];
               entryHandling.categoryId = data.docs[index]['categoryId'];
@@ -57,28 +81,23 @@ class ViewEntriesPageState extends State<ViewEntriesPage> {
               var distinctDates = entriesDates.toSet().toList();
               distinctDates.sort();
               distinctDates.reversed.toList();
-              List <String> finalDistinctDates = distinctDates.reversed.toList();
+              //List <String> finalDistinctDates = distinctDates.reversed.toList();
 
               //finalDistinctDates and entriesList
               /////////////////////////////////////////////////
 
 
               if (datesAdded.contains(data.docs[index]['date'])){
-                return Container(
-                );
-              }else{
-                datesAdded.add(data.docs[index]['date']);
-                return ExpansionTile(title: Text(data.docs[index]['date']),
-                  children: [
-                  Card(
+                expansionChildren.add(Card(
                   //margin: const EdgeInsets.symmetric(vertical: 10, horizontal: 16),
 
                   //margin: EdgeInsets.symmetric(horizontal: 10),
                   elevation: 2,
-                  color: mainColorList[1],
+                  //color: mainColorList[1],
                   shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(15)),
-                  child: Row(
+                  child:
+                  Row(
                     children: <Widget>[
                       Container(
                         /*width: 100,*/
@@ -87,7 +106,7 @@ class ViewEntriesPageState extends State<ViewEntriesPage> {
                             borderRadius:
                             const BorderRadius.all(Radius.circular(15.0)),
                             border: Border.all(
-                              color: const Color(0xFF5689B9),
+                              color: Colors.red,
                               width: 2,
                             )),
                         padding: const EdgeInsets.all(7),
@@ -97,7 +116,7 @@ class ViewEntriesPageState extends State<ViewEntriesPage> {
                           style: const TextStyle(
                             fontWeight: FontWeight.bold,
                             fontSize: 17,
-                            color: Color(0xFF5689B9),
+                            color: Colors.red,
                           ),
                         ),
                       ),
@@ -159,7 +178,7 @@ class ViewEntriesPageState extends State<ViewEntriesPage> {
                                             final expensePath =
 
                                             //////////////////////////////////
-                                            expenseRef.firestore.doc(ds.id);
+                                            expenseRef.doc(ds.id);
                                             /////////////////////
 
                                             await expensePath.delete();
@@ -183,7 +202,251 @@ class ViewEntriesPageState extends State<ViewEntriesPage> {
                       ),
                     ],
                   ),
-                  )],
+                ),);
+
+                getIncome().then((allIncome){
+                  for(Map incomr in allIncome){
+                    if (incomr['date'] == data.docs[index]['date']){
+                      expansionChildren.add(Card(
+                        //margin: const EdgeInsets.symmetric(vertical: 10, horizontal: 16),
+
+                        //margin: EdgeInsets.symmetric(horizontal: 10),
+                        elevation: 2,
+                        //color: mainColorList[1],
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(15)),
+                        child:
+                        Row(
+                          children: <Widget>[
+                            Container(
+                              width: 100,
+                              margin: const EdgeInsets.symmetric(vertical: 10, horizontal: 16),
+                              decoration: BoxDecoration(
+                                  borderRadius:
+                                  const BorderRadius.all(Radius.circular(15.0)),
+                                  border: Border.all(
+                                    color: Colors.green,
+                                    width: 2,
+                                  )),
+                              padding: const EdgeInsets.all(7),
+                              child: Text(
+                                'EGP ' + incomr['amount'],
+                                textAlign: TextAlign.center,
+                                style: const TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 17,
+                                  color: Colors.green,
+                                ),
+                              ),
+                            ),
+                            SizedBox(
+                              width: 140,
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: <Widget>[
+                                  Text(
+                                    incomr['label'],
+                                    style: const TextStyle(
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                  Text(
+                                    incomr['date'],
+                                    style: const TextStyle(
+                                      color: Colors.black45,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                            const SizedBox(width: 30),
+                            Column(
+                              mainAxisAlignment: MainAxisAlignment.end,
+                              crossAxisAlignment: CrossAxisAlignment.end,
+                              children: [
+                                Container(
+                                  alignment: Alignment.centerRight,
+                                  child: ElevatedButton(
+                                    style: ElevatedButton.styleFrom(
+                                      primary: const Color(0xFFD32F2F),
+                                      padding: const EdgeInsets.all(15),
+                                      shape: const CircleBorder(),
+                                    ),
+                                    child: const Icon(
+                                      Icons.delete,
+                                      color: Colors.white,
+                                      size: 20,
+                                    ),
+                                    onPressed: () {
+                                      showDialog<String>(
+                                        context: context,
+                                        builder: (BuildContext context) {
+                                          return AlertDialog(
+                                            title: const Text('Delete Entry'),
+                                            content: const Text(
+                                                'Are you sure you want to delete this entry?'),
+                                            actions: <Widget>[
+                                              TextButton(
+                                                onPressed: () =>
+                                                    Navigator.pop(context, 'Cancel'),
+                                                child: const Text('Cancel'),
+                                              ),
+                                              TextButton(
+                                                onPressed: () async {
+                                                  final expensePath =
+
+                                                  //////////////////////////////////
+                                                  expenseRef.doc(ds.id);
+                                                  /////////////////////
+
+                                                  await expensePath.delete();
+                                                  Navigator.pop(context, 'Cancel');
+                                                },
+                                                child: const Text(
+                                                  'Delete',
+                                                  style: TextStyle(
+                                                    color: Color(0xFFD32F2F),
+                                                  ),
+                                                ),
+                                              ),
+                                            ],
+                                          );
+                                        },
+                                      );
+                                    },
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ],
+                        ),
+                      ),);
+                    }
+                  }
+                });
+                return Container();
+
+              }else{
+                datesAdded.add(data.docs[index]['date']);
+                expansionChildren = [];
+                expansionChildren.add(Card(
+                    //margin: const EdgeInsets.symmetric(vertical: 10, horizontal: 16),
+
+                    //margin: EdgeInsets.symmetric(horizontal: 10),
+                    elevation: 2,
+                    //color: mainColorList[1],
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(15)),
+                    child: Row(
+                      children: <Widget>[
+                        Container(
+                          /*width: 100,*/
+                          margin: const EdgeInsets.symmetric(vertical: 10, horizontal: 16),
+                          decoration: BoxDecoration(
+                              borderRadius:
+                              const BorderRadius.all(Radius.circular(15.0)),
+                              border: Border.all(
+                                color: Colors.red,
+                                width: 2,
+                              )),
+                          padding: const EdgeInsets.all(7),
+                          child: Text(
+                            'EGP ' + data.docs[index]['amount'],
+                            textAlign: TextAlign.center,
+                            style: const TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: 17,
+                              color: Colors.red,
+                            ),
+                          ),
+                        ),
+                        SizedBox(
+                          width: 140,
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: <Widget>[
+                              Text(
+                                data.docs[index]['label'],
+                                style: const TextStyle(
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                              Text(
+                                data.docs[index]['date'],
+                                style: const TextStyle(
+                                  color: Colors.black45,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                        const SizedBox(width: 30),
+                        Column(
+                          mainAxisAlignment: MainAxisAlignment.end,
+                          crossAxisAlignment: CrossAxisAlignment.end,
+                          children: [
+                            Container(
+                              alignment: Alignment.centerRight,
+                              child: ElevatedButton(
+                                style: ElevatedButton.styleFrom(
+                                  primary: const Color(0xFFD32F2F),
+                                  padding: const EdgeInsets.all(15),
+                                  shape: const CircleBorder(),
+                                ),
+                                child: const Icon(
+                                  Icons.delete,
+                                  color: Colors.white,
+                                  size: 20,
+                                ),
+                                onPressed: () {
+                                  showDialog<String>(
+                                    context: context,
+                                    builder: (BuildContext context) {
+                                      return AlertDialog(
+                                        title: const Text('Delete Entry'),
+                                        content: const Text(
+                                            'Are you sure you want to delete this entry?'),
+                                        actions: <Widget>[
+                                          TextButton(
+                                            onPressed: () =>
+                                                Navigator.pop(context, 'Cancel'),
+                                            child: const Text('Cancel'),
+                                          ),
+                                          TextButton(
+                                            onPressed: () async {
+                                              final expensePath =
+
+                                              //////////////////////////////////
+                                              expenseRef.doc(ds.id);
+                                              /////////////////////
+
+                                              await expensePath.delete();
+                                              Navigator.pop(context, 'Cancel');
+                                            },
+                                            child: const Text(
+                                              'Delete',
+                                              style: TextStyle(
+                                                color: Color(0xFFD32F2F),
+                                              ),
+                                            ),
+                                          ),
+                                        ],
+                                      );
+                                    },
+                                  );
+                                },
+                              ),
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
+                  ),);
+
+                return ExpansionTile(title: Text(data.docs[index]['date']),
+                  children: expansionChildren,
 
                 );
               }
