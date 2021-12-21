@@ -152,7 +152,6 @@ Widget _buildBody(context, List<Entries> expenses, List<Categories> categories) 
     });
     expensesDataNoOther[key] = value;
   }
-  //print(expensesDataNoOther);
 
   if(expensesDataNoOther.isNotEmpty) {
     expensesDataNoOther.forEach((k, v) {
@@ -184,9 +183,6 @@ Widget _buildBody(context, List<Entries> expenses, List<Categories> categories) 
       expensesDataTrimmed[k] = v;
     });
   }
-
-  //print(expensesDataTrimmed);
-
 
   int i = 0;
   expensesDataTrimmed.forEach((k, v) {
@@ -316,7 +312,7 @@ class _PieChartPageState extends State<PieChartPage> {
           ),
         ),
         Padding(
-          padding: const EdgeInsets.all(20),
+          padding: const EdgeInsets.only(left: 5.0, right: 15.0, top: 15.0, bottom: 15.0),
           child: IndicatorsWidget(widget.list, touchedIndex),
         ),
       ],
@@ -345,6 +341,8 @@ class _PieChartPageState extends State<PieChartPage> {
         centerSpaceRadius: 35,
         sections: getSections(touchedIndex, piechartData),
       ),
+
+      //swapAnimationCurve: Curves.linearToEaseOut,
     );
   }
 }
@@ -370,7 +368,8 @@ class _IndicatorsWidgetState extends State<IndicatorsWidget> {
           return Expanded(
             flex: 1,
             child: Container(
-                padding: const EdgeInsets.symmetric(vertical: 2),
+              //margin: const EdgeInsets.symmetric(vertical: 6),
+              //padding: const EdgeInsets.symmetric(vertical: 6),
                 child: buildIndicator(
                   touched: widget.touchedIndex  == index,
                   color: widget.list[index].color,
@@ -408,13 +407,19 @@ class _IndicatorsWidgetState extends State<IndicatorsWidget> {
           children: [
             Flexible(
               child: SizedBox(
-                width: 80,
-                child: Text(
-                  text,
-                  style: TextStyle(
-                    fontSize: 16,
-                    fontWeight: touched? FontWeight.w900 : FontWeight.w100,
-                    color: touched ? const Color(0xFFFEC768) : textColor,
+                width: 95,
+                child: SingleChildScrollView(
+                  scrollDirection: Axis.horizontal,
+                  child: Text(
+                    text,
+                    overflow: TextOverflow.fade,
+                    maxLines: 1,
+                    softWrap: false,
+                    style: TextStyle(
+                      fontSize: 14,
+                      fontWeight: touched? FontWeight.w900 : FontWeight.w100,
+                      color: touched ? const Color(0xFFFEC768) : textColor,
+                    ),
                   ),
                 ),
               ),

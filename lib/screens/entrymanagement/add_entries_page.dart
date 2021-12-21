@@ -314,6 +314,7 @@ class AddNewEntryPageState extends State<AddNewEntryPage> {
             onPressed: () {
               setState(() {
                 type = "Income";
+                isExpense = false;
                 validType =  true;
               });
             },
