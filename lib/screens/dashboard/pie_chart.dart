@@ -15,7 +15,7 @@ class Entries {
   DocumentReference? reference;
 
   Entries.fromMap(Map<String, dynamic> map, {this.reference}) {
-    catID = map["categoryId"];
+    catID = map["categoryID"];
     amount = map["amount"];
     label = map["label"];
   }
@@ -32,8 +32,8 @@ class Categories {
   DocumentReference? reference;
 
   Categories.fromMap(Map<String, dynamic> map, {this.reference}) {
-    catID = map["categoryId"];
-    subcats = map["childIds"];
+    catID = map["categoryID"];
+    subcats = map["childIDs"];
     label = map["label"];
   }
 
@@ -45,8 +45,8 @@ class Categories {
 Widget _getExpenses(context) {
   return StreamBuilder<QuerySnapshot>(
       stream: FirebaseFirestore.instance
-          .collection("expenses/cFqsqHPIscrC6cY9iPs6/expense")
-          .orderBy("categoryId", descending: false)
+          .collection("/entries/7sQnsmHSjX5K8Sgz4PoD/expense")
+          .orderBy("categoryID", descending: false)
           .snapshots(),
       builder: (context, snapshot) {
         if (snapshot.hasError) {
@@ -70,7 +70,7 @@ Widget _getCategories(context, List<Entries> expenses) {
   return StreamBuilder<QuerySnapshot>(
       stream: FirebaseFirestore.instance
           .collection("/categories/JBSahpmjY2TtK0gRdT4s/category")
-          .where("walletId", isEqualTo: globals.getWallet()["walletID"]).snapshots(),
+          .where("walletID", isEqualTo: globals.getWallet()["walletID"]).snapshots(),
       /*.orderBy("categoryId", descending: false)*/
 
 
@@ -126,7 +126,7 @@ Widget _buildBody(context, List<Entries> expenses, List<Categories> categories) 
     ..sort((k1, k2) => expensesData[k2].compareTo(expensesData[k1]));
   LinkedHashMap sortedExpensesData = LinkedHashMap
       .fromIterable(sortedExpensesKeys, key: (k) => k, value: (k) => expensesData[k]);
-  print(sortedExpensesData);
+  //print(sortedExpensesData);
 
   Map expensesDataTrimmed = {};
   Map expensesDataNoOther = {};
@@ -134,7 +134,7 @@ Widget _buildBody(context, List<Entries> expenses, List<Categories> categories) 
 
   var list = sortedExpensesData.keys.toList(growable:false);
   var other = list.indexOf(2);
-  print(other);
+  //print(other);
 
   int count = 0;
   var key;
@@ -152,7 +152,7 @@ Widget _buildBody(context, List<Entries> expenses, List<Categories> categories) 
     });
     expensesDataNoOther[key] = value;
   }
-  print(expensesDataNoOther);
+  //print(expensesDataNoOther);
 
   if(expensesDataNoOther.isNotEmpty) {
     expensesDataNoOther.forEach((k, v) {
@@ -185,7 +185,7 @@ Widget _buildBody(context, List<Entries> expenses, List<Categories> categories) 
     });
   }
 
-  print(expensesDataTrimmed);
+  //print(expensesDataTrimmed);
 
 
   int i = 0;
@@ -203,23 +203,6 @@ Widget _buildBody(context, List<Entries> expenses, List<Categories> categories) 
     }
   });
 
-  //print(data);
-
-  //print(categoryNames);
-  /*expensesData.forEach((k, v) {
-    if (!total.contains(k)) {
-      total[0] += v;
-    }
-  });*/
-  //date.sort();
-  /*expensesData.forEach((k, v) {
-    expensesList
-        .add(FlSpot(date.indexWhere((element) => element == k).toDouble(), v));
-  });
-  incomesData.forEach((k, v) {
-    incomesList
-        .add(FlSpot(date.indexWhere((element) => element == k).toDouble(), v));
-  });*/
   return Container(
       child: Stack(children: <Widget>[
         Column(crossAxisAlignment: CrossAxisAlignment.stretch, children: <Widget>[
@@ -249,10 +232,6 @@ Widget _buildBody(context, List<Entries> expenses, List<Categories> categories) 
    child: PieChartPage(data),
   );*/
 }
-
-/*_buildChart(context, Map<dynamic, dynamic> categoryNames) {
-
-} */
 
 class TtestDashboard extends StatefulWidget {
   const TtestDashboard({Key? key}) : super(key: key);
@@ -385,7 +364,7 @@ class _IndicatorsWidgetState extends State<IndicatorsWidget> {
   Widget build(BuildContext context) {
     return Column(
         mainAxisSize: MainAxisSize.min,
-        mainAxisAlignment: MainAxisAlignment.center,
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: List.generate(widget.list.length, (index) {
           return Expanded(
@@ -400,22 +379,6 @@ class _IndicatorsWidgetState extends State<IndicatorsWidget> {
                 )),
           );
         })
-
-      /*widget.list.map(
-            (data) {
-          return Expanded(
-            flex: 1,
-            child: Container(
-                padding: const EdgeInsets.symmetric(vertical: 2),
-                child: buildIndicator(
-                  touched: widget.touchedIndex,
-                  color: data.color,
-                  text: (data.name).capitalize,
-                  // isSquare: true,
-                )),
-          );
-        },
-      ).toList(),*/
     );
   }
 
@@ -439,6 +402,9 @@ class _IndicatorsWidgetState extends State<IndicatorsWidget> {
         ),
         const SizedBox(width: 8),
         Column(
+          mainAxisSize: MainAxisSize.min,
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Flexible(
               child: SizedBox(

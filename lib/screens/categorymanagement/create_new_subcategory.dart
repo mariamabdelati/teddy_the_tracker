@@ -8,21 +8,19 @@ import '../../components/submission_button.dart';
 import '../../constants.dart';
 //import 'category_expansion_tile.dart';
 
-var size = 0;
-
-class CreateNewCategory extends StatefulWidget {
+class CreateNewSubcategory extends StatefulWidget {
   final String title;
 
-  const CreateNewCategory({
+  const CreateNewSubcategory({
     required this.title,
     Key? key,
   }) : super(key: key);
 
   @override
-  _CreateNewCategoryState createState() => _CreateNewCategoryState();
+  _CreateNewSubcategoryState createState() => _CreateNewSubcategoryState();
 }
 
-class _CreateNewCategoryState extends State<CreateNewCategory> {
+class _CreateNewSubcategoryState extends State<CreateNewSubcategory> {
   //this function is used to remove the extra zeros from the beginning of the budget entered
   String zeroCheck(String x){
     String y = "";
@@ -43,11 +41,11 @@ class _CreateNewCategoryState extends State<CreateNewCategory> {
 
   final formKey = GlobalKey<FormState>();
   //string to save new  category entered into
-  String newCategory = "";
+  String newSubcategory = "";
   //string to save new budget entered into
   String budget = "";
 
-  final _categorytext = TextEditingController();
+  final _subcategorytext = TextEditingController();
   final _budgettext = TextEditingController();
 
   //used to determine if a category exists or not
@@ -80,8 +78,6 @@ class _CreateNewCategoryState extends State<CreateNewCategory> {
     return true;
   }
 
-
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -104,7 +100,7 @@ class _CreateNewCategoryState extends State<CreateNewCategory> {
             children: [
               const SizedBox(height: 16),
               Text(
-                "Please input the new category data:", textAlign: TextAlign.center,
+                "Please input the new subcategory data:", textAlign: TextAlign.center,
                 style: TextStyle(
                     fontSize: 17,
                     fontWeight: FontWeight.bold,
@@ -130,17 +126,17 @@ class _CreateNewCategoryState extends State<CreateNewCategory> {
   //builds new category textformfield
   Widget buildCategory() {
     return TextFormField(
-      controller: _categorytext,
+      controller: _subcategorytext,
       focusNode: FocusNode(),
       decoration: InputDecoration(
         prefixIcon: SizedBox(width: 60,child: Icon(Icons.category_rounded, size: 20, color: iconsColor)),
-        labelText: "New Category",
+        labelText: "New Subcategory",
         border: OutlineInputBorder(borderRadius: BorderRadius.circular(20)),
         suffixIcon: SizedBox(
           width: 60,
           child: IconButton(
             icon: const Icon(Icons.clear_rounded, size: 20),
-            onPressed: _categorytext.clear,
+            onPressed: _subcategorytext.clear,
           ),
         ),
       ),
@@ -150,15 +146,15 @@ class _CreateNewCategoryState extends State<CreateNewCategory> {
         //categoryCheck(value!.toLowerCase().trim());
         //connector(value!.toLowerCase().trim());
         if (value!.toLowerCase().trim().isEmpty) {
-          return "Category cannot be empty";
+          return "Subcategory cannot be empty";
         } else if (!categoryCheck(value.toLowerCase().trim())){
-          return "Category already exists";
+          return "Subcategory already exists";
         } else {
           return null;
         }
       },
       //triggered on submission
-      onSaved: (value) => setState(() => newCategory = value!.trim()),
+      onSaved: (value) => setState(() => newSubcategory = value!.trim()),
     );
   }
 
@@ -216,14 +212,16 @@ class _CreateNewCategoryState extends State<CreateNewCategory> {
             if (isValid) {
               formKey.currentState!.save();
 
+
+              createNewCategory(newSubcategory.toLowerCase().trim(), budget);
+
               //adds new  document to db
-              createNewCategory(newCategory.toLowerCase().trim(), budget);
-
-
+              //categoriesRef.add(
+                  //{"label": newCategory.toLowerCase().trim(), "budget": int.parse(budget), "parentID": 0, "categoryID": size + 1, "childIDs": [], "expenseIDs": [], "walletID": globals.getWallet()["walletID"]});
 
               //message showing verification
               final message =
-                  "'$newCategory' has been successfully added to your categories";
+                  "'$newSubcategory' has been successfully added to your categories";
               final snackBar = SnackBar(
                 content: Text(
                   message,

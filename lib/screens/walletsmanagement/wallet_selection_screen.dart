@@ -5,6 +5,7 @@ import '../../screens/categorymanagement/subcategory_expansion_tile.dart';
 import '../../screens/dashboard/globals.dart';
 import '../../constants.dart';
 import '../dashboard/dashboard_navbar.dart';
+import 'add_new_wallet.dart';
 
 class SelectWallet extends StatefulWidget {
   const SelectWallet({Key? key,}) : super(key: key);
@@ -20,7 +21,27 @@ class _SelectWalletState extends State<SelectWallet> {
       appBar: AppBar(
         title: Text("Select Wallet"),
       ),
-      body: _buildBody(context),
+      body: SafeArea(
+        top: false,
+        bottom: false,
+        maintainBottomViewPadding: true,
+        child: Column(
+          children: [
+            Center(
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: const [
+                  AddWalletButton(0),
+                  AddWalletButton(1)
+                ],
+              ),
+            ),
+            _buildBody(context),
+          ],
+        ),
+      ),
     );
   }
 
@@ -42,6 +63,7 @@ class _SelectWalletState extends State<SelectWallet> {
               Wallets.fromMap(docSnapshot.data() as Map<String, dynamic>))
               .toList();*/
             return GridView.builder(
+              shrinkWrap: true,
               padding: const EdgeInsets.all(8),
               itemCount: wallets.length,
               gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 2),
