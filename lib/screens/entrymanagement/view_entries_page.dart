@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:teddy_the_tracker/screens/dashboard/hide_navbar.dart';
 
 import '../../constants.dart';
 //import 'package:firebase_core/firebase_core.dart';
@@ -23,14 +24,20 @@ class _ViewEntriesPageState extends State<ViewEntriesPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text(widget.title),
-        /*leading: IconButton(
-          onPressed: () {
-            Navigator.pop(context);
-          },
-          icon: const Icon(Icons.arrow_back_rounded),
-        ),*/
+      appBar: PreferredSize(
+        preferredSize: Size.fromHeight(100),
+        child: HideWidget(
+          controller: widget.controller,
+          child: AppBar(
+            title: Text(widget.title),
+            /*leading: IconButton(
+              onPressed: () {
+                Navigator.pop(context);
+              },
+              icon: const Icon(Icons.arrow_back_rounded),
+            ),*/
+          ),
+        ),
       ),
       //form containing list view of the fields
       body: StreamBuilder(

@@ -46,6 +46,10 @@ class MyApp extends StatelessWidget {
             if (userSnapshot.hasData && globals.getWallet() == null) {
               return const SelectWallet();
             }
+            return const Scaffold(
+              resizeToAvoidBottomInset: false,
+              body: AuthScreen(true),
+            );
           },
         ));
   }

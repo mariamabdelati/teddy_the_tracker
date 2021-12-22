@@ -57,7 +57,7 @@ Widget _getExpenses(context) {
         } else {
           List<Entries> expenses = snapshot.data!.docs
               .map((docSnapshot) =>
-              Entries.fromMap(docSnapshot.data() as Map<String, dynamic>))
+                  Entries.fromMap(docSnapshot.data() as Map<String, dynamic>))
               .toList();
           return Container(
             child: _getIncomes(context, expenses),
@@ -82,7 +82,7 @@ Widget _getIncomes(context, List<Entries> expenses) {
         } else {
           List<Entries> incomes = snapshot.data!.docs
               .map((docSnapshot) =>
-              Entries.fromMap(docSnapshot.data() as Map<String, dynamic>))
+                  Entries.fromMap(docSnapshot.data() as Map<String, dynamic>))
               .toList();
           return Container(
             child: _buildBody(context, expenses, incomes),
@@ -157,29 +157,21 @@ Widget _buildBody(context, List<Entries> expenses, List<Entries> incomes) {
 }
 
 // Widget responsible for using List <FlSpots> passed to it and construct the graph
-Widget _buildChart(context, List<FlSpot> expensesList,
-    List<FlSpot> incomesList, List<dynamic> dates) {
+Widget _buildChart(context, List<FlSpot> expensesList, List<FlSpot> incomesList,
+    List<dynamic> dates) {
   LineTitles lineTitle = LineTitles(dates);
   LineChartBarData expensesLine = LineChartBarData(
-      spots: expensesList,
-      isCurved: true,
-      colors: [Colors.orange, Colors.red],
-      barWidth: 8,
-      belowBarData: BarAreaData(
-          show: true,
-          colors: [Colors.orange, Colors.red]
-              .map((color) => color.withOpacity(0.6))
-              .toList()));
+    spots: expensesList,
+    isCurved: true,
+    colors: [Colors.orange, Colors.red],
+    barWidth: 8,
+  );
   LineChartBarData incomesLine = LineChartBarData(
-      spots: incomesList,
-      isCurved: true,
-      colors: [Colors.blue, Colors.green],
-      barWidth: 8,
-      belowBarData: BarAreaData(
-          show: true,
-          colors: [Colors.blue, Colors.green]
-              .map((color) => color.withOpacity(0.6))
-              .toList()));
+    spots: incomesList,
+    isCurved: true,
+    colors: [Colors.blue, Colors.green],
+    barWidth: 8,
+  );
   int maxY = 100;
   for (var spot in expensesList) {
     maxY = max(maxY, spot.y.ceil());
@@ -207,13 +199,6 @@ Widget _buildChart(context, List<FlSpot> expensesList,
         border: Border.all(color: const Color(0xAACCEDFF), width: 1),
       ),
       lineBarsData: <LineChartBarData>[expensesLine, incomesLine]));
-
-//   ListView.builder(
-//       padding: const EdgeInsets.all(8),
-//       itemCount: entries.length,
-//       itemBuilder: (BuildContext context, int index) {
-//         return Text(entries[index].toString());
-//       });
 }
 
 class LineTitles {
@@ -246,28 +231,28 @@ class TtestDashBoardState extends State<TestDashboard> {
   Widget build(BuildContext context) {
     return Container(
         child: Stack(children: <Widget>[
-          Column(crossAxisAlignment: CrossAxisAlignment.stretch, children: <Widget>[
-            const SizedBox(
-              height: 37,
-            ),
-            const Text(
-              "Expenses vs Income",
-              style: TextStyle(
-                  fontSize: 16, color: Colors.white, fontWeight: FontWeight.bold),
-              textAlign: TextAlign.center,
-            ),
-            const SizedBox(
-              height: 4,
-            ),
-            Expanded(
-                child: Padding(
-                  padding: const EdgeInsets.only(right: 5, left: 2, bottom: 40),
-                  child: _getExpenses(context),
-                )),
-            const SizedBox(
-              height: 10,
-            )
-          ])
-        ]));
+      Column(crossAxisAlignment: CrossAxisAlignment.stretch, children: <Widget>[
+        const SizedBox(
+          height: 37,
+        ),
+        const Text(
+          "Expenses vs Income",
+          style: TextStyle(
+              fontSize: 16, color: Colors.white, fontWeight: FontWeight.bold),
+          textAlign: TextAlign.center,
+        ),
+        const SizedBox(
+          height: 4,
+        ),
+        Expanded(
+            child: Padding(
+          padding: const EdgeInsets.only(right: 5, left: 2, bottom: 40),
+          child: _getExpenses(context),
+        )),
+        const SizedBox(
+          height: 10,
+        )
+      ])
+    ]));
   }
 }

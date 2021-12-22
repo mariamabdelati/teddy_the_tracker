@@ -38,19 +38,6 @@ class _DashboardScreenState extends State<DashboardScreen> {
 
   int selected = 0;
 
-  late ScrollController controller;
-  @override
-  void initState() {
-    super.initState();
-    controller = ScrollController();
-  }
-
-  @override
-  void dispose() {
-    controller.dispose();
-    super.dispose();
-  }
-
   @override
   Widget build(BuildContext context) {
     const items = <Widget>[

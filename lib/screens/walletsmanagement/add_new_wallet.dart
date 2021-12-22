@@ -45,7 +45,8 @@ class AddWalletButton extends StatelessWidget {
                             child: Container(
                               padding: const EdgeInsets.all(10.0),
                               decoration: const BoxDecoration(
-                                  borderRadius: BorderRadius.all(Radius.circular(30)),
+                                  borderRadius:
+                                      BorderRadius.all(Radius.circular(30)),
                                   color: Color.fromRGBO(255, 255, 255, 0.38)),
                               child: const Icon(
                                 Icons.account_balance_wallet_rounded,
@@ -63,7 +64,10 @@ class AddWalletButton extends StatelessWidget {
                         child: Text(
                           "Create New Wallet",
                           textAlign: TextAlign.center,
-                          style: TextStyle(color: mainColorList[4], fontSize: 17,),
+                          style: TextStyle(
+                            color: mainColorList[4],
+                            fontSize: 17,
+                          ),
                         ),
                       ),
                     ),
@@ -109,7 +113,7 @@ class AddWalletPopupCardState extends State<AddWalletPopupCard> {
     final QuerySnapshot result = await FirebaseFirestore.instance
         .collection("wallets/9Ho4oSCoaTrpsVn1U3H1/wallet")
         .where("usersIDs",
-        arrayContains: FirebaseAuth.instance.currentUser!.uid)
+            arrayContains: FirebaseAuth.instance.currentUser!.uid)
         .get();
 
     List<DocumentSnapshot> docs = result.docs;
@@ -134,7 +138,7 @@ class AddWalletPopupCardState extends State<AddWalletPopupCard> {
             color: const Color(0xFFECF4FB),
             elevation: 2,
             shape:
-            RoundedRectangleBorder(borderRadius: BorderRadius.circular(32)),
+                RoundedRectangleBorder(borderRadius: BorderRadius.circular(32)),
             child: SingleChildScrollView(
               child: Padding(
                 padding: const EdgeInsets.all(25.0),
@@ -147,11 +151,12 @@ class AddWalletPopupCardState extends State<AddWalletPopupCard> {
                       decoration: InputDecoration(
                         labelText: "Wallet Name",
                         errorText: _validate ? "Wallet can't be empty" : null,
-                        border: OutlineInputBorder(borderRadius: BorderRadius.circular(20)),
+                        border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(20)),
                         prefixIcon: SizedBox(
                             width: 60,
-                            child:
-                            Icon(Icons.account_balance_wallet_outlined, size: 25, color: iconsColor)),
+                            child: Icon(Icons.account_balance_wallet_outlined,
+                                size: 25, color: iconsColor)),
                         suffixIcon: SizedBox(
                           width: 60,
                           child: IconButton(
@@ -208,11 +213,21 @@ void createNewWallet(String name) async {
       .get();
   CollectionReference categoriesRef = FirebaseFirestore.instance
       .collection("categories/JBSahpmjY2TtK0gRdT4s/category");
+
+  QuerySnapshot highestCategory = await FirebaseFirestore.instance
+      .collection("categories/JBSahpmjY2TtK0gRdT4s/category")
+      .orderBy("categoryID", descending: true)
+      .limit(1)
+      .get();
+  int highestID = highestCategory.docs[0]["categoryID"];
+  print("Highest categoryID is $highestID");
+
   var walletsList = wallets.docs;
   var maxId = 0;
   for (var doc in walletsList) {
     maxId = max(maxId, doc["walletID"]);
   }
+
   var createdWallet = FirebaseFirestore.instance
       .collection("wallets/9Ho4oSCoaTrpsVn1U3H1/wallet")
       .doc();
@@ -239,19 +254,20 @@ void createNewWallet(String name) async {
   ];
   List categoriesIdList = [];
   for (var index = 0; index < defaultCategoriesList.length; index++) {
-    categoriesIdList.add(index);
+    categoriesIdList.add(index + highestID + 1);
     var newCategory = defaultCategoriesList[index];
     categoriesRef.add({
       "label": newCategory.toLowerCase().trim(),
       "budget": budget,
       "parentId": 0,
-      "categoryId": index,
+      "categoryID": highestID + index + 1,
       "childIds": [],
       "expenseIds": [],
       "walletId": maxId + 1,
     });
   }
-  print(createdWallet.id);
+  // print(createdWallet.id);
+  print("Categories list is: $categoriesIdList");
   FirebaseFirestore.instance
       .collection("wallets/9Ho4oSCoaTrpsVn1U3H1/wallet")
       .doc(createdWallet.id)
