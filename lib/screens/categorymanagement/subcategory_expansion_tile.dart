@@ -3,7 +3,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import '../../constants.dart';
 //import 'category_more_options.dart';
-//import 'category_expansion_tile.dart';
+import 'category_expansion_tile.dart';
 import 'category_more_options.dart';
 import 'create_new_category.dart';
 
@@ -27,13 +27,13 @@ class SubcategoryExpansionTile extends StatefulWidget {
 
 class _SubcategoryExpansionTileState extends State<SubcategoryExpansionTile> {
   //this string is used to identify what subcategory has been selected
-  var selectedSubcategory = "";
-  var selectedSubCategoryID = 0;
+  late String selectedSubcategory;
+  late int selectedSubCategoryID;
   bool different = false;
 
   static const double radius = 20;
 
-  bool _isExpanded = false;
+  late bool _isExpanded;
 
   UniqueKey keyTile = UniqueKey();
 
@@ -61,6 +61,13 @@ class _SubcategoryExpansionTileState extends State<SubcategoryExpansionTile> {
     });
   }
 
+  @override
+  void initState(){
+    selectedSubcategory = "";
+    selectedSubCategoryID = 0;
+    _isExpanded = false;
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -92,9 +99,6 @@ class _SubcategoryExpansionTileState extends State<SubcategoryExpansionTile> {
   }
 
   Widget buildTile(BuildContext context) {
-    if (!widget.visible) {
-      resetTile();
-    }
 
     return Theme(
       data: Theme.of(context).copyWith(dividerColor: Colors.transparent),
@@ -125,7 +129,7 @@ class _SubcategoryExpansionTileState extends State<SubcategoryExpansionTile> {
             StreamBuilder<QuerySnapshot>(
                 stream: FirebaseFirestore.instance
                     .collection("categories/JBSahpmjY2TtK0gRdT4s/category")
-                    .where("categoryId", whereIn: widget.index)
+                    .where("categoryID", whereIn: widget.index)
                     .snapshots(),
                 builder: (BuildContext context,
                     AsyncSnapshot<QuerySnapshot> snapshot) {
@@ -141,9 +145,9 @@ class _SubcategoryExpansionTileState extends State<SubcategoryExpansionTile> {
                   List.generate(
                       data.size,
                           (index) {
-                        if (data.docs[index]["parentId"] != 0) {
+                        if (data.docs[index]["parentID"] != 0) {
                           String chipName = data.docs[index]["label"];
-                          int chipID = data.docs[index]["categoryId"];
+                          int chipID = data.docs[index]["categoryID"];
                           contents.add(ActionChip(
                               labelPadding: const EdgeInsets.all(5),
                               label: Text(chipName.capitalize),
@@ -208,3 +212,6 @@ class _SubcategoryExpansionTileState extends State<SubcategoryExpansionTile> {
     );
   }
 }
+
+//on save then
+//set catID in expenses table to selectedCategoryID

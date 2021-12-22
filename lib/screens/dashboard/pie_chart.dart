@@ -19,7 +19,7 @@ class Entries {
   DocumentReference? reference;
 
   Entries.fromMap(Map<String, dynamic> map, {this.reference}) {
-    catID = map["categoryId"];
+    catID = map["categoryID"];
     amount = map["amount"];
     label = map["label"];
   }
@@ -40,8 +40,8 @@ class Categories {
   DocumentReference? reference;
 
   Categories.fromMap(Map<String, dynamic> map, {this.reference}) {
-    catID = map["categoryId"];
-    subcats = map["childIds"];
+    catID = map["categoryID"];
+    subcats = map["childIDs"];
     label = map["label"];
   }
 
@@ -53,8 +53,8 @@ class Categories {
 Widget _getExpenses(context) {
   return StreamBuilder<QuerySnapshot>(
       stream: FirebaseFirestore.instance
-          .collection("expenses/cFqsqHPIscrC6cY9iPs6/expense")
-          .orderBy("categoryId", descending: false)
+          .collection("/entries/7sQnsmHSjX5K8Sgz4PoD/expense")
+          .orderBy("categoryID", descending: false)
           .snapshots(),
       builder: (context, snapshot) {
         if (snapshot.hasError) {
@@ -78,7 +78,7 @@ Widget _getCategories(context, List<Entries> expenses) {
   return StreamBuilder<QuerySnapshot>(
       stream: FirebaseFirestore.instance
           .collection("/categories/JBSahpmjY2TtK0gRdT4s/category")
-          .where("walletId", isEqualTo: globals.getWallet()["walletID"])
+          .where("walletID", isEqualTo: globals.getWallet()["walletID"])
           .snapshots(),
       /*.orderBy("categoryId", descending: false)*/
 
@@ -137,7 +137,7 @@ Widget _buildBody(
       sortedExpensesKeys,
       key: (k) => k,
       value: (k) => expensesData[k]);
-  print(sortedExpensesData);
+  //print(sortedExpensesData);
 
   Map expensesDataTrimmed = {};
   Map expensesDataNoOther = {};
@@ -145,7 +145,7 @@ Widget _buildBody(
 
   var list = sortedExpensesData.keys.toList(growable: false);
   var other = list.indexOf(2);
-  print(other);
+  //print(other);
 
   int count = 0;
   var key;
@@ -163,7 +163,6 @@ Widget _buildBody(
     });
     expensesDataNoOther[key] = value;
   }
-  print(expensesDataNoOther);
 
   if (expensesDataNoOther.isNotEmpty) {
     expensesDataNoOther.forEach((k, v) {
@@ -198,8 +197,6 @@ Widget _buildBody(
     });
   }
 
-  print(expensesDataTrimmed);
-
   int i = 0;
   expensesDataTrimmed.forEach((k, v) {
     categoriesData.forEach((key, value) {
@@ -221,23 +218,6 @@ Widget _buildBody(
     }
   });
 
-  //print(data);
-
-  //print(categoryNames);
-  /*expensesData.forEach((k, v) {
-    if (!total.contains(k)) {
-      total[0] += v;
-    }
-  });*/
-  //date.sort();
-  /*expensesData.forEach((k, v) {
-    expensesList
-        .add(FlSpot(date.indexWhere((element) => element == k).toDouble(), v));
-  });
-  incomesData.forEach((k, v) {
-    incomesList
-        .add(FlSpot(date.indexWhere((element) => element == k).toDouble(), v));
-  });*/
   return Container(
       child: Stack(children: <Widget>[
     Column(crossAxisAlignment: CrossAxisAlignment.stretch, children: <Widget>[
@@ -267,10 +247,6 @@ Widget _buildBody(
    child: PieChartPage(data),
   );*/
 }
-
-/*_buildChart(context, Map<dynamic, dynamic> categoryNames) {
-
-} */
 
 class TtestDashboard extends StatefulWidget {
   const TtestDashboard({Key? key}) : super(key: key);
@@ -362,7 +338,8 @@ class _PieChartPageState extends State<PieChartPage> {
           ),
         ),
         Padding(
-          padding: const EdgeInsets.all(20),
+          padding: const EdgeInsets.only(
+              left: 5.0, right: 15.0, top: 15.0, bottom: 15.0),
           child: IndicatorsWidget(widget.list, touchedIndex),
         ),
       ],
@@ -393,6 +370,8 @@ class _PieChartPageState extends State<PieChartPage> {
         centerSpaceRadius: 35,
         sections: getSections(touchedIndex, piechartData),
       ),
+
+      //swapAnimationCurve: Curves.linearToEaseOut,
     );
   }
 }
@@ -412,38 +391,22 @@ class _IndicatorsWidgetState extends State<IndicatorsWidget> {
   Widget build(BuildContext context) {
     return Column(
         mainAxisSize: MainAxisSize.min,
-        mainAxisAlignment: MainAxisAlignment.center,
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: List.generate(widget.list.length, (index) {
           return Expanded(
             flex: 1,
             child: Container(
-                padding: const EdgeInsets.symmetric(vertical: 2),
+                //margin: const EdgeInsets.symmetric(vertical: 6),
+                //padding: const EdgeInsets.symmetric(vertical: 6),
                 child: buildIndicator(
-                  touched: widget.touchedIndex == index,
-                  color: widget.list[index].color,
-                  text: (widget.list[index].name).capitalize,
-                  // isSquare: true,
-                )),
+              touched: widget.touchedIndex == index,
+              color: widget.list[index].color,
+              text: (widget.list[index].name).capitalize,
+              // isSquare: true,
+            )),
           );
-        })
-
-        /*widget.list.map(
-            (data) {
-          return Expanded(
-            flex: 1,
-            child: Container(
-                padding: const EdgeInsets.symmetric(vertical: 2),
-                child: buildIndicator(
-                  touched: widget.touchedIndex,
-                  color: data.color,
-                  text: (data.name).capitalize,
-                  // isSquare: true,
-                )),
-          );
-        },
-      ).toList(),*/
-        );
+        }));
   }
 
   Widget buildIndicator({
@@ -466,16 +429,25 @@ class _IndicatorsWidgetState extends State<IndicatorsWidget> {
         ),
         const SizedBox(width: 8),
         Column(
+          mainAxisSize: MainAxisSize.min,
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Flexible(
               child: SizedBox(
-                width: 80,
-                child: Text(
-                  text,
-                  style: TextStyle(
-                    fontSize: 16,
-                    fontWeight: touched ? FontWeight.w900 : FontWeight.w100,
-                    color: touched ? const Color(0xFFFEC768) : textColor,
+                width: 95,
+                child: SingleChildScrollView(
+                  scrollDirection: Axis.horizontal,
+                  child: Text(
+                    text,
+                    overflow: TextOverflow.fade,
+                    maxLines: 1,
+                    softWrap: false,
+                    style: TextStyle(
+                      fontSize: 14,
+                      fontWeight: touched ? FontWeight.w900 : FontWeight.w100,
+                      color: touched ? const Color(0xFFFEC768) : textColor,
+                    ),
                   ),
                 ),
               ),

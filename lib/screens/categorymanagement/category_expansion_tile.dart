@@ -106,7 +106,7 @@ class _CategoryExpansionTileState extends State<CategoryExpansionTile> {
           ),
         //the selectedCategoryID is passed to the subcategory so that we can show the related subcategory
         SubcategoryExpansionTile(
-            index: selectedCategorySubs, visible: isSelected),
+          index: selectedCategorySubs, visible: isSelected, key: UniqueKey(),),
       ],
     );
   }
@@ -118,7 +118,7 @@ class _CategoryExpansionTileState extends State<CategoryExpansionTile> {
     //stream of categories from db
     final Stream<QuerySnapshot> categories = FirebaseFirestore.instance
         .collection("categories/JBSahpmjY2TtK0gRdT4s/category")
-        .where("walletId", isEqualTo: globals.getWallet()["walletID"]).snapshots();
+        .where("walletID", isEqualTo: globals.getWallet()["walletID"]).snapshots();
     //.orderBy("categoryId", descending: true)
     /*.where("categoryId", whereIn: (globals.getWallet()["categoryIds"]))*/
     //var contents = <Widget>[];
@@ -171,12 +171,12 @@ class _CategoryExpansionTileState extends State<CategoryExpansionTile> {
                     data.size,
                         (index) {
                       if (index == 0){
-                        size = data.docs[index]["categoryId"];
+                        size = data.docs[index]["categoryID"];
                       }
-                      if (data.docs[index]["parentId"] == 0) {
+                      if (data.docs[index]["parentID"] == 0) {
                         String chipName = data.docs[index]["label"];
-                        int chipID = data.docs[index]["categoryId"];
-                        List chipSubCat = data.docs[index]["childIds"];
+                        int chipID = data.docs[index]["categoryID"];
+                        List chipSubCat = data.docs[index]["childIDs"];
                         contents.add(ActionChip(
                             labelPadding: const EdgeInsets.all(5),
                             label: Text(chipName.capitalize),

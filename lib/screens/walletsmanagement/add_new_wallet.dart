@@ -7,62 +7,80 @@ import 'dart:math';
 //import '../../screens/dashboard/globals.dart';
 
 class AddWalletButton extends StatelessWidget {
-  //Widget navigatePage();
-  const AddWalletButton({Key? key}) : super(key: key);
+  final int idx;
+  const AddWalletButton(this.idx, {Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    var pages = [
+      AddWalletPopupCard(),
+      JoinWalletPopupCard(),
+    ];
     return Padding(
-      padding: const EdgeInsets.all(32.0),
+      padding:
+          const EdgeInsets.only(bottom: 4.0, right: 4.0, left: 4.0, top: 12.0),
       child: GestureDetector(
         onTap: () {
           Navigator.of(context).push(HeroDialogRoute(builder: (context) {
-            return AddWalletPopupCard();
+            return pages[idx];
           }));
         },
         child: Hero(
-          tag: _heroAddWallet,
+          tag: idx == 0 ? _heroAddWallet : _heroJoinWallet,
           child: SizedBox(
-            height: 160,
-            width: 160,
+            height: 120,
+            width: 180,
             child: Card(
               elevation: 4,
               color: const Color(0xFF0C43D5),
               shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(40)),
-              child: Padding(
+              child: /*Container(
+                  decoration: BoxDecoration(
+                    gradient: const RadialGradient(
+                      colors: [
+                        Color(0xFF0054DA),
+                        Color(0xFF049BD6),
+                      ],
+                      center: Alignment(2.0, 1.4),
+                      focal: Alignment(1.0,0.6),
+                      focalRadius: 1.0,
+                    ),
+                    borderRadius: BorderRadius.circular(40),
+                  ),
+                  child:*/
+                  Padding(
                 padding: const EdgeInsets.all(10.0),
                 child: Column(
-                  mainAxisAlignment: MainAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Align(
-                          //alignment: Alignment.bottomCenter,
-                          child: Padding(
-                            padding: const EdgeInsets.only(top: 8.0),
-                            child: Container(
-                              padding: const EdgeInsets.all(10.0),
-                              decoration: const BoxDecoration(
-                                  borderRadius:
-                                      BorderRadius.all(Radius.circular(30)),
-                                  color: Color.fromRGBO(255, 255, 255, 0.38)),
-                              child: const Icon(
-                                Icons.account_balance_wallet_rounded,
-                                color: Colors.white,
-                                size: 20,
+                    /*Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Align(
+                              //alignment: Alignment.bottomCenter,
+                              child: Padding(
+                                padding: const EdgeInsets.only(top: 8.0),
+                                child: Container(
+                                  padding: const EdgeInsets.all(10.0),
+                                  decoration: const BoxDecoration(
+                                      borderRadius: BorderRadius.all(Radius.circular(30)),
+                                      color: Color.fromRGBO(255, 255, 255, 0.38)),
+                                  child: const Icon(
+                                    Icons.account_balance_wallet_rounded,
+                                    color: Colors.white,
+                                    size: 20,
+                                  ),
+                                ),
                               ),
-                            ),
-                          ),
-                        )
-                      ],
-                    ),
+                            )
+                          ],
+                        ),*/
                     Flexible(
                       child: Padding(
                         padding: const EdgeInsets.all(15.0),
                         child: Text(
-                          "Create New Wallet",
+                          idx == 0 ? "Create New Wallet" : "Join Wallet",
                           textAlign: TextAlign.center,
                           style: TextStyle(
                             color: mainColorList[4],
@@ -78,6 +96,7 @@ class AddWalletButton extends StatelessWidget {
           ),
         ),
       ),
+      //),
     );
   }
 }
@@ -99,6 +118,8 @@ class AddWalletPopupCardState extends State<AddWalletPopupCard> {
   var _text = TextEditingController();
 
   bool _validate = false;
+
+  String errorText = "";
 
   var documents;
 
@@ -150,7 +171,7 @@ class AddWalletPopupCardState extends State<AddWalletPopupCard> {
                       focusNode: FocusNode(),
                       decoration: InputDecoration(
                         labelText: "Wallet Name",
-                        errorText: _validate ? "Wallet can't be empty" : null,
+                        errorText: _validate ? errorText : null,
                         border: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(20)),
                         prefixIcon: SizedBox(
@@ -181,15 +202,18 @@ class AddWalletPopupCardState extends State<AddWalletPopupCard> {
                           setState(() {
                             if (_text.text.isEmpty) {
                               _validate = true;
-                            } else if (!walletcheck(_text.text)) {
+                              errorText = "Wallet can't be empty";
+                            } else if (!walletcheck(
+                                _text.text.trim().toLowerCase())) {
                               _validate = true;
+                              errorText = "Wallet name already exists";
                             } else {
                               _validate = false;
                             }
                             //get results from the class and search for duplicate names
                           });
                           if (!_validate) {
-                            createNewWallet(_text.text);
+                            createNewWallet(_text.text.trim().toLowerCase());
                           }
                         },
                         child: const Text('Add'),
@@ -220,7 +244,6 @@ void createNewWallet(String name) async {
       .limit(1)
       .get();
   int highestID = highestCategory.docs[0]["categoryID"];
-  print("Highest categoryID is $highestID");
 
   var walletsList = wallets.docs;
   var maxId = 0;
@@ -266,10 +289,104 @@ void createNewWallet(String name) async {
       "walletId": maxId + 1,
     });
   }
-  // print(createdWallet.id);
-  print("Categories list is: $categoriesIdList");
   FirebaseFirestore.instance
       .collection("wallets/9Ho4oSCoaTrpsVn1U3H1/wallet")
       .doc(createdWallet.id)
       .set({"categoriesIDs": categoriesIdList}, SetOptions(merge: true));
+}
+
+const String _heroJoinWallet = 'join-wallet-hero';
+
+class JoinWalletPopupCard extends StatefulWidget {
+  // {@macro add_category_popup_card}
+  JoinWalletPopupCard({Key? key}) : super(key: key);
+
+  @override
+  State<JoinWalletPopupCard> createState() => JoinWalletPopupCardState();
+}
+
+class JoinWalletPopupCardState extends State<JoinWalletPopupCard> {
+  bool isEnabled = true;
+
+  var _text = TextEditingController();
+
+  bool _validate = false;
+
+  String errorText = "";
+
+  @override
+  Widget build(BuildContext context) {
+    return Center(
+      child: Padding(
+        padding: const EdgeInsets.all(20.0),
+        child: Hero(
+          tag: _heroJoinWallet,
+          child: Material(
+            color: const Color(0xFFECF4FB),
+            elevation: 2,
+            shape:
+                RoundedRectangleBorder(borderRadius: BorderRadius.circular(32)),
+            child: SingleChildScrollView(
+              child: Padding(
+                padding: const EdgeInsets.all(25.0),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    TextField(
+                      controller: _text,
+                      focusNode: FocusNode(),
+                      decoration: InputDecoration(
+                        labelText: "Wallet Code",
+                        errorText: _validate ? errorText : null,
+                        border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(20)),
+                        prefixIcon: SizedBox(
+                            width: 60,
+                            child: Icon(Icons.account_balance_wallet_outlined,
+                                size: 25, color: iconsColor)),
+                        suffixIcon: SizedBox(
+                          width: 60,
+                          child: IconButton(
+                            icon: const Icon(
+                              Icons.clear_rounded,
+                              size: 20,
+                            ),
+                            onPressed: _text.clear,
+                          ),
+                        ),
+                      ),
+                      cursorColor: const Color(0xFF67B5FD),
+                      enabled: isEnabled,
+                      readOnly: !isEnabled,
+                    ),
+                    const Divider(
+                      color: Color(0xFFECF4FB),
+                      thickness: 0.5,
+                    ),
+                    TextButton(
+                        onPressed: () {
+                          setState(() {
+                            if (_text.text.isEmpty) {
+                              _validate = true;
+                              errorText = "Wallet can't be empty";
+                            } else {
+                              _validate = false;
+                            }
+                            //get results from the class and search for duplicate names
+                          });
+                          if (!_validate) {
+                            createNewWallet(_text.text.trim().toLowerCase());
+                          }
+                        },
+                        child: const Text('Join'),
+                        style: TextButton.styleFrom(primary: Colors.blue))
+                  ],
+                ),
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
+  }
 }

@@ -5,9 +5,10 @@ import 'package:vector_math/vector_math_64.dart' as math;
 //import '../../constants.dart';
 
 class RadialProgress extends StatefulWidget {
-  final double goalCompleted = 0.7;
+  final String balance;
+  final double percentage;
 
-  const RadialProgress({Key? key}) : super(key: key);
+  const RadialProgress(this.balance, this.percentage, {Key? key}) : super(key: key);
 
   @override
   _RadialProgressState createState() => _RadialProgressState();
@@ -32,7 +33,7 @@ class _RadialProgressState extends State<RadialProgress>
         parent: _radialProgressAnimationController, curve: Curves.easeIn))
       ..addListener(() {
         setState(() {
-          progressDegrees = widget.goalCompleted * _progressAnimation.value;
+          progressDegrees = widget.percentage * _progressAnimation.value;
         });
       });
 
@@ -74,8 +75,8 @@ class _RadialProgressState extends State<RadialProgress>
               const SizedBox(
                 height: 8.0,
               ),
-              const Text(
-                '1,225',
+              Text(
+                widget.balance,
                 style: TextStyle(fontSize: 16.0, fontWeight: FontWeight.bold, color: Color(0xFFFFEDEC)),
               ),
               const SizedBox(

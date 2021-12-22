@@ -1,7 +1,8 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
-import '../../screens/categorymanagement/subcategory_expansion_tile.dart';
+//import '../../screens/categorymanagement/subcategory_expansion_tile.dart';
 //import 'package:teddy_categories/constants.dart';
 //import 'package:teddy_categories/screens/dashboard/pie_chart.dart';
 
@@ -11,6 +12,7 @@ import '../walletsmanagement/switch_wallet_screen.dart';
 import 'balance_progress_bar.dart';
 import 'dashboard_charts.dart';
 import 'globals.dart';
+import 'line_chart.dart';
 
 class DashboardPage extends StatefulWidget {
   const DashboardPage({Key? key}) : super(key: key);
@@ -132,11 +134,11 @@ class _DashboardPageState extends State<DashboardPage> {
                   ),
                 ),
                 SizedBox(height: screenHeight * 0.01),
-                const Align(
+                Align(
                     alignment: Alignment.center,
                     child: Padding(
                       padding: EdgeInsets.all(12.0),
-                      child: RadialProgress(),
+                      child: _getExpenses(context),
                     )),
                 //SizedBox(height: screenHeight * 0.03),
               ],
@@ -151,9 +153,85 @@ class _DashboardPageState extends State<DashboardPage> {
     return const SliverToBoxAdapter(
       child: SizedBox(
         height: 450,
-        width: 400,
+        width: 700,
         child: ChartsPageView(),
       ),
     );
   }
+}
+
+Widget _getExpenses(context) {
+  return StreamBuilder<QuerySnapshot>(
+      stream: FirebaseFirestore.instance
+          .collection("/entries/7sQnsmHSjX5K8Sgz4PoD/expense")
+          .orderBy("date", descending: true)
+          .snapshots(),
+      builder: (context, snapshot) {
+        if (snapshot.hasError) {
+          return const Text("Something went wrong",
+              style: TextStyle(color: Colors.white));
+        } else if (snapshot.connectionState == ConnectionState.waiting) {
+          return const CircularProgressIndicator();
+        } else {
+          List<Entries> expenses = snapshot.data!.docs
+              .map((docSnapshot) =>
+                  Entries.fromMap(docSnapshot.data() as Map<String, dynamic>))
+              .toList();
+          return Container(
+            child: _getIncomes(context, expenses),
+          );
+        }
+      });
+}
+
+Widget _getIncomes(context, List<Entries> expenses) {
+  return StreamBuilder<QuerySnapshot>(
+      stream: FirebaseFirestore.instance
+          .collection("/entries/7sQnsmHSjX5K8Sgz4PoD/income")
+          .orderBy("date", descending: true)
+          .snapshots(),
+      builder: (context, snapshot) {
+        if (snapshot.hasError) {
+          print("error retreiving income");
+          return const Text("Something went wrong",
+              style: TextStyle(color: Colors.white));
+        } else if (snapshot.connectionState == ConnectionState.waiting) {
+          return const CircularProgressIndicator();
+        } else {
+          List<Entries> incomes = snapshot.data!.docs
+              .map((docSnapshot) =>
+                  Entries.fromMap(docSnapshot.data() as Map<String, dynamic>))
+              .toList();
+          return Container(
+            child: _buildBody(context, expenses, incomes),
+          );
+        }
+      });
+}
+
+Widget _buildBody(context, List<Entries> expenses, List<Entries> incomes) {
+  double expTotal = 0;
+  double incTotal = 0;
+  for (var entry in expenses.toList()) {
+    expTotal += double.parse(entry.amount as String);
+  }
+
+  for (var entry in incomes.toList()) {
+    incTotal += double.parse(entry.amount as String);
+  }
+
+  String balance = "0";
+  double percentage = 0;
+  if (incTotal < expTotal) {
+    balance = (incTotal - expTotal).toString();
+    percentage = 1;
+  } else {
+    balance = (incTotal - expTotal).toString();
+    print(balance);
+    percentage = (incTotal - expTotal) / incTotal;
+  }
+
+  return Container(
+    child: RadialProgress(balance, percentage),
+  );
 }
