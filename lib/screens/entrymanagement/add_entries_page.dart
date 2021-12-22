@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -55,10 +57,10 @@ class AddNewEntryPageState extends State<AddNewEntryPage> {
 
 
   CollectionReference expenseRef = FirebaseFirestore.instance
-      .collection('/expenses/cFqsqHPIscrC6cY9iPs6/expense');
+      .collection('/entries/7sQnsmHSjX5K8Sgz4PoD/expense');
 
   CollectionReference incomeRef = FirebaseFirestore.instance
-      .collection('/expenses/cFqsqHPIscrC6cY9iPs6/income');
+      .collection('/entries/7sQnsmHSjX5K8Sgz4PoD/income');
 
   var _dateTime = DateTime.now();
   String dateText = '';
@@ -312,6 +314,7 @@ class AddNewEntryPageState extends State<AddNewEntryPage> {
             onPressed: () {
               setState(() {
                 type = "Income";
+                isExpense = false;
                 validType =  true;
               });
             },
@@ -471,26 +474,7 @@ class AddNewEntryPageState extends State<AddNewEntryPage> {
               formKey.currentState!.save();
 
               //add to db
-              if (isExpense){
-                await expenseRef.add({
-                  'amount': amount,
-                  'categoryId': selectedCategoryID,
-                  'date': DateFormat('yyyy-MM-dd').format(_dateTime),
-                  'expenseId': 2,
-                  'label': newTitle.toLowerCase(),
-                  'recurring': isChecked,
-                });
-              } else {
-                await incomeRef.add({
-                  'amount': amount,
-                  'categoryId': selectedCategoryID,
-                  'date': DateFormat('yyyy-MM-dd').format(_dateTime),
-                  'incomeId': 2,
-                  'label': newTitle.toLowerCase(),
-                  'recurring': isChecked,
-                });
-              }
-
+              createNewEntry(newTitle.toLowerCase(), amount, _dateTime, isChecked, isExpense);
 
               //shows snackbar with details upon adding
               final message =
@@ -511,4 +495,78 @@ class AddNewEntryPageState extends State<AddNewEntryPage> {
       },
     );
   }
+}
+
+void createNewEntry(String label, String amount, DateTime date, bool recurring, bool isExpense) async {
+  QuerySnapshot entry;
+  if (isExpense){
+    entry = await FirebaseFirestore.instance
+        .collection("/entries/7sQnsmHSjX5K8Sgz4PoD/expense")
+        .orderBy("expenseID")
+        .get();
+  } else{
+    entry = await FirebaseFirestore.instance
+        .collection("/entries/7sQnsmHSjX5K8Sgz4PoD/income")
+        .orderBy("incomeID")
+        .get();
+  }
+
+  var entriesList = entry.docs;
+  var maxId = 0;
+  for (var doc in entriesList) {
+    if (isExpense){
+      maxId = max(maxId, doc["expenseID"]);
+    } else{
+      maxId = max(maxId, doc["incomeID"]);
+    }
+  }
+  var newID = maxId + 1;
+
+
+  if (isExpense) {
+    var createdEntry = FirebaseFirestore.instance
+        .collection("/entries/7sQnsmHSjX5K8Sgz4PoD/expense")
+        .doc();
+    createdEntry.set({
+      "label": label.toLowerCase().trim(),
+      'date': DateFormat('yyyy-MM-dd').format(date),
+      "amount": amount,
+      "categoryID": selectedCategoryID,
+      "expenseID": newID,
+      "recurring": recurring,
+      //"walletID": globals.getWallet()["walletID"],
+    });
+  } else {
+    var createdEntry = FirebaseFirestore.instance
+        .collection("/entries/7sQnsmHSjX5K8Sgz4PoD/income")
+        .doc();
+    createdEntry.set({
+      "label": label.toLowerCase().trim(),
+      'date': DateFormat('yyyy-MM-dd').format(date),
+      "amount": amount,
+      "categoryID": selectedCategoryID,
+      "incomeID": newID,
+      "recurring": recurring,
+      //"walletID": globals.getWallet()["walletID"],
+    });
+  }
+
+
+
+  //var existingCatsList = globals.getWallet()["categoriesIDs"];
+  QuerySnapshot categoriesRef = await FirebaseFirestore.instance
+      .collection("/categories/JBSahpmjY2TtK0gRdT4s/category")
+      .where("categoryID", isEqualTo: selectedCategoryID).get();
+
+  var categ = categoriesRef.docs[0];
+
+
+  List existingEntries = categ["expenseIDs"];
+  existingEntries.add(newID);
+
+  FirebaseFirestore.instance
+      .collection("/categories/JBSahpmjY2TtK0gRdT4s/category")
+      .doc(categ.id)
+      .set({"expenseIDs": existingEntries}, SetOptions(merge: true));
+
 }

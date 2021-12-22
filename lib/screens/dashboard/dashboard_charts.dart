@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 import '../../constants.dart';
 import '../../screens/dashboard/pie_chart.dart';
 
@@ -17,23 +18,27 @@ class _ChartsPageViewState extends State<ChartsPageView> {
   //int touchedIndex = -1;
   String bal = '0';
   int currentPage = 0;
+  PageController controller = PageController();
 
   @override
   Widget build(BuildContext context) {
-    final charts = PageView(
+    const charts = <Widget>[
+      PiechartPanel(),
+      Linechart(),
+    ];
+    final pages = PageView.builder(
       onPageChanged: (int page) {
         setState(() {
-          currentPage = page;
+          currentPage = page % charts.length;
         });
       },
-      controller: PageController(initialPage: 0),
-      children: const <Widget>[
-        PiechartPanel(),
-        Linechart(),
-      ],
+      itemBuilder: (context, index){
+        return charts[index % charts.length];
+      },
+      controller: controller,
     );
     return Stack(children: <Widget>[
-      charts,
+      pages,
       Stack(
         children: <Widget>[
           Align(
@@ -44,8 +49,21 @@ class _ChartsPageViewState extends State<ChartsPageView> {
                 mainAxisSize: MainAxisSize.min,
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
-                  for (int i = 0; i < 2; i++)
-                    (i == currentPage ? circleBar(true) : circleBar(false))
+                  AnimatedSmoothIndicator(
+                    onDotClicked: animateToPage,
+                    activeIndex: currentPage,
+                    count: charts.length,
+                    effect: WormEffect(
+                      spacing: 12,
+                      activeDotColor: mainColorList[4],
+                      dotColor: Colors.white.withOpacity(0.6),
+                      dotHeight: 11,
+                      dotWidth: 11,
+                      type: WormType.thin,
+                      //jumpScale: .7,
+                      //verticalOffset: 15,
+                    ),
+                  ),
                 ],
               ),
             ),
@@ -55,17 +73,7 @@ class _ChartsPageViewState extends State<ChartsPageView> {
     ]);
   }
 
-  Widget circleBar(bool isActive) {
-    return AnimatedContainer(
-      duration: const Duration(milliseconds: 150),
-      margin: const EdgeInsets.symmetric(horizontal: 8),
-      height: isActive ? 11 : 8,
-      width: isActive ? 11 : 8,
-      decoration: BoxDecoration(
-          color: isActive ? mainColorList[4] : Colors.white.withOpacity(0.6),
-          borderRadius: const BorderRadius.all(Radius.circular(12))),
-    );
-  }
+  void animateToPage(int index) => controller.animateToPage(index, duration: const Duration(milliseconds: 400), curve: Curves.easeInOut);
 }
 
 class PiechartPanel extends StatefulWidget {

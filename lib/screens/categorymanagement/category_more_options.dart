@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import '../../constants.dart';
 import 'create_new_category.dart';
+import 'create_new_subcategory.dart';
+import 'delete_category.dart';
 
-//widget shows options in the bottom modal sheet
 class Options extends StatefulWidget {
   final String title;
 
@@ -43,7 +44,11 @@ class _OptionsState extends State<Options> {
               ),
               label: Text("Create " + widget.title),
               onPressed: () {
-                Navigator.push(context, MaterialPageRoute(builder: (context) => const CreateNewCategory(title: 'Create New Category',)));
+                if (widget.title == "Category"){
+                  Navigator.push(context, MaterialPageRoute(builder: (context) => const CreateNewCategory(title: 'Create New Category',)));
+                } else {
+                  Navigator.push(context, MaterialPageRoute(builder: (context) => const CreateNewSubcategory(title: 'Create New Subcategory',)));
+                }
               },
               style: ElevatedButton.styleFrom(primary: mainColorList[2], padding: buttonPadding,
                 shape: RoundedRectangleBorder(
@@ -59,7 +64,13 @@ class _OptionsState extends State<Options> {
                 size: 24.0,
               ),
               label: Text("Delete " + widget.title),
-              onPressed: null,
+              onPressed: (){
+                if (widget.title == "Category"){
+                  Navigator.push(context, MaterialPageRoute(builder: (context) => const DeleteCategory(title: 'Delete Category',)));
+                } else {
+                  //Navigator.push(context, MaterialPageRoute(builder: (context) => const CreateNewSubcategory(title: 'Create New Subcategory',)));
+                }
+              },
               style: ElevatedButton.styleFrom(primary: mainColorList[2], padding: buttonPadding,
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(50),
