@@ -1,6 +1,4 @@
 import 'package:teddy_the_tracker/screens/dashboard/hide_navbar.dart';
-import 'package:teddy_the_tracker/screens/walletmanagement/wallet_screen.dart';
-
 import '../../screens/entrymanagement/add_entries_page.dart';
 import '../../screens/entrymanagement/view_entries_page.dart';
 import '../../screens/profilemanagement/profile.dart';
