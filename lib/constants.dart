@@ -16,16 +16,29 @@ var mainColorList = [
   const Color(0xFF34C68E),
   const Color(0xFF679DC9),
   const Color(0xFF0AA599),
+];
 
-  const Color(0xFF3493E3),
+var pieChartColors =[
+  /*const Color(0xFF3493E3),
   const Color(0xFF97C7EF),
   const Color(0xFF61ADEB),
   const Color(0xFF388EE3),
   const Color(0xFF3498F7),
   const Color(0xFF1491FF),
+  const Color(0xFF92C9EC),
   const Color(0xFFD1EAFF),
   const Color(0xFFE8F5FE),
-  const Color(0xFF1D67A6),
+  const Color(0xFF1D67A6),*/
+  const Color(0xFF9DFBB1),
+  const Color(0xFFFFC8C2),
+  const Color(0xFFFFF1C2),
+  const Color(0xFFAFEEFE),
+  const Color(0xFFC1ECDA),
+  const Color(0xFFE1F5E0),
+  const Color(0xFFC7ECB4),
+  const Color(0xFFBCE784),
+  const Color(0xFF79B473),
+  const Color(0xFFF0F3BD),
 ];
 
 var iconsColor = const Color(0xFF5689B9);

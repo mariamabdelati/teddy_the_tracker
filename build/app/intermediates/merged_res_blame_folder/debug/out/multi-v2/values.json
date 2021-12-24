@@ -1,25 +1,8 @@
 {
     "logs": [
         {
-            "outputFile": "C:\\Users\\alypr\\StudioProjects\\new_project\\build\\app\\intermediates\\incremental\\mergeDebugResources\\merged.dir\\values\\values.xml",
+            "outputFile": "C:\\Users\\alypr\\StudioProjects\\ooo\\build\\app\\intermediates\\incremental\\mergeDebugResources\\merged.dir\\values\\values.xml",
             "map": [
-                {
-                    "source": "C:\\Users\\alypr\\StudioProjects\\new_project\\build\\app\\generated\\res\\google-services\\debug\\values\\values.xml",
-                    "from": {
-                        "startLines": "2,3,4,5,6,7,8",
-                        "startColumns": "4,4,4,4,4,4,4",
-                        "startOffsets": "55,199,281,385,494,614,713",
-                        "endColumns": "143,81,103,108,119,98,75",
-                        "endOffsets": "194,276,380,489,609,708,784"
-                    },
-                    "to": {
-                        "startLines": "112,113,114,115,116,117,118",
-                        "startColumns": "4,4,4,4,4,4,4",
-                        "startOffsets": "8240,8384,8466,8570,8679,8799,8898",
-                        "endColumns": "143,81,103,108,119,98,75",
-                        "endOffsets": "8379,8461,8565,8674,8794,8893,8969"
-                    }
-                },
                 {
                     "source": "C:\\Users\\alypr\\.gradle\\caches\\transforms-2\\files-2.1\\f55a0c545b31b95ae181790b2bcd500b\\jetified-play-services-base-17.1.0\\res\\values\\values.xml",
                     "from": {
@@ -40,6 +23,25 @@
                     }
                 },
                 {
+                    "source": "C:\\Users\\alypr\\StudioProjects\\ooo\\android\\app\\src\\main\\res\\values\\styles.xml",
+                    "from": {
+                        "startLines": "3,14",
+                        "startColumns": "4,4",
+                        "startOffsets": "173,816",
+                        "endLines": "7,16",
+                        "endColumns": "12,12",
+                        "endOffsets": "465,980"
+                    },
+                    "to": {
+                        "startLines": "120,125",
+                        "startColumns": "4,4",
+                        "startOffsets": "9045,9342",
+                        "endLines": "124,127",
+                        "endColumns": "12,12",
+                        "endOffsets": "9337,9506"
+                    }
+                },
+                {
                     "source": "C:\\Users\\alypr\\.gradle\\caches\\transforms-2\\files-2.1\\d30bd78f85a4293b98780e7f434b7d55\\jetified-play-services-basement-17.1.0\\res\\values\\values.xml",
                     "from": {
                         "startLines": "4,7",
@@ -54,6 +56,23 @@
                         "startOffsets": "5769,6947",
                         "endColumns": "67,166",
                         "endOffsets": "5832,7109"
+                    }
+                },
+                {
+                    "source": "C:\\Users\\alypr\\StudioProjects\\ooo\\build\\app\\generated\\res\\google-services\\debug\\values\\values.xml",
+                    "from": {
+                        "startLines": "2,3,4,5,6,7,8",
+                        "startColumns": "4,4,4,4,4,4,4",
+                        "startOffsets": "55,199,281,385,494,614,713",
+                        "endColumns": "143,81,103,108,119,98,75",
+                        "endOffsets": "194,276,380,489,609,708,784"
+                    },
+                    "to": {
+                        "startLines": "112,113,114,115,116,117,118",
+                        "startColumns": "4,4,4,4,4,4,4",
+                        "startOffsets": "8240,8384,8466,8570,8679,8799,8898",
+                        "endColumns": "143,81,103,108,119,98,75",
+                        "endOffsets": "8379,8461,8565,8674,8794,8893,8969"
                     }
                 },
                 {
@@ -73,25 +92,6 @@
                         "endLines": "2,143,160,249",
                         "endColumns": "60,12,24,24",
                         "endOffsets": "161,10548,11454,16665"
-                    }
-                },
-                {
-                    "source": "C:\\Users\\alypr\\StudioProjects\\new_project\\android\\app\\src\\main\\res\\values\\styles.xml",
-                    "from": {
-                        "startLines": "3,14",
-                        "startColumns": "4,4",
-                        "startOffsets": "173,816",
-                        "endLines": "7,16",
-                        "endColumns": "12,12",
-                        "endOffsets": "465,980"
-                    },
-                    "to": {
-                        "startLines": "120,125",
-                        "startColumns": "4,4",
-                        "startOffsets": "9045,9342",
-                        "endLines": "124,127",
-                        "endColumns": "12,12",
-                        "endOffsets": "9337,9506"
                     }
                 },
                 {
@@ -131,7 +131,7 @@
                     }
                 },
                 {
-                    "source": "C:\\Users\\alypr\\StudioProjects\\new_project\\android\\app\\src\\main\\res\\values\\colors.xml",
+                    "source": "C:\\Users\\alypr\\StudioProjects\\ooo\\android\\app\\src\\main\\res\\values\\colors.xml",
                     "from": {
                         "startLines": "2",
                         "startColumns": "4",

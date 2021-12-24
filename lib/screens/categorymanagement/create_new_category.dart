@@ -1,7 +1,9 @@
 import 'dart:async';
+import 'dart:math';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import '../../screens/dashboard/globals.dart';
 import '../../components/submission_button.dart';
 import '../../constants.dart';
 //import 'category_expansion_tile.dart';
@@ -21,19 +23,6 @@ class CreateNewCategory extends StatefulWidget {
 }
 
 class _CreateNewCategoryState extends State<CreateNewCategory> {
-  /*String spaceRemover(String x){
-    String y = "";
-    for (int i = 0; i < x.length; i++){
-      if(x[i] == " "){
-        continue;
-      } else{
-        y = x.substring(i);
-        break;
-      }
-    }
-    return y;
-  }*/
-
   //this function is used to remove the extra zeros from the beginning of the budget entered
   String zeroCheck(String x){
     String y = "";
@@ -65,23 +54,33 @@ class _CreateNewCategoryState extends State<CreateNewCategory> {
   late bool _invalid;
 
   //checks if a category exists or not
-  Future<bool> categoryCheck(String newCat) async {
-    final QuerySnapshot result = await FirebaseFirestore.instance
-        .collection('categories/JBSahpmjY2TtK0gRdT4s/category')
-        .where('label', isEqualTo: newCat)
-        .limit(1)
-        .get();
-    final List<DocumentSnapshot> documents = result.docs;
-    return (documents.length == 1);
+  var documents;
+
+  @override
+  void initState() {
+    super.initState();
+
+    _getCategories();
   }
 
-  //converts future<bool> to bool
-  void connector(String v) async {
-    bool value = await categoryCheck(v);
-    setState(() {
-      _invalid = value;
-    });
+  void _getCategories() async {
+    final QuerySnapshot result = await FirebaseFirestore.instance
+        .collection("categories/JBSahpmjY2TtK0gRdT4s/category")
+        .where("walletID", isEqualTo: globals.getWallet()["walletID"])
+        .get();
+
+    List<DocumentSnapshot> docs = result.docs;
+    documents = docs;
   }
+
+  bool categoryCheck(String newCat) {
+    for (var document in documents) {
+      if (document["label"] == newCat) return false;
+    }
+    return true;
+  }
+
+
 
   @override
   Widget build(BuildContext context) {
@@ -148,10 +147,11 @@ class _CreateNewCategoryState extends State<CreateNewCategory> {
 
       //validates field  value
       validator: (value) {
-        connector(value!.toLowerCase().trim());
-        if (value.trim().isEmpty) {
+        //categoryCheck(value!.toLowerCase().trim());
+        //connector(value!.toLowerCase().trim());
+        if (value!.toLowerCase().trim().isEmpty) {
           return "Category cannot be empty";
-        } else if (_invalid){
+        } else if (!categoryCheck(value.toLowerCase().trim())){
           return "Category already exists";
         } else {
           return null;
@@ -186,6 +186,7 @@ class _CreateNewCategoryState extends State<CreateNewCategory> {
         if (value! == ""){
           return null;
         } else if(zeroCheck(value) == "0") {
+          //print(globals.getWallet());
           return "Budget must not be zero";
         } else {
           return null;
@@ -215,22 +216,10 @@ class _CreateNewCategoryState extends State<CreateNewCategory> {
             if (isValid) {
               formKey.currentState!.save();
 
-
-              /*await FirebaseFirestore.instance
-              .collection('categories/JBSahpmjY2TtK0gRdT4s/category')
-              .doc(uid)
-              .set({
-            "username": username,
-            "email": email,
-          });*/
-
-              //reference to category instance
-              CollectionReference categoriesRef = FirebaseFirestore.instance.collection("categories/JBSahpmjY2TtK0gRdT4s/category");
-
-
               //adds new  document to db
-              categoriesRef.add(
-                  {"label": newCategory.toLowerCase().trim(), "budget": int.parse(budget), "parentId": 0, "categoryId": size + 1, "childIds": [], "expenseIds": []});
+              createNewCategory(newCategory.toLowerCase().trim(), budget);
+
+
 
               //message showing verification
               final message =
@@ -251,4 +240,44 @@ class _CreateNewCategoryState extends State<CreateNewCategory> {
       },
     );
   }
+}
+
+void createNewCategory(String label, String budget) async {
+  QuerySnapshot categories = await FirebaseFirestore.instance
+      .collection("categories/JBSahpmjY2TtK0gRdT4s/category")
+      .orderBy("categoryID")
+      .get();
+
+  var categoriesList = categories.docs;
+  var maxId = 0;
+  for (var doc in categoriesList) {
+    maxId = max(maxId, doc["categoryID"]);
+  }
+  var newID = maxId + 1;
+  var createdCategory = FirebaseFirestore.instance
+      .collection("categories/JBSahpmjY2TtK0gRdT4s/category")
+      .doc();
+  createdCategory.set({
+    "label": label.toLowerCase().trim(),
+    "budget": int.parse(budget),
+    "parentID": 0,
+    "categoryID": newID,
+    "childIDs": [],
+    "expenseIDs": [],
+    "walletID": globals.getWallet()["walletID"],
+  });
+
+  var existingCatsList = globals.getWallet()["categoriesIDs"];
+  existingCatsList.add(newID);
+
+  QuerySnapshot walletsRef = await FirebaseFirestore.instance
+      .collection("wallets/9Ho4oSCoaTrpsVn1U3H1/wallet")
+      .where("walletID", isEqualTo: globals.getWallet()["walletID"]).get();
+
+  var walet = walletsRef.docs[0];
+
+  FirebaseFirestore.instance
+      .collection("wallets/9Ho4oSCoaTrpsVn1U3H1/wallet")
+      .doc(walet.id)
+      .set({"categoriesIDs": existingCatsList}, SetOptions(merge: true));
 }

@@ -1,14 +1,14 @@
 -- Merging decision tree log ---
 manifest
-ADDED from C:\Users\alypr\StudioProjects\new_project\android\app\src\main\AndroidManifest.xml:1:1-41:12
-INJECTED from C:\Users\alypr\StudioProjects\new_project\android\app\src\main\AndroidManifest.xml:1:1-41:12
-INJECTED from C:\Users\alypr\StudioProjects\new_project\android\app\src\main\AndroidManifest.xml:1:1-41:12
-INJECTED from C:\Users\alypr\StudioProjects\new_project\android\app\src\main\AndroidManifest.xml:1:1-41:12
-MERGED from C:\Users\alypr\StudioProjects\new_project\android\app\src\main\AndroidManifest.xml:1:1-41:12
-MERGED from [:firebase_auth] C:\Users\alypr\StudioProjects\new_project\build\firebase_auth\intermediates\library_manifest\debug\AndroidManifest.xml:2:1-15:12
-MERGED from [:cloud_firestore] C:\Users\alypr\StudioProjects\new_project\build\cloud_firestore\intermediates\library_manifest\debug\AndroidManifest.xml:2:1-15:12
-MERGED from [:firebase_core] C:\Users\alypr\StudioProjects\new_project\build\firebase_core\intermediates\library_manifest\debug\AndroidManifest.xml:2:1-15:12
-MERGED from [:flutter_keyboard_visibility] C:\Users\alypr\StudioProjects\new_project\build\flutter_keyboard_visibility\intermediates\library_manifest\debug\AndroidManifest.xml:2:1-7:12
+ADDED from C:\Users\alypr\StudioProjects\ooo\android\app\src\main\AndroidManifest.xml:1:1-41:12
+INJECTED from C:\Users\alypr\StudioProjects\ooo\android\app\src\main\AndroidManifest.xml:1:1-41:12
+INJECTED from C:\Users\alypr\StudioProjects\ooo\android\app\src\main\AndroidManifest.xml:1:1-41:12
+INJECTED from C:\Users\alypr\StudioProjects\ooo\android\app\src\main\AndroidManifest.xml:1:1-41:12
+MERGED from C:\Users\alypr\StudioProjects\ooo\android\app\src\main\AndroidManifest.xml:1:1-41:12
+MERGED from [:firebase_auth] C:\Users\alypr\StudioProjects\ooo\build\firebase_auth\intermediates\library_manifest\debug\AndroidManifest.xml:2:1-15:12
+MERGED from [:cloud_firestore] C:\Users\alypr\StudioProjects\ooo\build\cloud_firestore\intermediates\library_manifest\debug\AndroidManifest.xml:2:1-15:12
+MERGED from [:firebase_core] C:\Users\alypr\StudioProjects\ooo\build\firebase_core\intermediates\library_manifest\debug\AndroidManifest.xml:2:1-15:12
+MERGED from [:flutter_keyboard_visibility] C:\Users\alypr\StudioProjects\ooo\build\flutter_keyboard_visibility\intermediates\library_manifest\debug\AndroidManifest.xml:2:1-7:12
 MERGED from [com.google.firebase:firebase-auth:21.0.1] C:\Users\alypr\.gradle\caches\transforms-2\files-2.1\10e05af780216079a637c76c90b471cf\jetified-firebase-auth-21.0.1\AndroidManifest.xml:17:1-83:12
 MERGED from [com.google.firebase:firebase-firestore:24.0.0] C:\Users\alypr\.gradle\caches\transforms-2\files-2.1\41ba7ea9a972904b1fa3473b5b818ac9\jetified-firebase-firestore-24.0.0\AndroidManifest.xml:2:1-26:12
 MERGED from [com.google.firebase:firebase-auth-interop:20.0.0] C:\Users\alypr\.gradle\caches\transforms-2\files-2.1\e3175ef23f868ecc3d1245275b020cd2\jetified-firebase-auth-interop-20.0.0\AndroidManifest.xml:2:1-10:12
@@ -49,31 +49,31 @@ MERGED from [androidx.documentfile:documentfile:1.0.0] C:\Users\alypr\.gradle\ca
 MERGED from [androidx.print:print:1.0.0] C:\Users\alypr\.gradle\caches\transforms-2\files-2.1\7ac247ab30796a9f70188bef0ae9fc0d\print-1.0.0\AndroidManifest.xml:17:1-22:12
 MERGED from [com.google.firebase:protolite-well-known-types:18.0.0] C:\Users\alypr\.gradle\caches\transforms-2\files-2.1\624f4d71698bb698a3c9009216715936\jetified-protolite-well-known-types-18.0.0\AndroidManifest.xml:2:1-11:12
 MERGED from [io.grpc:grpc-android:1.41.0] C:\Users\alypr\.gradle\caches\transforms-2\files-2.1\966faf3364d6d2cf814ded1ec98c9cd6\jetified-grpc-android-1.41.0\AndroidManifest.xml:2:1-13:12
-INJECTED from C:\Users\alypr\StudioProjects\new_project\android\app\src\debug\AndroidManifest.xml:1:1-7:12
-INJECTED from C:\Users\alypr\StudioProjects\new_project\android\app\src\debug\AndroidManifest.xml:1:1-7:12
-INJECTED from C:\Users\alypr\StudioProjects\new_project\android\app\src\debug\AndroidManifest.xml:1:1-7:12
+INJECTED from C:\Users\alypr\StudioProjects\ooo\android\app\src\debug\AndroidManifest.xml:1:1-7:12
+INJECTED from C:\Users\alypr\StudioProjects\ooo\android\app\src\debug\AndroidManifest.xml:1:1-7:12
+INJECTED from C:\Users\alypr\StudioProjects\ooo\android\app\src\debug\AndroidManifest.xml:1:1-7:12
 	package
-		ADDED from C:\Users\alypr\StudioProjects\new_project\android\app\src\main\AndroidManifest.xml:2:5-43
-		INJECTED from C:\Users\alypr\StudioProjects\new_project\android\app\src\main\AndroidManifest.xml
-		INJECTED from C:\Users\alypr\StudioProjects\new_project\android\app\src\debug\AndroidManifest.xml
+		ADDED from C:\Users\alypr\StudioProjects\ooo\android\app\src\main\AndroidManifest.xml:2:5-43
+		INJECTED from C:\Users\alypr\StudioProjects\ooo\android\app\src\main\AndroidManifest.xml
+		INJECTED from C:\Users\alypr\StudioProjects\ooo\android\app\src\debug\AndroidManifest.xml
 	android:versionName
-		INJECTED from C:\Users\alypr\StudioProjects\new_project\android\app\src\main\AndroidManifest.xml
-		ADDED from C:\Users\alypr\StudioProjects\new_project\android\app\src\main\AndroidManifest.xml:1:1-41:12
-		INJECTED from C:\Users\alypr\StudioProjects\new_project\android\app\src\debug\AndroidManifest.xml
+		INJECTED from C:\Users\alypr\StudioProjects\ooo\android\app\src\main\AndroidManifest.xml
+		ADDED from C:\Users\alypr\StudioProjects\ooo\android\app\src\main\AndroidManifest.xml:1:1-41:12
+		INJECTED from C:\Users\alypr\StudioProjects\ooo\android\app\src\debug\AndroidManifest.xml
 	android:versionCode
-		INJECTED from C:\Users\alypr\StudioProjects\new_project\android\app\src\main\AndroidManifest.xml
-		ADDED from C:\Users\alypr\StudioProjects\new_project\android\app\src\main\AndroidManifest.xml:1:1-41:12
-		INJECTED from C:\Users\alypr\StudioProjects\new_project\android\app\src\debug\AndroidManifest.xml
+		INJECTED from C:\Users\alypr\StudioProjects\ooo\android\app\src\main\AndroidManifest.xml
+		ADDED from C:\Users\alypr\StudioProjects\ooo\android\app\src\main\AndroidManifest.xml:1:1-41:12
+		INJECTED from C:\Users\alypr\StudioProjects\ooo\android\app\src\debug\AndroidManifest.xml
 	xmlns:android
-		ADDED from C:\Users\alypr\StudioProjects\new_project\android\app\src\main\AndroidManifest.xml:1:11-69
+		ADDED from C:\Users\alypr\StudioProjects\ooo\android\app\src\main\AndroidManifest.xml:1:11-69
 application
-ADDED from C:\Users\alypr\StudioProjects\new_project\android\app\src\main\AndroidManifest.xml:3:4-40:19
-MERGED from [:firebase_auth] C:\Users\alypr\StudioProjects\new_project\build\firebase_auth\intermediates\library_manifest\debug\AndroidManifest.xml:7:5-13:19
-MERGED from [:firebase_auth] C:\Users\alypr\StudioProjects\new_project\build\firebase_auth\intermediates\library_manifest\debug\AndroidManifest.xml:7:5-13:19
-MERGED from [:cloud_firestore] C:\Users\alypr\StudioProjects\new_project\build\cloud_firestore\intermediates\library_manifest\debug\AndroidManifest.xml:7:5-13:19
-MERGED from [:cloud_firestore] C:\Users\alypr\StudioProjects\new_project\build\cloud_firestore\intermediates\library_manifest\debug\AndroidManifest.xml:7:5-13:19
-MERGED from [:firebase_core] C:\Users\alypr\StudioProjects\new_project\build\firebase_core\intermediates\library_manifest\debug\AndroidManifest.xml:7:5-13:19
-MERGED from [:firebase_core] C:\Users\alypr\StudioProjects\new_project\build\firebase_core\intermediates\library_manifest\debug\AndroidManifest.xml:7:5-13:19
+ADDED from C:\Users\alypr\StudioProjects\ooo\android\app\src\main\AndroidManifest.xml:3:4-40:19
+MERGED from [:firebase_auth] C:\Users\alypr\StudioProjects\ooo\build\firebase_auth\intermediates\library_manifest\debug\AndroidManifest.xml:7:5-13:19
+MERGED from [:firebase_auth] C:\Users\alypr\StudioProjects\ooo\build\firebase_auth\intermediates\library_manifest\debug\AndroidManifest.xml:7:5-13:19
+MERGED from [:cloud_firestore] C:\Users\alypr\StudioProjects\ooo\build\cloud_firestore\intermediates\library_manifest\debug\AndroidManifest.xml:7:5-13:19
+MERGED from [:cloud_firestore] C:\Users\alypr\StudioProjects\ooo\build\cloud_firestore\intermediates\library_manifest\debug\AndroidManifest.xml:7:5-13:19
+MERGED from [:firebase_core] C:\Users\alypr\StudioProjects\ooo\build\firebase_core\intermediates\library_manifest\debug\AndroidManifest.xml:7:5-13:19
+MERGED from [:firebase_core] C:\Users\alypr\StudioProjects\ooo\build\firebase_core\intermediates\library_manifest\debug\AndroidManifest.xml:7:5-13:19
 MERGED from [com.google.firebase:firebase-auth:21.0.1] C:\Users\alypr\.gradle\caches\transforms-2\files-2.1\10e05af780216079a637c76c90b471cf\jetified-firebase-auth-21.0.1\AndroidManifest.xml:26:5-81:19
 MERGED from [com.google.firebase:firebase-auth:21.0.1] C:\Users\alypr\.gradle\caches\transforms-2\files-2.1\10e05af780216079a637c76c90b471cf\jetified-firebase-auth-21.0.1\AndroidManifest.xml:26:5-81:19
 MERGED from [com.google.firebase:firebase-firestore:24.0.0] C:\Users\alypr\.gradle\caches\transforms-2\files-2.1\41ba7ea9a972904b1fa3473b5b818ac9\jetified-firebase-firestore-24.0.0\AndroidManifest.xml:16:5-24:19
@@ -99,63 +99,63 @@ MERGED from [androidx.versionedparcelable:versionedparcelable:1.1.0] C:\Users\al
 	android:appComponentFactory
 		ADDED from [androidx.core:core:1.1.0] C:\Users\alypr\.gradle\caches\transforms-2\files-2.1\42bd2d2c0e4737b992da175e0f08272f\core-1.1.0\AndroidManifest.xml:24:18-86
 	android:label
-		ADDED from C:\Users\alypr\StudioProjects\new_project\android\app\src\main\AndroidManifest.xml:4:9-42
+		ADDED from C:\Users\alypr\StudioProjects\ooo\android\app\src\main\AndroidManifest.xml:4:9-42
 	android:icon
-		ADDED from C:\Users\alypr\StudioProjects\new_project\android\app\src\main\AndroidManifest.xml:5:9-43
+		ADDED from C:\Users\alypr\StudioProjects\ooo\android\app\src\main\AndroidManifest.xml:5:9-43
 activity#com.example.teddy_categories.MainActivity
-ADDED from C:\Users\alypr\StudioProjects\new_project\android\app\src\main\AndroidManifest.xml:6:9-34:20
+ADDED from C:\Users\alypr\StudioProjects\ooo\android\app\src\main\AndroidManifest.xml:6:9-34:20
 	android:launchMode
-		ADDED from C:\Users\alypr\StudioProjects\new_project\android\app\src\main\AndroidManifest.xml:8:13-43
+		ADDED from C:\Users\alypr\StudioProjects\ooo\android\app\src\main\AndroidManifest.xml:8:13-43
 	android:hardwareAccelerated
-		ADDED from C:\Users\alypr\StudioProjects\new_project\android\app\src\main\AndroidManifest.xml:11:13-47
+		ADDED from C:\Users\alypr\StudioProjects\ooo\android\app\src\main\AndroidManifest.xml:11:13-47
 	android:windowSoftInputMode
-		ADDED from C:\Users\alypr\StudioProjects\new_project\android\app\src\main\AndroidManifest.xml:12:13-55
+		ADDED from C:\Users\alypr\StudioProjects\ooo\android\app\src\main\AndroidManifest.xml:12:13-55
 	android:configChanges
-		ADDED from C:\Users\alypr\StudioProjects\new_project\android\app\src\main\AndroidManifest.xml:10:13-163
+		ADDED from C:\Users\alypr\StudioProjects\ooo\android\app\src\main\AndroidManifest.xml:10:13-163
 	android:theme
-		ADDED from C:\Users\alypr\StudioProjects\new_project\android\app\src\main\AndroidManifest.xml:9:13-47
+		ADDED from C:\Users\alypr\StudioProjects\ooo\android\app\src\main\AndroidManifest.xml:9:13-47
 	android:name
-		ADDED from C:\Users\alypr\StudioProjects\new_project\android\app\src\main\AndroidManifest.xml:7:13-41
+		ADDED from C:\Users\alypr\StudioProjects\ooo\android\app\src\main\AndroidManifest.xml:7:13-41
 meta-data#io.flutter.embedding.android.NormalTheme
-ADDED from C:\Users\alypr\StudioProjects\new_project\android\app\src\main\AndroidManifest.xml:17:13-20:17
+ADDED from C:\Users\alypr\StudioProjects\ooo\android\app\src\main\AndroidManifest.xml:17:13-20:17
 	android:resource
-		ADDED from C:\Users\alypr\StudioProjects\new_project\android\app\src\main\AndroidManifest.xml:19:15-52
+		ADDED from C:\Users\alypr\StudioProjects\ooo\android\app\src\main\AndroidManifest.xml:19:15-52
 	android:name
-		ADDED from C:\Users\alypr\StudioProjects\new_project\android\app\src\main\AndroidManifest.xml:18:15-70
+		ADDED from C:\Users\alypr\StudioProjects\ooo\android\app\src\main\AndroidManifest.xml:18:15-70
 meta-data#io.flutter.embedding.android.SplashScreenDrawable
-ADDED from C:\Users\alypr\StudioProjects\new_project\android\app\src\main\AndroidManifest.xml:26:13-29:17
+ADDED from C:\Users\alypr\StudioProjects\ooo\android\app\src\main\AndroidManifest.xml:26:13-29:17
 	android:resource
-		ADDED from C:\Users\alypr\StudioProjects\new_project\android\app\src\main\AndroidManifest.xml:28:15-61
+		ADDED from C:\Users\alypr\StudioProjects\ooo\android\app\src\main\AndroidManifest.xml:28:15-61
 	android:name
-		ADDED from C:\Users\alypr\StudioProjects\new_project\android\app\src\main\AndroidManifest.xml:27:15-79
+		ADDED from C:\Users\alypr\StudioProjects\ooo\android\app\src\main\AndroidManifest.xml:27:15-79
 intent-filter#action:name:android.intent.action.MAIN+category:name:android.intent.category.LAUNCHER
-ADDED from C:\Users\alypr\StudioProjects\new_project\android\app\src\main\AndroidManifest.xml:30:13-33:29
+ADDED from C:\Users\alypr\StudioProjects\ooo\android\app\src\main\AndroidManifest.xml:30:13-33:29
 action#android.intent.action.MAIN
-ADDED from C:\Users\alypr\StudioProjects\new_project\android\app\src\main\AndroidManifest.xml:31:17-68
+ADDED from C:\Users\alypr\StudioProjects\ooo\android\app\src\main\AndroidManifest.xml:31:17-68
 	android:name
-		ADDED from C:\Users\alypr\StudioProjects\new_project\android\app\src\main\AndroidManifest.xml:31:25-66
+		ADDED from C:\Users\alypr\StudioProjects\ooo\android\app\src\main\AndroidManifest.xml:31:25-66
 category#android.intent.category.LAUNCHER
-ADDED from C:\Users\alypr\StudioProjects\new_project\android\app\src\main\AndroidManifest.xml:32:17-76
+ADDED from C:\Users\alypr\StudioProjects\ooo\android\app\src\main\AndroidManifest.xml:32:17-76
 	android:name
-		ADDED from C:\Users\alypr\StudioProjects\new_project\android\app\src\main\AndroidManifest.xml:32:27-74
+		ADDED from C:\Users\alypr\StudioProjects\ooo\android\app\src\main\AndroidManifest.xml:32:27-74
 meta-data#flutterEmbedding
-ADDED from C:\Users\alypr\StudioProjects\new_project\android\app\src\main\AndroidManifest.xml:37:9-39:33
+ADDED from C:\Users\alypr\StudioProjects\ooo\android\app\src\main\AndroidManifest.xml:37:9-39:33
 	android:value
-		ADDED from C:\Users\alypr\StudioProjects\new_project\android\app\src\main\AndroidManifest.xml:39:13-30
+		ADDED from C:\Users\alypr\StudioProjects\ooo\android\app\src\main\AndroidManifest.xml:39:13-30
 	android:name
-		ADDED from C:\Users\alypr\StudioProjects\new_project\android\app\src\main\AndroidManifest.xml:38:13-44
+		ADDED from C:\Users\alypr\StudioProjects\ooo\android\app\src\main\AndroidManifest.xml:38:13-44
 uses-sdk
-INJECTED from C:\Users\alypr\StudioProjects\new_project\android\app\src\main\AndroidManifest.xml reason: use-sdk injection requested
-INJECTED from C:\Users\alypr\StudioProjects\new_project\android\app\src\main\AndroidManifest.xml
-INJECTED from C:\Users\alypr\StudioProjects\new_project\android\app\src\main\AndroidManifest.xml
-MERGED from [:firebase_auth] C:\Users\alypr\StudioProjects\new_project\build\firebase_auth\intermediates\library_manifest\debug\AndroidManifest.xml:5:5-44
-MERGED from [:firebase_auth] C:\Users\alypr\StudioProjects\new_project\build\firebase_auth\intermediates\library_manifest\debug\AndroidManifest.xml:5:5-44
-MERGED from [:cloud_firestore] C:\Users\alypr\StudioProjects\new_project\build\cloud_firestore\intermediates\library_manifest\debug\AndroidManifest.xml:5:5-44
-MERGED from [:cloud_firestore] C:\Users\alypr\StudioProjects\new_project\build\cloud_firestore\intermediates\library_manifest\debug\AndroidManifest.xml:5:5-44
-MERGED from [:firebase_core] C:\Users\alypr\StudioProjects\new_project\build\firebase_core\intermediates\library_manifest\debug\AndroidManifest.xml:5:5-44
-MERGED from [:firebase_core] C:\Users\alypr\StudioProjects\new_project\build\firebase_core\intermediates\library_manifest\debug\AndroidManifest.xml:5:5-44
-MERGED from [:flutter_keyboard_visibility] C:\Users\alypr\StudioProjects\new_project\build\flutter_keyboard_visibility\intermediates\library_manifest\debug\AndroidManifest.xml:5:5-44
-MERGED from [:flutter_keyboard_visibility] C:\Users\alypr\StudioProjects\new_project\build\flutter_keyboard_visibility\intermediates\library_manifest\debug\AndroidManifest.xml:5:5-44
+INJECTED from C:\Users\alypr\StudioProjects\ooo\android\app\src\main\AndroidManifest.xml reason: use-sdk injection requested
+INJECTED from C:\Users\alypr\StudioProjects\ooo\android\app\src\main\AndroidManifest.xml
+INJECTED from C:\Users\alypr\StudioProjects\ooo\android\app\src\main\AndroidManifest.xml
+MERGED from [:firebase_auth] C:\Users\alypr\StudioProjects\ooo\build\firebase_auth\intermediates\library_manifest\debug\AndroidManifest.xml:5:5-44
+MERGED from [:firebase_auth] C:\Users\alypr\StudioProjects\ooo\build\firebase_auth\intermediates\library_manifest\debug\AndroidManifest.xml:5:5-44
+MERGED from [:cloud_firestore] C:\Users\alypr\StudioProjects\ooo\build\cloud_firestore\intermediates\library_manifest\debug\AndroidManifest.xml:5:5-44
+MERGED from [:cloud_firestore] C:\Users\alypr\StudioProjects\ooo\build\cloud_firestore\intermediates\library_manifest\debug\AndroidManifest.xml:5:5-44
+MERGED from [:firebase_core] C:\Users\alypr\StudioProjects\ooo\build\firebase_core\intermediates\library_manifest\debug\AndroidManifest.xml:5:5-44
+MERGED from [:firebase_core] C:\Users\alypr\StudioProjects\ooo\build\firebase_core\intermediates\library_manifest\debug\AndroidManifest.xml:5:5-44
+MERGED from [:flutter_keyboard_visibility] C:\Users\alypr\StudioProjects\ooo\build\flutter_keyboard_visibility\intermediates\library_manifest\debug\AndroidManifest.xml:5:5-44
+MERGED from [:flutter_keyboard_visibility] C:\Users\alypr\StudioProjects\ooo\build\flutter_keyboard_visibility\intermediates\library_manifest\debug\AndroidManifest.xml:5:5-44
 MERGED from [com.google.firebase:firebase-auth:21.0.1] C:\Users\alypr\.gradle\caches\transforms-2\files-2.1\10e05af780216079a637c76c90b471cf\jetified-firebase-auth-21.0.1\AndroidManifest.xml:21:5-44
 MERGED from [com.google.firebase:firebase-auth:21.0.1] C:\Users\alypr\.gradle\caches\transforms-2\files-2.1\10e05af780216079a637c76c90b471cf\jetified-firebase-auth-21.0.1\AndroidManifest.xml:21:5-44
 MERGED from [com.google.firebase:firebase-firestore:24.0.0] C:\Users\alypr\.gradle\caches\transforms-2\files-2.1\41ba7ea9a972904b1fa3473b5b818ac9\jetified-firebase-firestore-24.0.0\AndroidManifest.xml:7:5-9:41
@@ -236,28 +236,28 @@ MERGED from [com.google.firebase:protolite-well-known-types:18.0.0] C:\Users\aly
 MERGED from [com.google.firebase:protolite-well-known-types:18.0.0] C:\Users\alypr\.gradle\caches\transforms-2\files-2.1\624f4d71698bb698a3c9009216715936\jetified-protolite-well-known-types-18.0.0\AndroidManifest.xml:7:5-9:41
 MERGED from [io.grpc:grpc-android:1.41.0] C:\Users\alypr\.gradle\caches\transforms-2\files-2.1\966faf3364d6d2cf814ded1ec98c9cd6\jetified-grpc-android-1.41.0\AndroidManifest.xml:7:5-9:41
 MERGED from [io.grpc:grpc-android:1.41.0] C:\Users\alypr\.gradle\caches\transforms-2\files-2.1\966faf3364d6d2cf814ded1ec98c9cd6\jetified-grpc-android-1.41.0\AndroidManifest.xml:7:5-9:41
-INJECTED from C:\Users\alypr\StudioProjects\new_project\android\app\src\debug\AndroidManifest.xml
-INJECTED from C:\Users\alypr\StudioProjects\new_project\android\app\src\debug\AndroidManifest.xml
+INJECTED from C:\Users\alypr\StudioProjects\ooo\android\app\src\debug\AndroidManifest.xml
+INJECTED from C:\Users\alypr\StudioProjects\ooo\android\app\src\debug\AndroidManifest.xml
 	android:targetSdkVersion
-		INJECTED from C:\Users\alypr\StudioProjects\new_project\android\app\src\main\AndroidManifest.xml
-		INJECTED from C:\Users\alypr\StudioProjects\new_project\android\app\src\debug\AndroidManifest.xml
+		INJECTED from C:\Users\alypr\StudioProjects\ooo\android\app\src\main\AndroidManifest.xml
+		INJECTED from C:\Users\alypr\StudioProjects\ooo\android\app\src\debug\AndroidManifest.xml
 	android:minSdkVersion
-		INJECTED from C:\Users\alypr\StudioProjects\new_project\android\app\src\main\AndroidManifest.xml
-		INJECTED from C:\Users\alypr\StudioProjects\new_project\android\app\src\debug\AndroidManifest.xml
+		INJECTED from C:\Users\alypr\StudioProjects\ooo\android\app\src\main\AndroidManifest.xml
+		INJECTED from C:\Users\alypr\StudioProjects\ooo\android\app\src\debug\AndroidManifest.xml
 uses-permission#android.permission.INTERNET
-ADDED from C:\Users\alypr\StudioProjects\new_project\android\app\src\debug\AndroidManifest.xml:6:5-66
+ADDED from C:\Users\alypr\StudioProjects\ooo\android\app\src\debug\AndroidManifest.xml:6:5-66
 MERGED from [com.google.firebase:firebase-auth:21.0.1] C:\Users\alypr\.gradle\caches\transforms-2\files-2.1\10e05af780216079a637c76c90b471cf\jetified-firebase-auth-21.0.1\AndroidManifest.xml:23:5-67
 MERGED from [com.google.firebase:firebase-auth:21.0.1] C:\Users\alypr\.gradle\caches\transforms-2\files-2.1\10e05af780216079a637c76c90b471cf\jetified-firebase-auth-21.0.1\AndroidManifest.xml:23:5-67
 MERGED from [com.google.firebase:firebase-firestore:24.0.0] C:\Users\alypr\.gradle\caches\transforms-2\files-2.1\41ba7ea9a972904b1fa3473b5b818ac9\jetified-firebase-firestore-24.0.0\AndroidManifest.xml:14:5-67
 MERGED from [com.google.firebase:firebase-firestore:24.0.0] C:\Users\alypr\.gradle\caches\transforms-2\files-2.1\41ba7ea9a972904b1fa3473b5b818ac9\jetified-firebase-firestore-24.0.0\AndroidManifest.xml:14:5-67
 	android:name
-		ADDED from C:\Users\alypr\StudioProjects\new_project\android\app\src\debug\AndroidManifest.xml:6:22-64
+		ADDED from C:\Users\alypr\StudioProjects\ooo\android\app\src\debug\AndroidManifest.xml:6:22-64
 service#com.google.firebase.components.ComponentDiscoveryService
-ADDED from [:firebase_auth] C:\Users\alypr\StudioProjects\new_project\build\firebase_auth\intermediates\library_manifest\debug\AndroidManifest.xml:8:9-12:19
-MERGED from [:cloud_firestore] C:\Users\alypr\StudioProjects\new_project\build\cloud_firestore\intermediates\library_manifest\debug\AndroidManifest.xml:8:9-12:19
-MERGED from [:cloud_firestore] C:\Users\alypr\StudioProjects\new_project\build\cloud_firestore\intermediates\library_manifest\debug\AndroidManifest.xml:8:9-12:19
-MERGED from [:firebase_core] C:\Users\alypr\StudioProjects\new_project\build\firebase_core\intermediates\library_manifest\debug\AndroidManifest.xml:8:9-12:19
-MERGED from [:firebase_core] C:\Users\alypr\StudioProjects\new_project\build\firebase_core\intermediates\library_manifest\debug\AndroidManifest.xml:8:9-12:19
+ADDED from [:firebase_auth] C:\Users\alypr\StudioProjects\ooo\build\firebase_auth\intermediates\library_manifest\debug\AndroidManifest.xml:8:9-12:19
+MERGED from [:cloud_firestore] C:\Users\alypr\StudioProjects\ooo\build\cloud_firestore\intermediates\library_manifest\debug\AndroidManifest.xml:8:9-12:19
+MERGED from [:cloud_firestore] C:\Users\alypr\StudioProjects\ooo\build\cloud_firestore\intermediates\library_manifest\debug\AndroidManifest.xml:8:9-12:19
+MERGED from [:firebase_core] C:\Users\alypr\StudioProjects\ooo\build\firebase_core\intermediates\library_manifest\debug\AndroidManifest.xml:8:9-12:19
+MERGED from [:firebase_core] C:\Users\alypr\StudioProjects\ooo\build\firebase_core\intermediates\library_manifest\debug\AndroidManifest.xml:8:9-12:19
 MERGED from [com.google.firebase:firebase-auth:21.0.1] C:\Users\alypr\.gradle\caches\transforms-2\files-2.1\10e05af780216079a637c76c90b471cf\jetified-firebase-auth-21.0.1\AndroidManifest.xml:74:9-80:19
 MERGED from [com.google.firebase:firebase-auth:21.0.1] C:\Users\alypr\.gradle\caches\transforms-2\files-2.1\10e05af780216079a637c76c90b471cf\jetified-firebase-auth-21.0.1\AndroidManifest.xml:74:9-80:19
 MERGED from [com.google.firebase:firebase-firestore:24.0.0] C:\Users\alypr\.gradle\caches\transforms-2\files-2.1\41ba7ea9a972904b1fa3473b5b818ac9\jetified-firebase-firestore-24.0.0\AndroidManifest.xml:17:9-23:19
@@ -271,25 +271,25 @@ MERGED from [com.google.firebase:firebase-common:20.0.0] C:\Users\alypr\.gradle\
 	android:directBootAware
 		ADDED from [com.google.firebase:firebase-common:20.0.0] C:\Users\alypr\.gradle\caches\transforms-2\files-2.1\17d1e98b88ae1be29373e10a6526a17f\jetified-firebase-common-20.0.0\AndroidManifest.xml:35:13-43
 	android:name
-		ADDED from [:firebase_auth] C:\Users\alypr\StudioProjects\new_project\build\firebase_auth\intermediates\library_manifest\debug\AndroidManifest.xml:8:18-89
+		ADDED from [:firebase_auth] C:\Users\alypr\StudioProjects\ooo\build\firebase_auth\intermediates\library_manifest\debug\AndroidManifest.xml:8:18-89
 meta-data#com.google.firebase.components:io.flutter.plugins.firebase.auth.FlutterFirebaseAuthRegistrar
-ADDED from [:firebase_auth] C:\Users\alypr\StudioProjects\new_project\build\firebase_auth\intermediates\library_manifest\debug\AndroidManifest.xml:9:13-11:85
+ADDED from [:firebase_auth] C:\Users\alypr\StudioProjects\ooo\build\firebase_auth\intermediates\library_manifest\debug\AndroidManifest.xml:9:13-11:85
 	android:value
-		ADDED from [:firebase_auth] C:\Users\alypr\StudioProjects\new_project\build\firebase_auth\intermediates\library_manifest\debug\AndroidManifest.xml:11:17-82
+		ADDED from [:firebase_auth] C:\Users\alypr\StudioProjects\ooo\build\firebase_auth\intermediates\library_manifest\debug\AndroidManifest.xml:11:17-82
 	android:name
-		ADDED from [:firebase_auth] C:\Users\alypr\StudioProjects\new_project\build\firebase_auth\intermediates\library_manifest\debug\AndroidManifest.xml:10:17-124
+		ADDED from [:firebase_auth] C:\Users\alypr\StudioProjects\ooo\build\firebase_auth\intermediates\library_manifest\debug\AndroidManifest.xml:10:17-124
 meta-data#com.google.firebase.components:io.flutter.plugins.firebase.firestore.FlutterFirebaseFirestoreRegistrar
-ADDED from [:cloud_firestore] C:\Users\alypr\StudioProjects\new_project\build\cloud_firestore\intermediates\library_manifest\debug\AndroidManifest.xml:9:13-11:85
+ADDED from [:cloud_firestore] C:\Users\alypr\StudioProjects\ooo\build\cloud_firestore\intermediates\library_manifest\debug\AndroidManifest.xml:9:13-11:85
 	android:value
-		ADDED from [:cloud_firestore] C:\Users\alypr\StudioProjects\new_project\build\cloud_firestore\intermediates\library_manifest\debug\AndroidManifest.xml:11:17-82
+		ADDED from [:cloud_firestore] C:\Users\alypr\StudioProjects\ooo\build\cloud_firestore\intermediates\library_manifest\debug\AndroidManifest.xml:11:17-82
 	android:name
-		ADDED from [:cloud_firestore] C:\Users\alypr\StudioProjects\new_project\build\cloud_firestore\intermediates\library_manifest\debug\AndroidManifest.xml:10:17-134
+		ADDED from [:cloud_firestore] C:\Users\alypr\StudioProjects\ooo\build\cloud_firestore\intermediates\library_manifest\debug\AndroidManifest.xml:10:17-134
 meta-data#com.google.firebase.components:io.flutter.plugins.firebase.core.FlutterFirebaseCoreRegistrar
-ADDED from [:firebase_core] C:\Users\alypr\StudioProjects\new_project\build\firebase_core\intermediates\library_manifest\debug\AndroidManifest.xml:9:13-11:85
+ADDED from [:firebase_core] C:\Users\alypr\StudioProjects\ooo\build\firebase_core\intermediates\library_manifest\debug\AndroidManifest.xml:9:13-11:85
 	android:value
-		ADDED from [:firebase_core] C:\Users\alypr\StudioProjects\new_project\build\firebase_core\intermediates\library_manifest\debug\AndroidManifest.xml:11:17-82
+		ADDED from [:firebase_core] C:\Users\alypr\StudioProjects\ooo\build\firebase_core\intermediates\library_manifest\debug\AndroidManifest.xml:11:17-82
 	android:name
-		ADDED from [:firebase_core] C:\Users\alypr\StudioProjects\new_project\build\firebase_core\intermediates\library_manifest\debug\AndroidManifest.xml:10:17-124
+		ADDED from [:firebase_core] C:\Users\alypr\StudioProjects\ooo\build\firebase_core\intermediates\library_manifest\debug\AndroidManifest.xml:10:17-124
 uses-permission#android.permission.ACCESS_NETWORK_STATE
 ADDED from [com.google.firebase:firebase-auth:21.0.1] C:\Users\alypr\.gradle\caches\transforms-2\files-2.1\10e05af780216079a637c76c90b471cf\jetified-firebase-auth-21.0.1\AndroidManifest.xml:24:5-79
 MERGED from [com.google.firebase:firebase-firestore:24.0.0] C:\Users\alypr\.gradle\caches\transforms-2\files-2.1\41ba7ea9a972904b1fa3473b5b818ac9\jetified-firebase-firestore-24.0.0\AndroidManifest.xml:13:5-79
