@@ -49,11 +49,13 @@ class _AuthScreenState extends State<AuthScreen> {
         });
         FirebaseAuth.instance.currentUser!.updateDisplayName(username);
       }
-      Navigator.of(context).pushAndRemoveUntil(
+      Navigator.push(
+          context,
           MaterialPageRoute(
               builder: (context) =>
-                  isLogin ? const SwitchWallet() : const VerificationScreen()),
-          (route) => false);
+                  VerificationScreen(isLogin: widget._isLogin)));
+      // builder: (context) => VerificationScreen(isLogin: isLogin)),
+
     } on FirebaseAuthException catch (err) {
       var msg = "Error occurred, please check your credentials";
 

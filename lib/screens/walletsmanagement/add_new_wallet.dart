@@ -282,11 +282,11 @@ void createNewWallet(String name) async {
     categoriesRef.add({
       "label": newCategory.toLowerCase().trim(),
       "budget": budget,
-      "parentId": 0,
+      "parentID": 0,
       "categoryID": highestID + index + 1,
-      "childIds": [],
-      "expenseIds": [],
-      "walletId": maxId + 1,
+      "childIDs": [],
+      "expenseIDs": [],
+      "walletID": maxId + 1,
     });
   }
   FirebaseFirestore.instance
