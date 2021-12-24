@@ -9,6 +9,7 @@ import 'package:flutter/material.dart';
 import 'constants.dart';
 import '../../screens/dashboard/globals.dart';
 
+//the main file instantiates the db and begins running the app
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
@@ -35,11 +36,16 @@ class MyApp extends StatelessWidget {
           buttonTheme: ButtonTheme.of(context).copyWith(
               buttonColor: const Color(0xFFF6BAB5),
               textTheme: ButtonTextTheme.primary,
-
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(20),
               )),
         ),
+
+        /*
+        this stream  builder checks if the user is logged in and navigates them to the select wallet screen
+        otherwise, the user is navigated to the authentication screen which calls the login page
+         */
+
         home: StreamBuilder(
           stream: FirebaseAuth.instance.authStateChanges(),
           builder: (ctx, userSnapshot) {

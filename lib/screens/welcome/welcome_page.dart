@@ -1,6 +1,7 @@
 //import 'dart:async';
-
 //import 'package:flutter/cupertino.dart';
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
 //import 'package:keyboard_visibility/keyboard_visibility.dart';
@@ -9,7 +10,13 @@ import '../../components/rounded_fill_button.dart';
 import '../../components/rounded_outlined_button.dart';
 import '../../constants.dart';
 
-class LoginPage extends StatefulWidget {
+/*
+this class takes 2 bool variables and a function:
+1. to identify if the user is logging in
+2. to identify if the app is waiting for firebase response
+3. the function is used to authenticate the email, password and/or user name entered in the  login page form
+ */
+class RegistrationPage extends StatefulWidget {
   bool isLoading;
   bool isLogged;
   final void Function(
@@ -20,14 +27,14 @@ class LoginPage extends StatefulWidget {
       BuildContext ctx,
       ) submitFn;
 
-  LoginPage(this.submitFn, this.isLoading, this.isLogged, {Key? key}) : super(key: key);
+  RegistrationPage(this.submitFn, this.isLoading, this.isLogged, {Key? key}) : super(key: key);
 
   @override
-  _LoginPageState createState() => _LoginPageState();
+  _RegistrationPageState createState() => _RegistrationPageState();
 
 }
 
-class _LoginPageState extends State<LoginPage> {
+class _RegistrationPageState extends State<RegistrationPage> {
   final _formkey = GlobalKey<FormState>();
   late var _isLogin = widget.isLogged;
   var _userEmail = "";
@@ -76,7 +83,7 @@ class _LoginPageState extends State<LoginPage> {
 
   bool _keyboardVisible = false;
 
-
+  late StreamSubscription<bool> keyboardSubscription;
   @override
   void initState() {
     super.initState();
@@ -84,20 +91,17 @@ class _LoginPageState extends State<LoginPage> {
 
     var keyboardVisibilityController = KeyboardVisibilityController();
 
-
-    keyboardVisibilityController.onChange.listen((bool visible) {
+    keyboardSubscription = keyboardVisibilityController.onChange.listen((bool visible) {
       setState(() {
         _keyboardVisible = visible;
       });
     });
-    /*KeyboardVisibilityNotification().addNewListener(
-      onChange: (bool visible) {
-        setState(() {
-          _keyboardVisible = visible;
-          print("Keyboard State Changed : $visible");
-        });
-      },
-    );*/
+  }
+
+  @override
+  void dispose() {
+    keyboardSubscription.cancel();
+    super.dispose();
   }
 
   @override

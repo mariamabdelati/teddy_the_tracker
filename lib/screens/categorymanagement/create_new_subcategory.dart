@@ -3,9 +3,12 @@ import 'dart:math';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import '../../components/success_dialog.dart';
 import '../../screens/dashboard/globals.dart';
 import '../../components/submission_button.dart';
 import '../../constants.dart';
+import 'category_expansion_tile.dart';
+import 'subcategory_expansion_tile.dart';
 //import 'category_expansion_tile.dart';
 
 class CreateNewSubcategory extends StatefulWidget {
@@ -48,30 +51,27 @@ class _CreateNewSubcategoryState extends State<CreateNewSubcategory> {
   final _subcategorytext = TextEditingController();
   final _budgettext = TextEditingController();
 
-  //used to determine if a category exists or not
-  late bool _invalid;
-
   //checks if a category exists or not
   var documents;
 
   @override
   void initState() {
     super.initState();
-
-    _getCategories();
+    _getSubCategories();
   }
 
-  void _getCategories() async {
+  String categoryName = selectedCategory.capitalize;
+  void _getSubCategories() async {
     final QuerySnapshot result = await FirebaseFirestore.instance
         .collection("categories/JBSahpmjY2TtK0gRdT4s/category")
-        .where("walletID", isEqualTo: globals.getWallet()["walletID"])
-        .get();
+        .where("parentID", isEqualTo: selectedCategoryID).get();
 
     List<DocumentSnapshot> docs = result.docs;
     documents = docs;
   }
 
-  bool categoryCheck(String newCat) {
+  //used to determine if a subcategory exists or not
+  bool subcategoryCheck(String newCat) {
     for (var document in documents) {
       if (document["label"] == newCat) return false;
     }
@@ -99,15 +99,51 @@ class _CreateNewSubcategoryState extends State<CreateNewSubcategory> {
             padding: const EdgeInsets.all(16),
             children: [
               const SizedBox(height: 16),
-              Text(
-                "Please input the new subcategory data:", textAlign: TextAlign.center,
-                style: TextStyle(
-                    fontSize: 17,
-                    fontWeight: FontWeight.bold,
-                    color: iconsColor),
+              Align(
+                alignment: Alignment.topCenter,
+                child: Container(
+                  //margin: const EdgeInsets.symmetric(vertical: 2),
+                  padding: const EdgeInsets.symmetric(vertical: 10),
+                  decoration: BoxDecoration(
+                      border: Border.all(
+                        color: const Color(0xFF0AA599),
+                        width: 1,
+                      ),
+                      borderRadius: BorderRadius.circular(20)
+                  ),
+                  child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        const SizedBox(
+                          width: 60,
+                          child: Icon(Icons.category_rounded, color: Color(0xFF0AA599), size: 25),
+                        ),
+                        Text(
+                          categoryName,
+                          style: const TextStyle(
+                              fontSize: 17,
+                              fontWeight: FontWeight.bold,
+                              color: Color(0xFF0AA599)),
+                        ),
+                        const SizedBox(width: 15,)
+                      ]),
+                ),
               ),
-              const SizedBox(height: 32),
-              buildCategory(),
+              const SizedBox(height: 20),
+              Padding(
+                padding: const EdgeInsets.only(left: 6.0),
+                child: Text(
+                  "Subcategory Details",
+                  textAlign: TextAlign.left,
+                  style: TextStyle(
+                      fontSize: 17,
+                      fontWeight: FontWeight.bold,
+                      color: mainColorList[2]),
+                ),
+              ),
+              const SizedBox(height: 16),
+              buildSubcategory(),
               const SizedBox(height: 16),
               buildBudget(),
               const SizedBox(height: 32),
@@ -123,13 +159,13 @@ class _CreateNewSubcategoryState extends State<CreateNewSubcategory> {
     );
   }
 
-  //builds new category textformfield
-  Widget buildCategory() {
+  //builds new subcategory textformfield
+  Widget buildSubcategory() {
     return TextFormField(
       controller: _subcategorytext,
       focusNode: FocusNode(),
       decoration: InputDecoration(
-        prefixIcon: SizedBox(width: 60,child: Icon(Icons.category_rounded, size: 20, color: iconsColor)),
+        prefixIcon: SizedBox(width: 60,child: Icon(Icons.account_tree_rounded, size: 20, color: iconsColor)),
         labelText: "New Subcategory",
         border: OutlineInputBorder(borderRadius: BorderRadius.circular(20)),
         suffixIcon: SizedBox(
@@ -143,12 +179,10 @@ class _CreateNewSubcategoryState extends State<CreateNewSubcategory> {
 
       //validates field  value
       validator: (value) {
-        //categoryCheck(value!.toLowerCase().trim());
-        //connector(value!.toLowerCase().trim());
         if (value!.toLowerCase().trim().isEmpty) {
           return "Subcategory cannot be empty";
-        } else if (!categoryCheck(value.toLowerCase().trim())){
-          return "Subcategory already exists";
+        } else if (!subcategoryCheck(value.toLowerCase().trim())){
+          return "Subcategory already exists for category '$categoryName'";
         } else {
           return null;
         }
@@ -182,7 +216,6 @@ class _CreateNewSubcategoryState extends State<CreateNewSubcategory> {
         if (value! == ""){
           return null;
         } else if(zeroCheck(value) == "0") {
-          //print(globals.getWallet());
           return "Budget must not be zero";
         } else {
           return null;
@@ -212,25 +245,52 @@ class _CreateNewSubcategoryState extends State<CreateNewSubcategory> {
             if (isValid) {
               formKey.currentState!.save();
 
-
-              createNewCategory(newSubcategory.toLowerCase().trim(), budget);
-
-              //adds new  document to db
-              //categoriesRef.add(
-                  //{"label": newCategory.toLowerCase().trim(), "budget": int.parse(budget), "parentID": 0, "categoryID": size + 1, "childIDs": [], "expenseIDs": [], "walletID": globals.getWallet()["walletID"]});
+              createNewSubCategory(newSubcategory.toLowerCase().trim(), budget);
 
               //message showing verification
               final message =
-                  "'$newSubcategory' has been successfully added to your categories";
-              final snackBar = SnackBar(
-                content: Text(
-                  message,
-                  style: const TextStyle(fontSize: 20),
-                ),
-                backgroundColor: Colors.green,
-              );
-              ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                  "'$newSubcategory' has been successfully added to '$categoryName' subcategories";
 
+              showDialog(context: context, builder: (BuildContext context)
+              {
+                return Dialog(
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(20),
+                  ),
+                  child: Padding(
+                    padding: const EdgeInsets.all(20.0),
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        AnimatedCheck(),
+                        SizedBox(height: 12),
+                        const Text(
+                          'Success!',
+                          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+                        ),
+                        const SizedBox(height: 12),
+                        Text(
+                          message,
+                          textAlign: TextAlign.center,
+                          //style: TextStyle(fontSize: 20),
+                        ),
+                        const SizedBox(height: 12),
+                        Center(
+                          child: ElevatedButton(
+                            style: ElevatedButton.styleFrom(
+                              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(50)),
+                            ),
+                            child: Text('Ok'),
+                            onPressed: () {
+                              Navigator.of(context).pop();
+                            },
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                );
+              });
               //Navigator.pop(context, MaterialPageRoute(builder: (context) => const CategoryExpansionTile()));
             }
           },
@@ -240,7 +300,7 @@ class _CreateNewSubcategoryState extends State<CreateNewSubcategory> {
   }
 }
 
-void createNewCategory(String label, String budget) async {
+void createNewSubCategory(String label, String budget) async {
   QuerySnapshot categories = await FirebaseFirestore.instance
       .collection("categories/JBSahpmjY2TtK0gRdT4s/category")
       .orderBy("categoryID")
@@ -258,24 +318,24 @@ void createNewCategory(String label, String budget) async {
   createdCategory.set({
     "label": label.toLowerCase().trim(),
     "budget": int.parse(budget),
-    "parentID": 0,
+    "parentID": selectedCategoryID,
     "categoryID": newID,
     "childIDs": [],
     "expenseIDs": [],
+    "incomeIDs": [],
     "walletID": globals.getWallet()["walletID"],
   });
 
-  var existingCatsList = globals.getWallet()["categoriesIDs"];
-  existingCatsList.add(newID);
+  QuerySnapshot categoriesRef = await FirebaseFirestore.instance
+      .collection("/categories/JBSahpmjY2TtK0gRdT4s/category")
+      .where("categoryID", isEqualTo: selectedCategoryID).get();
 
-  QuerySnapshot walletsRef = await FirebaseFirestore.instance
-      .collection("wallets/9Ho4oSCoaTrpsVn1U3H1/wallet")
-      .where("walletID", isEqualTo: globals.getWallet()["walletID"]).get();
-
-  var walet = walletsRef.docs[0];
+  var catDoc = categoriesRef.docs[0];
+  var existingSubCats = catDoc["childIDs"];
+  existingSubCats.add(newID);
 
   FirebaseFirestore.instance
-      .collection("wallets/9Ho4oSCoaTrpsVn1U3H1/wallet")
-      .doc(walet.id)
-      .set({"categoriesIDs": existingCatsList}, SetOptions(merge: true));
+      .collection("/categories/JBSahpmjY2TtK0gRdT4s/category")
+      .doc(catDoc.id)
+      .set({"childIDs": existingSubCats}, SetOptions(merge: true));
 }

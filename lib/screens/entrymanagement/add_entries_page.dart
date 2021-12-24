@@ -5,9 +5,12 @@ import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
+import '../../screens/categorymanagement/subcategory_expansion_tile.dart';
+import '../../components/success_dialog.dart';
 import '../../components/submission_button.dart';
 import '../../screens/categorymanagement/category_expansion_tile.dart';
 import '../../constants.dart';
+import '../../screens/dashboard/globals.dart';
 
 class AddNewEntryPage extends StatefulWidget {
   final String title;
@@ -92,12 +95,6 @@ class AddNewEntryPageState extends State<AddNewEntryPage> {
     return Scaffold(
       appBar: AppBar(
         title: Text(widget.title),
-        /*leading: IconButton(
-          onPressed: () {
-            Navigator.pop(context);
-          },
-          icon: const Icon(Icons.arrow_back_rounded),
-        ),*/
       ),
       //form containing list view of the fields
       body: Form(
@@ -274,41 +271,10 @@ class AddNewEntryPageState extends State<AddNewEntryPage> {
           OutlinedButton(
             style: OutlinedButton.styleFrom(shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(20)),
-              side: BorderSide(color: (type == "Expense")
-                  ? mainColorList[8]
-                  : iconsColor, width: 2),
-              primary: (type == "Expense")
-                  ? mainColorList[8]
-                  : iconsColor,
-              //backgroundColor: (recurring == "Yes") ? Colors.grey: null,
-            ),
-            onPressed: () {
-              setState(() {
-                type = "Expense";
-                isExpense = true;
-                validType =  true;
-              });
-            },
-            child: Center(
-              child: Text(
-                "Expense",
-                style: TextStyle(
-                    color: (type == "Expense")
-                        ? mainColorList[8]
-                        : iconsColor,
-                    fontSize: 16
-                ),
-              ),
-            ),
-          ),
-          const SizedBox(width: 15,),
-          OutlinedButton(
-            style: OutlinedButton.styleFrom(shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(20)),
               side: BorderSide(color: (type == "Income")
-                  ? progressbarColorWhite
+                  ? mainColorList[8]
                   : iconsColor, width: 2),
-              primary: (type == "Income") ? progressbarColorWhite : iconsColor,
+              primary: (type == "Income") ? mainColorList[8] : iconsColor,
               //backgroundColor: (recurring == "No") ? Colors.grey[100]: null,
             ),
             onPressed: () {
@@ -323,8 +289,35 @@ class AddNewEntryPageState extends State<AddNewEntryPage> {
                 "Income",
                 style: TextStyle(
                     color: (type == "Income")
-                        ? progressbarColorWhite
-                        : iconsColor,
+                        ? mainColorList[8] : iconsColor,
+                    fontSize: 16
+                ),
+              ),
+            ),
+          ),
+          const SizedBox(width: 15,),
+          OutlinedButton(
+            style: OutlinedButton.styleFrom(shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(20)),
+              side: BorderSide(color: (type == "Expense")
+                  ? progressbarColorWhite : iconsColor, width: 2),
+              primary: (type == "Expense")
+                  ? progressbarColorWhite : iconsColor,
+              //backgroundColor: (recurring == "Yes") ? Colors.grey: null,
+            ),
+            onPressed: () {
+              setState(() {
+                type = "Expense";
+                isExpense = true;
+                validType =  true;
+              });
+            },
+            child: Center(
+              child: Text(
+                "Expense",
+                style: TextStyle(
+                    color: (type == "Expense")
+                        ? progressbarColorWhite : iconsColor,
                     fontSize: 16
                 ),
               ),
@@ -476,24 +469,58 @@ class AddNewEntryPageState extends State<AddNewEntryPage> {
               //add to db
               createNewEntry(newTitle.toLowerCase(), amount, _dateTime, isChecked, isExpense);
 
+
               //shows snackbar with details upon adding
               final message =
-                  "'$newTitle' with amount '$amount 'has been successfully added to your entries";
-              final snackBar = SnackBar(
-                content: Text(
-                  message,
-                  style: const TextStyle(fontSize: 20),
-                ),
-                backgroundColor: Colors.green,
-              );
-              ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                  "'$newTitle' with amount '$amount' has been successfully added to your entries";
 
-              //Navigator.pop(context, MaterialPageRoute(builder: (context) => const CategoryExpansionTile()));
+              buildSuccessDialog(context, message);
             }
           },
         );
       },
     );
+  }
+
+  void buildSuccessDialog(BuildContext context, String message) {
+    showDialog(context: context, builder: (BuildContext context)
+    {
+      return Dialog(
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(20),
+        ),
+        child: Padding(
+          padding: const EdgeInsets.all(20.0),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              AnimatedCheck(),
+              SizedBox(height: 12),
+              const Text(
+                'Success!',
+                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+              ),
+              const SizedBox(height: 12),
+              Text(
+                message,
+                textAlign: TextAlign.center,
+                //style: TextStyle(fontSize: 20),
+              ),
+              const SizedBox(height: 12),
+              Center(
+                child: ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(50)),
+                  ),
+                  child: Text('Ok'),
+                  onPressed: () => Navigator.of(context).pop(),
+                ),
+              ),
+            ],
+          ),
+        ),
+      );
+    });
   }
 }
 
@@ -532,9 +559,10 @@ void createNewEntry(String label, String amount, DateTime date, bool recurring, 
       'date': DateFormat('yyyy-MM-dd').format(date),
       "amount": amount,
       "categoryID": selectedCategoryID,
+      "subcategoryID": selectedSubCategoryID,
       "expenseID": newID,
       "recurring": recurring,
-      //"walletID": globals.getWallet()["walletID"],
+      "walletID": globals.getWallet()["walletID"],
     });
   } else {
     var createdEntry = FirebaseFirestore.instance
@@ -545,13 +573,12 @@ void createNewEntry(String label, String amount, DateTime date, bool recurring, 
       'date': DateFormat('yyyy-MM-dd').format(date),
       "amount": amount,
       "categoryID": selectedCategoryID,
+      "subcategoryID": selectedSubCategoryID,
       "incomeID": newID,
       "recurring": recurring,
-      //"walletID": globals.getWallet()["walletID"],
+      "walletID": globals.getWallet()["walletID"],
     });
   }
-
-
 
   //var existingCatsList = globals.getWallet()["categoriesIDs"];
   QuerySnapshot categoriesRef = await FirebaseFirestore.instance
@@ -560,13 +587,48 @@ void createNewEntry(String label, String amount, DateTime date, bool recurring, 
 
   var categ = categoriesRef.docs[0];
 
+  if (isExpense){
+    List existingEntries = categ["expenseIDs"];
+    existingEntries.add(newID);
 
-  List existingEntries = categ["expenseIDs"];
-  existingEntries.add(newID);
+    FirebaseFirestore.instance
+        .collection("/categories/JBSahpmjY2TtK0gRdT4s/category")
+        .doc(categ.id)
+        .set({"expenseIDs": existingEntries}, SetOptions(merge: true));
+  } else {
+    List existingEntries = categ["incomeIDs"];
+    existingEntries.add(newID);
 
-  FirebaseFirestore.instance
-      .collection("/categories/JBSahpmjY2TtK0gRdT4s/category")
-      .doc(categ.id)
-      .set({"expenseIDs": existingEntries}, SetOptions(merge: true));
+    FirebaseFirestore.instance
+        .collection("/categories/JBSahpmjY2TtK0gRdT4s/category")
+        .doc(categ.id)
+        .set({"incomeIDs": existingEntries}, SetOptions(merge: true));
+  }
 
+  if (selectedSubCategoryID != -1){
+    QuerySnapshot subcategoriesRef = await FirebaseFirestore.instance
+        .collection("/categories/JBSahpmjY2TtK0gRdT4s/category")
+        .where("categoryID", isEqualTo: selectedSubCategoryID).get();
+
+    var subcateg = subcategoriesRef.docs[0];
+    print(subcateg.id.toString());
+
+    if (isExpense){
+      List existingEntries = subcateg["expenseIDs"];
+      existingEntries.add(newID);
+
+      FirebaseFirestore.instance
+          .collection("/categories/JBSahpmjY2TtK0gRdT4s/category")
+          .doc(subcateg.id)
+          .set({"expenseIDs": existingEntries}, SetOptions(merge: true));
+    } else {
+      List existingEntries = subcateg["incomeIDs"];
+      existingEntries.add(newID);
+
+      FirebaseFirestore.instance
+          .collection("/categories/JBSahpmjY2TtK0gRdT4s/category")
+          .doc(subcateg.id)
+          .set({"incomeIDs": existingEntries}, SetOptions(merge: true));
+    }
+  }
 }

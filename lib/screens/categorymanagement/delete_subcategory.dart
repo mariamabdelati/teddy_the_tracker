@@ -7,20 +7,20 @@ import '../../constants.dart';
 import '../../screens/dashboard/globals.dart';
 import 'category_expansion_tile.dart';
 
-class DeleteCategory extends StatefulWidget {
+class DeleteSubcategory extends StatefulWidget {
   final String title;
 
-  const DeleteCategory({
+  const DeleteSubcategory({
     required this.title,
     Key? key,
   }) : super(key: key);
 
   @override
-  _DeleteCategoryState createState() => _DeleteCategoryState();
+  _DeleteSubcategoryState createState() => _DeleteSubcategoryState();
 }
 
-class _DeleteCategoryState extends State<DeleteCategory> {
-
+class _DeleteSubcategoryState extends State<DeleteSubcategory> {
+  String categoryName = selectedCategory.capitalize;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -34,14 +34,46 @@ class _DeleteCategoryState extends State<DeleteCategory> {
         ),
       ),
 
-      //form for new category
       body: ListView(
         padding: const EdgeInsets.all(16),
         children: [
+          const SizedBox(height: 16),
+          Align(
+            alignment: Alignment.topCenter,
+            child: Container(
+              //margin: const EdgeInsets.symmetric(vertical: 2),
+              padding: const EdgeInsets.symmetric(vertical: 10),
+              decoration: BoxDecoration(
+                  border: Border.all(
+                    color: const Color(0xFF0AA599),
+                    width: 1,
+                  ),
+                  borderRadius: BorderRadius.circular(20)
+              ),
+              child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    const SizedBox(
+                      width: 60,
+                      child: Icon(Icons.category_rounded, color: const Color(0xFF0AA599), size: 25),
+                    ),
+                    Text(
+                      categoryName,
+                      style: const TextStyle(
+                          fontSize: 17,
+                          fontWeight: FontWeight.bold,
+                          color: const Color(0xFF0AA599)),
+                    ),
+                    const SizedBox(width: 15,)
+                  ]),
+            ),
+          ),
+          const SizedBox(height: 20),
           Padding(
             padding: const EdgeInsets.only(left: 6.0),
             child: Text(
-              "Available Categories",
+              "Available Subcategories",
               textAlign: TextAlign.left,
               style: TextStyle(
                   fontSize: 17,
@@ -61,14 +93,8 @@ class _DeleteCategoryState extends State<DeleteCategory> {
                   color: Colors.grey,
                   width: 1,
                 ),
-                borderRadius: BorderRadius.circular(20),
-              ),/*BoxDecoration(
-                  borderRadius: const BorderRadius.all(Radius.circular(20)),
-                  color: mainColorList[1],
-                  boxShadow: [
-                    BoxShadow(
-                        color: Colors.blue.withAlpha(100), blurRadius: 5.0),
-                  ]),*/
+                  borderRadius: BorderRadius.circular(20),
+              ),
               child: ClipRRect(
                 borderRadius: BorderRadius.circular(20),
                 child: SingleChildScrollView(
@@ -93,7 +119,7 @@ class _DeleteCategoryState extends State<DeleteCategory> {
   Widget buildTile(BuildContext context) {
     final Stream<QuerySnapshot> categories = FirebaseFirestore.instance
         .collection("categories/JBSahpmjY2TtK0gRdT4s/category")
-        .where("walletID", isEqualTo: globals.getWallet()["walletID"])
+        .where("parentID", isEqualTo: selectedCategoryID)
         .snapshots();
 
     return StreamBuilder<QuerySnapshot>(
@@ -112,8 +138,9 @@ class _DeleteCategoryState extends State<DeleteCategory> {
           List.generate(
               data.size,
                   (index) {
-                List expenses =  data.docs[index]["expenseIDs"];
-                if (data.docs[index]["parentID"] == 0 && data.docs[index]["categoryID"] != selectedCategoryID && data.docs[index]["label"] != "others" && expenses.isEmpty) {
+                List expenses = data.docs[index]["expenseIDs"];
+                List incomes = data.docs[index]["incomeIDs"];
+                if (data.docs[index]["parentID"] != 0 && data.docs[index]["categoryID"] != selectedSubCategoryID && expenses.isEmpty && incomes.isEmpty) {
                   String chipName = data.docs[index]["label"];
                   int chipID = data.docs[index]["categoryID"];
                   contents.add(
@@ -122,7 +149,7 @@ class _DeleteCategoryState extends State<DeleteCategory> {
                         deleteIcon: const Icon(Icons.cancel_rounded, ),
                         onDeleted: () {
                           showCustomDialog(context, chipName, chipID);
-                        },
+                       },
                         labelPadding: const EdgeInsets.only(left: 8, right: 5, bottom: 5, top: 5),
                         label: Text(chipName.capitalize),
                         labelStyle: const TextStyle(
@@ -130,7 +157,7 @@ class _DeleteCategoryState extends State<DeleteCategory> {
                           color: Color(0xFFFFFFFA),
                         ),
                         backgroundColor: mainColorList[2],
-                      ));
+                  ));
                 }
               }
           );
@@ -148,12 +175,12 @@ class _DeleteCategoryState extends State<DeleteCategory> {
                     AnimatedError(),
                     const SizedBox(height: 12),
                     const Text(
-                      'No Categories Available',
+                      'No Subcategories Available',
                       style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
                     ),
                     const SizedBox(height: 12),
                     const Text(
-                      "No categories can be deleted since they are all used by expenses or incomes",
+                      "No subcategories can be deleted since they are all used by expenses or incomes",
                       textAlign: TextAlign.center,
                       //style: TextStyle(fontSize: 20),
                     ),
@@ -173,6 +200,10 @@ class _DeleteCategoryState extends State<DeleteCategory> {
                 ),
               ),
             );
+            /*return const Padding(
+              padding: EdgeInsets.all(10.0),
+              child: *//*Text("No categories can be deleted since they are all used by expenses or incomes", style: TextStyle(color: Color(0xFFD32F2F))),*//*
+            );*/
           }  else {
             //used to display the chips in the expansion tile
             return Padding(
@@ -190,88 +221,87 @@ class _DeleteCategoryState extends State<DeleteCategory> {
 
   void showCustomDialog(BuildContext context, String x, int y) {
     showDialog(
-      context: context,
-      barrierDismissible: false,
-      builder: (BuildContext context) {
-        return Dialog(
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(20),
-          ),
-          child: Padding(
-            padding: const EdgeInsets.all(20.0),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                SizedBox(height: 12),
-                const Text(
-                  'Delete Category',
-                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
-                ),
-                const SizedBox(height: 12),
-                Text(
-                  "Are you sure you want to delete '$x' from your categories?",
-                  textAlign: TextAlign.center,
-                  //style: TextStyle(fontSize: 20),
-                ),
-                const SizedBox(height: 12),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    ElevatedButton(
-                      style: ElevatedButton.styleFrom(
+    context: context,
+    barrierDismissible: false,
+    builder: (BuildContext context) {
+      return Dialog(
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(20),
+        ),
+        child: Padding(
+          padding: const EdgeInsets.all(20.0),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              SizedBox(height: 12),
+              const Text(
+                'Delete Subategory',
+                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+              ),
+              const SizedBox(height: 12),
+              Text(
+                "Are you sure you want to delete '$x' from your '$categoryName' subcategories?",
+                textAlign: TextAlign.center,
+                //style: TextStyle(fontSize: 20),
+              ),
+              const SizedBox(height: 12),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  ElevatedButton(
+                    style: ElevatedButton.styleFrom(
                         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(50)),
-                      ),
-                      child: Text('Cancel'),
-                      onPressed: () => Navigator.of(context).pop(),
                     ),
-                    const SizedBox(width: 15.0,),
-                    ElevatedButton(
-                      child: Text('Delete'),
-                      style: ElevatedButton.styleFrom(
-                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(50))  ,
-                        primary: const Color(0xFFD32F2F),
-                      ),
-                      onPressed: () {
-                        deleteCategory(y);
-                        Navigator.of(context).pop();
-                      },
-                    )
-                  ],
-                ),
-                //const SizedBox(height: 12),
-              ],
-            ),
+                    child: Text('Cancel'),
+                    onPressed: () => Navigator.of(context).pop(),
+                  ),
+                  const SizedBox(width: 15.0,),
+                  ElevatedButton(
+                    child: Text('Delete'),
+                    style: ElevatedButton.styleFrom(
+                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(50))  ,
+                      primary: const Color(0xFFD32F2F),
+                    ),
+                    onPressed: () {
+                      deleteCategory(y);
+                      Navigator.of(context).pop();
+                    },
+                  )
+                ],
+              ),
+              //const SizedBox(height: 12),
+            ],
           ),
-        );
-      },
-    );
+        ),
+      );
+    },
+  );
   }
 }
 
 void deleteCategory(int idx) async {
-  QuerySnapshot categoriesRef = await FirebaseFirestore.instance
+  QuerySnapshot subcategoriesRef = await FirebaseFirestore.instance
       .collection("/categories/JBSahpmjY2TtK0gRdT4s/category")
       .where("categoryID", isEqualTo: idx).get();
 
-  var categ = categoriesRef.docs[0];
+  var categ = subcategoriesRef.docs[0];
 
   FirebaseFirestore.instance
       .collection("/categories/JBSahpmjY2TtK0gRdT4s/category")
       .doc(categ.id)
       .delete();
 
-  var existingCatsList = globals.getWallet()["categoriesIDs"];
-  existingCatsList.remove(idx);
+  QuerySnapshot categoriesRef = await FirebaseFirestore.instance
+        .collection("/categories/JBSahpmjY2TtK0gRdT4s/category")
+        .where("categoryID", isEqualTo: selectedCategoryID).get();
 
-  QuerySnapshot walletsRef = await FirebaseFirestore.instance
-      .collection("wallets/9Ho4oSCoaTrpsVn1U3H1/wallet")
-      .where("walletID", isEqualTo: globals.getWallet()["walletID"]).get();
-
-  var walet = walletsRef.docs[0];
+    var catDoc = categoriesRef.docs[0];
+    var existingSubCats = catDoc["childIDs"];
+    existingSubCats.remove(idx);
 
   FirebaseFirestore.instance
-      .collection("wallets/9Ho4oSCoaTrpsVn1U3H1/wallet")
-      .doc(walet.id)
-      .set({"categoriesIDs": existingCatsList}, SetOptions(merge: true));
+      .collection("/categories/JBSahpmjY2TtK0gRdT4s/category")
+      .doc(catDoc.id)
+      .set({"childIDs": existingSubCats}, SetOptions(merge: true));
 }

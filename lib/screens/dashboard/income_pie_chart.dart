@@ -2,6 +2,8 @@ import 'dart:collection';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:fl_chart/fl_chart.dart';
+//import 'package:quiver/iterables.dart';
+//import 'package:async/async.dart';
 import '../../constants.dart';
 import '../../screens/categorymanagement/subcategory_expansion_tile.dart';
 import 'globals.dart';
@@ -41,13 +43,14 @@ class Categories {
   String toString() => "Entry<$label : $catID : $subcats\$";
 }
 
+
+
 // widget responsible for fetching the data from firebase and convert them to List <Entries>
-Widget _getExpenses(context) {
+Widget _getIncomes(context) {
   return StreamBuilder<QuerySnapshot>(
       stream: FirebaseFirestore.instance
-          .collection("/entries/7sQnsmHSjX5K8Sgz4PoD/expense")
-          .orderBy("categoryID", descending: false)
-          .snapshots(),
+          .collection("/entries/7sQnsmHSjX5K8Sgz4PoD/income")
+          .where("walletID", isEqualTo: (globals.getWallet()["walletID"])).snapshots(),
       builder: (context, snapshot) {
         if (snapshot.hasError) {
           return const Text("Something went wrong",
@@ -66,14 +69,13 @@ Widget _getExpenses(context) {
       });
 }
 
-Widget _getCategories(context, List<Entries> expenses) {
+
+
+Widget _getCategories(context, List<Entries> incomes) {
   return StreamBuilder<QuerySnapshot>(
       stream: FirebaseFirestore.instance
           .collection("/categories/JBSahpmjY2TtK0gRdT4s/category")
-          .where("walletID", isEqualTo: globals.getWallet()["walletID"]).snapshots(),
-      /*.orderBy("categoryId", descending: false)*/
-
-
+          .where("walletID", isEqualTo: (globals.getWallet()["walletID"])).snapshots(),
       builder: (context, snapshot) {
         if (snapshot.hasError) {
           print("error retreiving categories");
@@ -87,62 +89,66 @@ Widget _getCategories(context, List<Entries> expenses) {
               Categories.fromMap(docSnapshot.data() as Map<String, dynamic>))
               .toList();
           return Container(
-            child: _buildBody(context, expenses, categories),
+            child: _buildBody(context, incomes, categories),
           );
         }
       });
 }
 
 // Widget responsible for converting List <Entries> to List <FlSpot>
-Widget _buildBody(context, List<Entries> expenses, List<Categories> categories) {
-  Map expensesData = {};
+Widget _buildBody(context, List<Entries> incomes, List<Categories> categories) {
+  Map incomesData = {};
   Map categoriesData = {};
   //Map categoryNames = {};
   List<Data> data = [];
 
-  for (var entry in expenses.toList()) {
-    if (expensesData.containsKey(entry.catID)) {
-      expensesData[entry.catID] =
-          expensesData[entry.catID] + double.parse(entry.amount as String);
+  for (var entry in incomes.toList()) {
+    if (incomesData.containsKey(entry.catID)) {
+      incomesData[entry.catID] =
+          incomesData[entry.catID] + double.parse(entry.amount as String);
     } else {
-      expensesData[entry.catID] = double.parse(entry.amount as String);
+      incomesData[entry.catID] = double.parse(entry.amount as String);
     }
   }
 
-  print(expensesData);
+  print(incomesData);
 
+  var otherID = 0;
   for (var category in categories.toList()) {
+    if (category.label == "others"){
+      otherID = category.catID as int;
+    }
     categoriesData[category.catID] = category.label;
   }
   print(categoriesData);
 
   double total = 0;
-  expensesData.forEach((k, v) {
+  incomesData.forEach((k, v) {
     total += v;
     //print(total);
   });
 
-  var sortedExpensesKeys = expensesData.keys.toList(growable:false)
-    ..sort((k1, k2) => expensesData[k2].compareTo(expensesData[k1]));
-  LinkedHashMap sortedExpensesData = LinkedHashMap
-      .fromIterable(sortedExpensesKeys, key: (k) => k, value: (k) => expensesData[k]);
-  //print(sortedExpensesData);
+  var sortedIncomesKeys = incomesData.keys.toList(growable:false)
+    ..sort((k1, k2) => incomesData[k2].compareTo(incomesData[k1]));
+  LinkedHashMap sortedIncomesData = LinkedHashMap
+      .fromIterable(sortedIncomesKeys, key: (k) => k, value: (k) => incomesData[k]);
+  print(sortedIncomesData);
 
-  Map expensesDataTrimmed = {};
-  Map expensesDataNoOther = {};
+  Map incomesDataTrimmed = {};
+  Map incomesDataNoOther = {};
   int index = 0;
 
-  var list = sortedExpensesData.keys.toList(growable:false);
-  var other = list.indexOf(2);
+  var list = sortedIncomesData.keys.toList(growable:false);
+  var other = list.indexOf(otherID);
   //print(other);
 
   int count = 0;
   var key;
   var value;
   if (other < 9 && other > -1){
-    sortedExpensesData.forEach((k, v) {
+    sortedIncomesData.forEach((k, v) {
       if (count != other){
-        expensesDataNoOther[k] = v;
+        incomesDataNoOther[k] = v;
         count ++;
       } else{
         key = k;
@@ -150,55 +156,80 @@ Widget _buildBody(context, List<Entries> expenses, List<Categories> categories) 
         count++;
       }
     });
-    expensesDataNoOther[key] = value;
+    incomesDataNoOther[key] = value;
+  }
+  //print(incomesDataNoOther);
+
+  if(incomesDataNoOther.isNotEmpty) {
+    incomesDataNoOther.forEach((k, v) {
+    if (index < 9) {
+      if (k == 13){
+        incomesDataTrimmed["other categories"] = v;
+      } else{
+        incomesDataTrimmed[k] = v;
+        index++;
+        //print(index);
+      }
+    } else {
+      if (index == 9){
+        if (incomesDataTrimmed["other categories"] == null){
+          incomesDataTrimmed["other categories"] = v;
+          index++;
+        }  else{
+          incomesDataTrimmed["other categories"] = incomesDataTrimmed["other categories"] + v;
+          index++;
+        }
+      } else{
+        incomesDataTrimmed["other categories"] = incomesDataTrimmed["other categories"] + v;
+        index++;
+      }
+    }
+  });
+  } else {
+    sortedIncomesData.forEach((k, v){
+      incomesDataTrimmed[k] = v;
+    });
   }
 
-  if(expensesDataNoOther.isNotEmpty) {
-    expensesDataNoOther.forEach((k, v) {
-      if (index < 9) {
-        if (k == 13){
-          expensesDataTrimmed["other categories"] = v;
-        } else{
-          expensesDataTrimmed[k] = v;
-          index++;
-          //print(index);
-        }
-      } else {
-        if (index == 9){
-          if (expensesDataTrimmed["other categories"] == null){
-            expensesDataTrimmed["other categories"] = v;
-            index++;
-          }  else{
-            expensesDataTrimmed["other categories"] = expensesDataTrimmed["other categories"] + v;
-            index++;
-          }
-        } else{
-          expensesDataTrimmed["other categories"] = expensesDataTrimmed["other categories"] + v;
-          index++;
-        }
-      }
-    });
-  } else {
-    sortedExpensesData.forEach((k, v){
-      expensesDataTrimmed[k] = v;
-    });
-  }
+  //print(incomesDataTrimmed);
+
 
   int i = 0;
-  expensesDataTrimmed.forEach((k, v) {
+  incomesDataTrimmed.forEach((k, v) {
     categoriesData.forEach((key, value) {
       if (k == key){
         data.add(Data(name: value, percent: double.parse(((v/total)*100).toStringAsFixed(2)), color: pieChartColors[i]));
         i++;
       }
     });
-    if (expensesDataTrimmed.length > 9){
-      if (expensesDataTrimmed.keys.last == k){
+    if (incomesDataTrimmed.length > 9){
+      if (incomesDataTrimmed.keys.last == k){
         data.add(Data(name: k, percent: double.parse(((v/total)*100).toStringAsFixed(2)), color: pieChartColors[i]));
       }
     }
   });
 
+  if (data.isEmpty){
+    data.add(Data(name: "no incomes available", percent: 100.00, color: pieChartColors[1]));
+  }
+
+  //print(data);
+
+  //print(categoryNames);
+  /*expensesData.forEach((k, v) {
+    if (!total.contains(k)) {
+      total[0] += v;
+    }
+  });*/
+  //date.sort();
+  /*expensesData.forEach((k, v) {
+    expensesList
+        .add(FlSpot(date.indexWhere((element) => element == k).toDouble(), v));
+  });
+  incomesData.forEach((k, v) {
+    incomesList
+        .add(FlSpot(date.indexWhere((element) => element == k).toDouble(), v));
+  });*/
   return Container(
       child: Stack(children: <Widget>[
         Column(crossAxisAlignment: CrossAxisAlignment.stretch, children: <Widget>[
@@ -206,7 +237,7 @@ Widget _buildBody(context, List<Entries> expenses, List<Categories> categories) 
             height: 37,
           ),
           const Text(
-            "Expenses by Category Distribution",
+            "Incomes by Category Distribution",
             style: TextStyle(
                 fontSize: 16, color: Colors.white, fontWeight: FontWeight.bold),
             textAlign: TextAlign.center,
@@ -229,18 +260,22 @@ Widget _buildBody(context, List<Entries> expenses, List<Categories> categories) 
   );*/
 }
 
-class TtestDashboard extends StatefulWidget {
-  const TtestDashboard({Key? key}) : super(key: key);
+/*_buildChart(context, Map<dynamic, dynamic> categoryNames) {
+
+} */
+
+class IncomePieChart extends StatefulWidget {
+  const IncomePieChart({Key? key}) : super(key: key);
 
   @override
-  TtestDashBoardState createState() => TtestDashBoardState();
+  IncomePieChartState createState() => IncomePieChartState();
 }
 
-class TtestDashBoardState extends State<TtestDashboard> {
+class IncomePieChartState extends State<IncomePieChart> {
   @override
   Widget build(BuildContext context) {
     return Container(
-        child: _getExpenses(context)//_buildBody(context),
+      child: _getIncomes(context)//_buildBody(context),
     );
   }
 }
@@ -258,33 +293,33 @@ class Data {
 
 List<PieChartSectionData> getSections(int touchedIndex, List<Data> piechartData) {
   return piechartData.asMap().map<int, PieChartSectionData>((index, data) {
-    final isTouched = index == touchedIndex;
-    final opacity = isTouched  ? 1.0 : 0.9;
-    //final widgetSize = isTouched ? 55.0 : 40.0;
-    //final double fontSize = isTouched ? 20 : 16;
-    final double radius = isTouched ? 70 : 60;
+        final isTouched = index == touchedIndex;
+        final opacity = isTouched  ? 1.0 : 0.9;
+        //final widgetSize = isTouched ? 55.0 : 40.0;
+        //final double fontSize = isTouched ? 20 : 16;
+        final double radius = isTouched ? 70 : 60;
 
-    final value = PieChartSectionData(
-      color: data.color.withOpacity(opacity),
-      value: data.percent,
-      title: '${data.percent}%',
-      radius: radius,
-      titleStyle: const TextStyle(
-        fontSize: 18,
-        fontWeight: FontWeight.bold,
-        color: Color(0xff044d7c),
-      ),
-      badgeWidget: isTouched? _Badge(text: '${data.percent}%', borderColor: data.color, size: 37, ) : null,
-      badgePositionPercentageOffset: .65,
-      showTitle: false,//isTouched,
-      titlePositionPercentageOffset: 0.60,
-      borderSide: isTouched
-          ? const BorderSide(color: Color(0xff0293ee), width: 4)
-          : null,
-    );
+        final value = PieChartSectionData(
+          color: data.color.withOpacity(opacity),
+          value: data.percent,
+          title: '${data.percent}%',
+          radius: radius,
+          titleStyle: const TextStyle(
+            fontSize: 18,
+            fontWeight: FontWeight.bold,
+            color: Color(0xff044d7c),
+          ),
+          badgeWidget: isTouched? _Badge(text: '${data.percent}%', borderColor: data.color, size: 37, ) : null,
+          badgePositionPercentageOffset: .65,
+          showTitle: false,//isTouched,
+          titlePositionPercentageOffset: 0.60,
+          borderSide: isTouched
+              ? const BorderSide(color: Color(0xff0293ee), width: 4)
+              : null,
+        );
 
-    return MapEntry(index, value);
-  })
+        return MapEntry(index, value);
+      })
       .values
       .toList();
 }
@@ -347,33 +382,27 @@ class _PieChartPageState extends State<PieChartPage> {
   }
 }
 
-
-class IndicatorsWidget extends StatefulWidget {
+class IndicatorsWidget extends StatelessWidget {
   final List<Data> list;
   final int touchedIndex;
   const IndicatorsWidget(this.list, this.touchedIndex, {Key? key}) : super(key: key);
 
-  @override
-  State<IndicatorsWidget> createState() => _IndicatorsWidgetState();
-}
-
-class _IndicatorsWidgetState extends State<IndicatorsWidget> {
   @override
   Widget build(BuildContext context) {
     return Column(
         mainAxisSize: MainAxisSize.min,
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         crossAxisAlignment: CrossAxisAlignment.start,
-        children: List.generate(widget.list.length, (index) {
+        children: List.generate(list.length, (index) {
           return Expanded(
             flex: 1,
             child: Container(
               //margin: const EdgeInsets.symmetric(vertical: 6),
               //padding: const EdgeInsets.symmetric(vertical: 6),
                 child: buildIndicator(
-                  touched: widget.touchedIndex  == index,
-                  color: widget.list[index].color,
-                  text: (widget.list[index].name).capitalize,
+                  touched: touchedIndex  == index,
+                  color: list[index].color,
+                  text: (list[index].name).capitalize,
                   // isSquare: true,
                 )),
           );
@@ -468,9 +497,110 @@ class _Badge extends StatelessWidget {
       padding: EdgeInsets.all(size * .15),
       child: Center(
         child: Text(
-            text
+          text
         ),
       ),
     );
   }
 }
+
+/*
+class IndicatorsWidget extends StatefulWidget {
+  final List<Data> list;
+  final int touchedIndex;
+  const IndicatorsWidget(this.list, this.touchedIndex, {Key? key}) : super(key: key);
+
+  @override
+  State<IndicatorsWidget> createState() => _IndicatorsWidgetState();
+}
+
+class _IndicatorsWidgetState extends State<IndicatorsWidget> {
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: List.generate(widget.list.length, (index) {
+        return Expanded(
+          flex: 1,
+          child: Container(
+              //margin: const EdgeInsets.symmetric(vertical: 6),
+              //padding: const EdgeInsets.symmetric(vertical: 6),
+              child: buildIndicator(
+                touched: widget.touchedIndex  == index,
+                color: widget.list[index].color,
+                text: (widget.list[index].name).capitalize,
+                // isSquare: true,
+              )),
+        );
+      })
+
+      /*widget.list.map(
+            (data) {
+          return Expanded(
+            flex: 1,
+            child: Container(
+                padding: const EdgeInsets.symmetric(vertical: 2),
+                child: buildIndicator(
+                  touched: widget.touchedIndex,
+                  color: data.color,
+                  text: (data.name).capitalize,
+                  // isSquare: true,
+                )),
+          );
+        },
+      ).toList(),*/
+    );
+  }
+
+  Widget buildIndicator({
+    required Color color,
+    required String text,
+    required bool touched,
+    bool isSquare = false,
+    //double size = touched ? 18: 16,
+    Color textColor = const Color(0xFFFFFFFA),
+  }) {
+    return Row(
+      children: <Widget>[
+        Container(
+          width: touched? 18 : 16,
+          height: touched? 18 : 16,
+          decoration: BoxDecoration(
+            shape: isSquare ? BoxShape.rectangle : BoxShape.circle,
+            color: color,
+          ),
+        ),
+        const SizedBox(width: 8),
+        Column(
+          mainAxisSize: MainAxisSize.min,
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Flexible(
+              child: SizedBox(
+                width: 95,
+                child: SingleChildScrollView(
+                  scrollDirection: Axis.horizontal,
+                  child: Text(
+                    text,
+                    overflow: TextOverflow.fade,
+                    maxLines: 1,
+                    softWrap: false,
+                    style: TextStyle(
+                      fontSize: 14,
+                      fontWeight: touched? FontWeight.w900 : FontWeight.w100,
+                      color: touched ? const Color(0xFFFEC768) : textColor,
+                    ),
+                  ),
+                ),
+              ),
+            ),
+          ],
+        )
+      ],
+    );
+  }
+}
+ */

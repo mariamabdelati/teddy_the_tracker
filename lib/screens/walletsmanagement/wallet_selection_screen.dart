@@ -21,25 +21,27 @@ class _SelectWalletState extends State<SelectWallet> {
       appBar: AppBar(
         title: Text("Select Wallet"),
       ),
-      body: SafeArea(
-        top: false,
-        bottom: false,
-        maintainBottomViewPadding: true,
-        child: Column(
-          children: [
-            Center(
-              child: Row(
-                mainAxisSize: MainAxisSize.min,
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: const [
-                  AddWalletButton(0),
-                  AddWalletButton(1)
-                ],
+      body: SingleChildScrollView(
+        child: SafeArea(
+          top: false,
+          bottom: false,
+          maintainBottomViewPadding: true,
+          child: Column(
+            children: [
+              Center(
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: const [
+                    AddWalletButton(0),
+                    AddWalletButton(1)
+                  ],
+                ),
               ),
-            ),
-            _buildBody(context),
-          ],
+              _buildBody(context),
+            ],
+          ),
         ),
       ),
     );
@@ -63,6 +65,7 @@ class _SelectWalletState extends State<SelectWallet> {
               Wallets.fromMap(docSnapshot.data() as Map<String, dynamic>))
               .toList();*/
             return GridView.builder(
+              physics: const NeverScrollableScrollPhysics(),
               shrinkWrap: true,
               padding: const EdgeInsets.all(8),
               itemCount: wallets.length,

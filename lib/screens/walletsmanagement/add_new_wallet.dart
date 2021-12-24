@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import '../../components/hero_dialog_route.dart';
 import '../../constants.dart';
 import 'dart:math';
-//import '../../screens/dashboard/globals.dart';
 
 class AddWalletButton extends StatelessWidget {
   final int idx;
@@ -34,46 +33,11 @@ class AddWalletButton extends StatelessWidget {
               color: const Color(0xFF0C43D5),
               shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(40)),
-              child: /*Container(
-                  decoration: BoxDecoration(
-                    gradient: const RadialGradient(
-                      colors: [
-                        Color(0xFF0054DA),
-                        Color(0xFF049BD6),
-                      ],
-                      center: Alignment(2.0, 1.4),
-                      focal: Alignment(1.0,0.6),
-                      focalRadius: 1.0,
-                    ),
-                    borderRadius: BorderRadius.circular(40),
-                  ),
-                  child:*/ Padding(
+              child: Padding(
                 padding: const EdgeInsets.all(10.0),
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    /*Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Align(
-                              //alignment: Alignment.bottomCenter,
-                              child: Padding(
-                                padding: const EdgeInsets.only(top: 8.0),
-                                child: Container(
-                                  padding: const EdgeInsets.all(10.0),
-                                  decoration: const BoxDecoration(
-                                      borderRadius: BorderRadius.all(Radius.circular(30)),
-                                      color: Color.fromRGBO(255, 255, 255, 0.38)),
-                                  child: const Icon(
-                                    Icons.account_balance_wallet_rounded,
-                                    color: Colors.white,
-                                    size: 20,
-                                  ),
-                                ),
-                              ),
-                            )
-                          ],
-                        ),*/
                     Flexible(
                       child: Padding(
                         padding: const EdgeInsets.all(15.0),
@@ -230,6 +194,14 @@ void createNewWallet(String name) async {
       .get();
   CollectionReference categoriesRef = FirebaseFirestore.instance
       .collection("categories/JBSahpmjY2TtK0gRdT4s/category");
+
+  QuerySnapshot highestCategory = await FirebaseFirestore.instance
+      .collection("categories/JBSahpmjY2TtK0gRdT4s/category")
+      .orderBy("categoryID", descending: true)
+      .limit(1)
+      .get();
+  int highestID = highestCategory.docs[0]["categoryID"];
+
   var walletsList = wallets.docs;
   var maxId = 0;
   for (var doc in walletsList) {
@@ -261,19 +233,19 @@ void createNewWallet(String name) async {
   ];
   List categoriesIdList = [];
   for (var index = 0; index < defaultCategoriesList.length; index++) {
-    categoriesIdList.add(index);
+    categoriesIdList.add(index + highestID + 1);
     var newCategory = defaultCategoriesList[index];
     categoriesRef.add({
       "label": newCategory.toLowerCase().trim(),
       "budget": budget,
       "parentID": 0,
-      "categoryID": index,
+      "categoryID": highestID + index + 1,
       "childIDs": [],
       "expenseIDs": [],
+      "incomeIDs": [],
       "walletID": maxId + 1,
     });
   }
-  print(createdWallet.id);
   FirebaseFirestore.instance
       .collection("wallets/9Ho4oSCoaTrpsVn1U3H1/wallet")
       .doc(createdWallet.id)

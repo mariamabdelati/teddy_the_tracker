@@ -6,13 +6,9 @@ import "package:flutter/material.dart";
 //import 'package:firebase_auth/firebase_auth.dart';
 import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 import 'package:curved_navigation_bar/curved_navigation_bar.dart';
-
-import '../walletsmanagement/add_new_wallet.dart';
-//import 'blank.dart';
 import '../walletsmanagement/wallet_selection_screen.dart';
 import 'dashboard_screen.dart';
 import 'hide_navbar.dart';
-
 
 class DashboardScreen extends StatefulWidget {
   const DashboardScreen({Key? key}) : super(key: key);
@@ -39,8 +35,6 @@ class _DashboardScreenState extends State<DashboardScreen> {
 
   @override
   Widget build(BuildContext context) {
-
-
     const items = <Widget>[
       Padding(
         padding: EdgeInsets.all(4.0),
@@ -77,15 +71,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
       const Profile(),
     ];
     return Scaffold(
-      /*appBar: AppBar(
-        title: const Text("Dashboard"),
-        elevation: 0,
-        centerTitle: true,
-      ),*/
       body: pages[selected],
-      //backgroundColor: mainColorList[4],
-      //extendBodyBehindAppBar: true,
-      //extendBody: true,
       bottomNavigationBar: HideWidget(
         controller: controller,
         child: Theme(

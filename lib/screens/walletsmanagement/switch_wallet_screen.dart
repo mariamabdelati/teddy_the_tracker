@@ -8,7 +8,6 @@ import '../dashboard/dashboard_navbar.dart';
 import 'add_new_wallet.dart';
 
 class SwitchWallet extends StatefulWidget {
-
   const SwitchWallet({Key? key,}) : super(key: key);
 
   @override
@@ -21,24 +20,29 @@ class _SwitchWalletState extends State<SwitchWallet> {
     return Container(
       decoration: BoxDecoration(boxShadow: [BoxShadow(color: Colors.blue.withAlpha(100), blurRadius: 10.0)], borderRadius: const BorderRadius.all(Radius.circular(40.0)), color: mainColorList[1],),
       height: 650,
-      child: SafeArea(
-        top: false,
-        //bottom: false,
-        child: Column(
-          children: [
-            Center(
-              child: Row(
-                mainAxisSize: MainAxisSize.min,
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: const [
-                  AddWalletButton(0),
-                  AddWalletButton(1)
-                ],
-              ),
+      child: ClipRRect(
+        borderRadius: BorderRadius.circular(40),
+        child: SingleChildScrollView(
+          child: SafeArea(
+            top: false,
+            //bottom: false,
+            child: Column(
+              children: [
+                Center(
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: const [
+                      AddWalletButton(0),
+                      AddWalletButton(1)
+                    ],
+                  ),
+                ),
+                _buildBody(context),
+              ],
             ),
-            _buildBody(context),
-          ],
+          ),
         ),
       ),
     );
@@ -62,6 +66,7 @@ class _SwitchWalletState extends State<SwitchWallet> {
               Wallets.fromMap(docSnapshot.data() as Map<String, dynamic>))
               .toList();*/
             return GridView.builder(
+              physics: const NeverScrollableScrollPhysics(),
               shrinkWrap: true,
               padding: const EdgeInsets.all(8),
               itemCount: wallets.length,

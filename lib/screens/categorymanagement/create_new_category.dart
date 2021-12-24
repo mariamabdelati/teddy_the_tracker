@@ -5,10 +5,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import '../../screens/dashboard/globals.dart';
 import '../../components/submission_button.dart';
+import '../../components/success_dialog.dart';
 import '../../constants.dart';
 //import 'category_expansion_tile.dart';
-
-var size = 0;
 
 class CreateNewCategory extends StatefulWidget {
   final String title;
@@ -50,8 +49,6 @@ class _CreateNewCategoryState extends State<CreateNewCategory> {
   final _categorytext = TextEditingController();
   final _budgettext = TextEditingController();
 
-  //used to determine if a category exists or not
-  late bool _invalid;
 
   //checks if a category exists or not
   var documents;
@@ -66,21 +63,20 @@ class _CreateNewCategoryState extends State<CreateNewCategory> {
   void _getCategories() async {
     final QuerySnapshot result = await FirebaseFirestore.instance
         .collection("categories/JBSahpmjY2TtK0gRdT4s/category")
-        .where("walletID", isEqualTo: globals.getWallet()["walletID"])
+        .where("walletID", isEqualTo: (globals.getWallet()["walletID"]))
         .get();
 
     List<DocumentSnapshot> docs = result.docs;
     documents = docs;
   }
 
+  //used to determine if a category exists or not
   bool categoryCheck(String newCat) {
     for (var document in documents) {
       if (document["label"] == newCat) return false;
     }
     return true;
   }
-
-
 
   @override
   Widget build(BuildContext context) {
@@ -102,15 +98,18 @@ class _CreateNewCategoryState extends State<CreateNewCategory> {
           child: ListView(
             padding: const EdgeInsets.all(16),
             children: [
-              const SizedBox(height: 16),
-              Text(
-                "Please input the new category data:", textAlign: TextAlign.center,
-                style: TextStyle(
-                    fontSize: 17,
-                    fontWeight: FontWeight.bold,
-                    color: iconsColor),
+              Padding(
+                padding: const EdgeInsets.only(left: 6.0),
+                child: Text(
+                  "Category Details",
+                  textAlign: TextAlign.left,
+                  style: TextStyle(
+                      fontSize: 17,
+                      fontWeight: FontWeight.bold,
+                      color: mainColorList[2]),
+                ),
               ),
-              const SizedBox(height: 32),
+              const SizedBox(height: 16),
               buildCategory(),
               const SizedBox(height: 16),
               buildBudget(),
@@ -147,8 +146,6 @@ class _CreateNewCategoryState extends State<CreateNewCategory> {
 
       //validates field  value
       validator: (value) {
-        //categoryCheck(value!.toLowerCase().trim());
-        //connector(value!.toLowerCase().trim());
         if (value!.toLowerCase().trim().isEmpty) {
           return "Category cannot be empty";
         } else if (!categoryCheck(value.toLowerCase().trim())){
@@ -219,21 +216,48 @@ class _CreateNewCategoryState extends State<CreateNewCategory> {
               //adds new  document to db
               createNewCategory(newCategory.toLowerCase().trim(), budget);
 
-
-
               //message showing verification
               final message =
                   "'$newCategory' has been successfully added to your categories";
-              final snackBar = SnackBar(
-                content: Text(
-                  message,
-                  style: const TextStyle(fontSize: 20),
-                ),
-                backgroundColor: Colors.green,
-              );
-              ScaffoldMessenger.of(context).showSnackBar(snackBar);
 
-              //Navigator.pop(context, MaterialPageRoute(builder: (context) => const CategoryExpansionTile()));
+              showDialog(context: context, builder: (BuildContext context)
+              {
+                return Dialog(
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(20),
+                  ),
+                  child: Padding(
+                    padding: const EdgeInsets.all(20.0),
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        AnimatedCheck(),
+                        SizedBox(height: 12),
+                        const Text(
+                          'Success!',
+                          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+                        ),
+                        const SizedBox(height: 12),
+                        Text(
+                          message,
+                          textAlign: TextAlign.center,
+                          //style: TextStyle(fontSize: 20),
+                        ),
+                        const SizedBox(height: 12),
+                        Center(
+                          child: ElevatedButton(
+                            style: ElevatedButton.styleFrom(
+                              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(50)),
+                            ),
+                            child: Text('Ok'),
+                            onPressed: () => Navigator.of(context).pop(),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                );
+              });
             }
           },
         );
@@ -264,6 +288,7 @@ void createNewCategory(String label, String budget) async {
     "categoryID": newID,
     "childIDs": [],
     "expenseIDs": [],
+    "incomeIDs": [],
     "walletID": globals.getWallet()["walletID"],
   });
 

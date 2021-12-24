@@ -1,13 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
-//import '../../screens/categorymanagement/subcategory_expansion_tile.dart';
-//import 'package:teddy_categories/constants.dart';
-//import 'package:teddy_categories/screens/dashboard/pie_chart.dart';
-
-import '../../constants.dart';
-import '../categorymanagement/create_new_category.dart';
 import '../walletsmanagement/switch_wallet_screen.dart';
 import 'balance_progress_bar.dart';
 import 'dashboard_charts.dart';
@@ -81,7 +74,6 @@ class _DashboardPageState extends State<DashboardPage> {
                     borderRadius: BorderRadius.circular(40),
                   ),
                   elevation: 40.0,
-                  //backgroundColor: mainColorList[1],
                   context: context,
                   builder: (BuildContext context) {
                     return const SwitchWallet();
@@ -138,8 +130,8 @@ class _DashboardPageState extends State<DashboardPage> {
                     child: Padding(
                       padding: EdgeInsets.all(12.0),
                       child: _getExpenses(context),
-                    )),
-                //SizedBox(height: screenHeight * 0.03),
+                    ),
+                ),
               ],
             ),
           ],
@@ -152,7 +144,7 @@ class _DashboardPageState extends State<DashboardPage> {
     return const SliverToBoxAdapter(
       child: SizedBox(
         height: 450,
-        width: 700,
+        width: 400,
         child: ChartsPageView(),
       ),
     );
@@ -163,8 +155,7 @@ Widget _getExpenses(context) {
   return StreamBuilder<QuerySnapshot>(
       stream: FirebaseFirestore.instance
           .collection("/entries/7sQnsmHSjX5K8Sgz4PoD/expense")
-          .orderBy("date", descending: true)
-          .snapshots(),
+          .where("walletID", isEqualTo: (globals.getWallet()["walletID"])).snapshots(),
       builder: (context, snapshot) {
         if (snapshot.hasError) {
           return const Text("Something went wrong",
@@ -187,8 +178,7 @@ Widget _getIncomes(context, List<Entries> expenses) {
   return StreamBuilder<QuerySnapshot>(
       stream: FirebaseFirestore.instance
           .collection("/entries/7sQnsmHSjX5K8Sgz4PoD/income")
-          .orderBy("date", descending: true)
-          .snapshots(),
+          .where("walletID", isEqualTo: (globals.getWallet()["walletID"])).snapshots(),
       builder: (context, snapshot) {
         if (snapshot.hasError) {
           print("error retreiving income");
@@ -221,18 +211,17 @@ Widget _buildBody(context, List<Entries> expenses, List<Entries> incomes) {
 
   String balance = "0";
   double percentage = 0;
-  if (incTotal < expTotal){
-    balance = (incTotal-expTotal).toString();
-    percentage = 1;
+  if (incTotal <= expTotal){
+    balance = (incTotal-expTotal).toStringAsFixed(2);
+    percentage = 0.0;
   } else{
-    balance = (incTotal-expTotal).toString();
-    print(balance);
+    balance = (incTotal-expTotal).toStringAsFixed(2);
+    //print(balance);
     percentage = (incTotal-expTotal)/incTotal;
+    //print(percentage);
   }
 
   return Container(
     child: RadialProgress(balance, percentage),
   );
-
-
 }

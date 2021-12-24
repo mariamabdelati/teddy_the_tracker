@@ -45,6 +45,8 @@ dependencies:
   curved_navigation_bar: ^1.0.1
   flutter_svg: ^1.0.0
   intl:  ^0.17.0
+  #rxdart: ^0.27.3
+  #quiver: ^3.0.1+1
 
 ddependency_overrides:
   flutter_svg: ^0.19.3
@@ -52,7 +54,6 @@ ddependency_overrides:
 dev_dependencies:
   flutter_test:
     sdk: flutter
-
 
   # The "flutter_lints" package below contains a set of recommended lints to
   # encourage good coding practices. The lint set provided by the package is
@@ -69,8 +70,6 @@ flutter_icons:
   image_path: "assets/icon.png"
   adaptive_icon_background: "#4d91ff"
   adaptive_icon_foreground: "assets/logo.png"
-
-
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
@@ -117,7 +116,6 @@ flutter:
     - family: Nunito
       fonts:
         - asset: assets/fonts/Nunito-Bold.ttf
-
 
   # For details regarding fonts from package dependencies,
   # see https://flutter.dev/custom-fonts/#from-packages
