@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
 //import 'package:keyboard_visibility/keyboard_visibility.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import '../../components/success_dialog.dart';
 import '../../components/rounded_fill_button.dart';
 import '../../components/rounded_outlined_button.dart';
 import '../../constants.dart';
@@ -73,8 +74,8 @@ class _RegistrationPageState extends State<RegistrationPage> {
 
   double _loginYOffset = 0;
   double _loginXOffset = 0;
-  //double _registerYOffset = 0;
-  //double _registerHeight = 0;
+  double _verificationYOffset = 0;
+  double _verificationHeight = 0;
 
   double windowWidth = 0;
   double windowHeight = 0;
@@ -96,6 +97,14 @@ class _RegistrationPageState extends State<RegistrationPage> {
         _keyboardVisible = visible;
       });
     });
+    /*KeyboardVisibilityNotification().addNewListener(
+      onChange: (bool visible) {
+        setState(() {
+          _keyboardVisible = visible;
+          print("Keyboard State Changed : $visible");
+        });
+      },
+    );*/
   }
 
   @override
@@ -110,7 +119,7 @@ class _RegistrationPageState extends State<RegistrationPage> {
     windowWidth = MediaQuery.of(context).size.width;
 
     _loginHeight = windowHeight - 270;
-    //_registerHeight = windowHeight - 270;
+    _verificationHeight = windowHeight - 270;
 
     switch (_pageState) {
       case 0:
@@ -126,7 +135,7 @@ class _RegistrationPageState extends State<RegistrationPage> {
         _loginHeight = _keyboardVisible ? windowHeight : windowHeight - 270;
 
         _loginXOffset = 0;
-        //_registerYOffset = windowHeight;
+        _verificationYOffset = windowHeight;
         break;
       case 1:
         _backgroundColor = mainColorList[2];
@@ -141,7 +150,23 @@ class _RegistrationPageState extends State<RegistrationPage> {
         _loginHeight = _keyboardVisible ? windowHeight : windowHeight - 270;
 
         _loginXOffset = 0;
-        //_registerYOffset = windowHeight;
+        _verificationYOffset = windowHeight;
+        break;
+      case 2:
+        _backgroundColor = Color(0xFFBD34C59);
+        _headingColor = Colors.white;
+
+        _headingTop = 80;
+
+        _loginWidth = windowWidth - 40;
+        _loginOpacity = 0.7;
+
+        _loginYOffset = _keyboardVisible ? 30 : 240;
+        _loginHeight = _keyboardVisible ? windowHeight : windowHeight - 240;
+
+        _loginXOffset = 20;
+        _verificationYOffset = _keyboardVisible ? 55 : 270;
+        _verificationHeight = _keyboardVisible ? windowHeight : windowHeight - 270;
         break;
     }
 
@@ -250,7 +275,10 @@ class _RegistrationPageState extends State<RegistrationPage> {
                     if (!widget.isLoading)
                       RoundButton(
                         text: _isLogin? "Login" : "Create Account",
-                        onClicked: _trySubmit,
+                        onClicked: (){
+                          setState(() {
+                            _pageState = 2;
+                          });}/*_trySubmit*/,
                       ),
                     const SizedBox(
                       height: 10,
@@ -272,6 +300,80 @@ class _RegistrationPageState extends State<RegistrationPage> {
             ),
           ),
         ),
+        AnimatedContainer(
+          height: _verificationHeight,
+          padding: EdgeInsets.all(32),
+          curve: Curves.fastLinearToSlowEaseIn,
+          duration: const Duration(
+              milliseconds: 1000
+          ),
+          transform: Matrix4.translationValues(0, _verificationYOffset, 1),
+          decoration: const BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.only(
+                  topLeft: Radius.circular(25),
+                  topRight: Radius.circular(25)
+              )
+          ),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            //mainAxisSize: MainAxisSize.min,
+            children: <Widget>[
+              Column(
+                mainAxisSize: MainAxisSize.min,
+                children: <Widget>[
+                  Container(
+                    margin: const EdgeInsets.only(bottom: 20),
+                    child: const Text(
+                      "Verify Your Email",
+                      style: TextStyle(
+                          fontSize: 20
+                      ),
+                    ),
+                  ),
+                  Flexible(
+                    flex: 1,
+                    //padding: const EdgeInsets.symmetric(horizontal: 32),
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 25),
+                      child: Center(
+                        child: SvgPicture.asset(
+                          "assets/icons/Email Verification.svg",
+                          height: (windowHeight * 0.3),
+                          width: (windowWidth * 0.5),
+                        ),
+                      ),
+                    ),
+                  ),
+                  const SizedBox(height: 20,),
+                ],
+              ),
+              Column(
+                children: <Widget>[
+                  RoundButton(
+                    text: "Send Verification Email",
+                    onClicked: (){
+                      buildSuccessDialog(context);
+                    },
+                  ),
+                  const SizedBox(
+                    height: 10,
+                  ),
+                  GestureDetector(
+                    onTap: () {
+                      setState(() {
+                        _isLogin = !_isLogin;
+                      });
+                    },
+                    child: RoundOutlinedButton(
+                      text: _isLogin? "Create New Account" : "Back to Login",
+                    ),
+                  )
+                ],
+              ),
+            ],
+          ),
+        )
       ],
     );
   }
@@ -429,4 +531,45 @@ class _RegistrationPageState extends State<RegistrationPage> {
       onSaved: (value) { _userUsername = value as String;},
     );
   }
+}
+
+void buildSuccessDialog(BuildContext context) {
+  showDialog(context: context, builder: (BuildContext context)
+  {
+    return Dialog(
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(20),
+      ),
+      child: Padding(
+        padding: const EdgeInsets.all(20.0),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            AnimatedCheck(),
+            SizedBox(height: 12),
+            const Text(
+              'Success!',
+              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+            ),
+            const SizedBox(height: 12),
+            const Text(
+              "A verification email has been sent to your email",
+              textAlign: TextAlign.center,
+              //style: TextStyle(fontSize: 20),
+            ),
+            const SizedBox(height: 12),
+            Center(
+              child: ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(50)),
+                ),
+                child: Text('Ok'),
+                onPressed: () => Navigator.of(context).pop(),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  });
 }
