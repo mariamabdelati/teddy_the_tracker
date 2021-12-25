@@ -9,6 +9,8 @@ class Entries {
   String? date;
   String? amount;
   String? label;
+  int? expenseID;
+  int? incomeID;
   DocumentReference? reference;
 
   int year = 2021;
@@ -26,18 +28,18 @@ class Entries {
     date = map["date"];
     amount = map["amount"];
     label = map["label"];
+    expenseID = map["expenseID"];
+    incomeID = map["incomeID"];
     cleanDate();
   }
 
 /* @override
   String toString() => "Entry<$label : $year,$month,$day : $amount\$";*/
 }
-void deleteExpense(String lab,String dat,String amo) async {
+void deleteExpense(int id) async {
   QuerySnapshot expenseRef = await FirebaseFirestore.instance
       .collection("/entries/7sQnsmHSjX5K8Sgz4PoD/expense")
-      .where("label", isEqualTo: lab)
-      .where("date", isEqualTo:dat)
-      .where("amount", isEqualTo:amo).get();
+      .where("expenseID", isEqualTo: id).get();
 
 
   var exp = expenseRef.docs[0];
@@ -48,12 +50,10 @@ void deleteExpense(String lab,String dat,String amo) async {
       .delete();
 }
 
-void deleteIncome(String lab,String dat,String amo) async {
+void deleteIncome(int id) async {
   QuerySnapshot incomeRef = await FirebaseFirestore.instance
       .collection("/entries/7sQnsmHSjX5K8Sgz4PoD/income")
-      .where("label", isEqualTo: lab)
-      .where("date", isEqualTo:dat)
-      .where("amount", isEqualTo:amo).get();
+      .where("incomeID", isEqualTo: id).get();
 
   var inc = incomeRef.docs[0];
 
@@ -241,8 +241,7 @@ Widget _buildBody(context, List<Entries> expenses, List<Entries> incomes) {
                                   child: const Text('Cancel'),
                                 ),
                                 TextButton(
-                                  onPressed: ()=>{deleteExpense(exp.label.toString()
-                                      ,exp.date.toString(),exp.amount.toString())},
+                                  onPressed: ()=>{deleteExpense(exp.expenseID!.toInt())},
                                   child: const Text(
                                     'Delete',
                                     style: TextStyle(
@@ -352,8 +351,7 @@ Widget _buildBody(context, List<Entries> expenses, List<Entries> incomes) {
                                   child: const Text('Cancel'),
                                 ),
                                 TextButton(
-                                  onPressed: () => {deleteIncome(inc.label.toString(),inc.date.toString(),
-                                  inc.amount.toString())},
+                                  onPressed: () => {deleteIncome(inc.incomeID!.toInt())},
                                   child: const Text(
                                     'Delete',
                                     style: TextStyle(
@@ -386,6 +384,12 @@ Widget _buildBody(context, List<Entries> expenses, List<Entries> incomes) {
         children: expansionChildren,),
     )
     );
+  }
+
+  for(Entries x in incomes){
+
+    print(x.incomeID);
+
   }
 
   return Column(
