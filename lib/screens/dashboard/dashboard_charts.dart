@@ -1,11 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 import '../../constants.dart';
-import '../../screens/dashboard/pie_chart.dart';
-
+import 'expense_pie_chart.dart';
+import 'income_pie_chart.dart';
 import 'line_chart.dart';
 
-//import 'line_chart.dart';
 
 class ChartsPageView extends StatefulWidget {
   const ChartsPageView({Key? key}) : super(key: key);
@@ -23,7 +22,8 @@ class _ChartsPageViewState extends State<ChartsPageView> {
   @override
   Widget build(BuildContext context) {
     const charts = <Widget>[
-      PiechartPanel(),
+      ExpensesPiechartPanel(),
+      IncomesPiechartPanel(),
       Linechart(),
     ];
     final pages = PageView.builder(
@@ -76,14 +76,14 @@ class _ChartsPageViewState extends State<ChartsPageView> {
   void animateToPage(int index) => controller.animateToPage(index, duration: const Duration(milliseconds: 400), curve: Curves.easeInOut);
 }
 
-class PiechartPanel extends StatefulWidget {
-  const PiechartPanel({Key? key}) : super(key: key);
+class ExpensesPiechartPanel extends StatefulWidget {
+  const ExpensesPiechartPanel({Key? key}) : super(key: key);
 
   @override
-  _PiechartPanelState createState() => _PiechartPanelState();
+  _ExpensesPiechartPanelState createState() => _ExpensesPiechartPanelState();
 }
 
-class _PiechartPanelState extends State<PiechartPanel> {
+class _ExpensesPiechartPanelState extends State<ExpensesPiechartPanel> {
   @override
   Widget build(BuildContext context) {
     return Align(
@@ -95,19 +95,13 @@ class _PiechartPanelState extends State<PiechartPanel> {
         decoration: BoxDecoration(
           gradient: const RadialGradient(
             colors: [
-              //Color(0xFF1D67A6),
-              //Color(0xFF3493E3),
-              //Color(0xFF61ADEB)
               Color(0xFF0054DA),
               Color(0xFF049BD6),
-              //Color(0xFF1E49C1),
-              //Color(0xFF67B5FD),
             ],
             center: Alignment(1.0, 2.0),
             focal: Alignment(1.0,0.6),
             focalRadius: 1.1,
           ),
-          //border: Border.all(color: Colors.grey),
           boxShadow: const <BoxShadow>[
             BoxShadow(
               color: Colors.grey,
@@ -117,7 +111,48 @@ class _PiechartPanelState extends State<PiechartPanel> {
           ],
           borderRadius: BorderRadius.circular(40),
         ),
-        child: const TtestDashboard(),
+        child: const ExpensePieChart(),
+      ),
+    );
+  }
+}
+
+class IncomesPiechartPanel extends StatefulWidget {
+  const IncomesPiechartPanel({Key? key}) : super(key: key);
+
+  @override
+  _IncomesPiechartPanelState createState() => _IncomesPiechartPanelState();
+}
+
+class _IncomesPiechartPanelState extends State<IncomesPiechartPanel> {
+  @override
+  Widget build(BuildContext context) {
+    return Align(
+      alignment: Alignment.topCenter,
+      child: Container(
+        width: 400,
+        height: 400,
+        margin: const EdgeInsets.all(6),
+        decoration: BoxDecoration(
+          gradient: const RadialGradient(
+            colors: [
+              Color(0xFF0054DA),
+              Color(0xFF049BD6),
+            ],
+            center: Alignment(1.0, 2.0),
+            focal: Alignment(1.0,0.6),
+            focalRadius: 1.1,
+          ),
+          boxShadow: const <BoxShadow>[
+            BoxShadow(
+              color: Colors.grey,
+              offset: Offset(1.1, 1.1),
+              blurRadius: 5.0,
+            ),
+          ],
+          borderRadius: BorderRadius.circular(40),
+        ),
+        child: const IncomePieChart(),
       ),
     );
   }
@@ -144,19 +179,11 @@ class _LinechartState extends State<Linechart> {
             colors: [
               Color(0xFF0054DA),
               Color(0xFF049BD6),
-              //Color(0xFF1D67A6),
-              //Color(0xFF3493E3),
-              //Color(0xFF0054DA),
-              //Color(0xFF3298D6),
             ],
             center: Alignment(1.0, 2.0),
             focal: Alignment(1.0,0.6),
             focalRadius: 1.1,
-            /*center: Alignment(0.3, 1.8),
-            focal: Alignment(-1.0, 0.6),
-            focalRadius: 1.4,*/
           ),
-          //border: Border.all(color: Colors.grey),
           boxShadow: const <BoxShadow>[
             BoxShadow(
               color: Colors.grey,
@@ -167,8 +194,7 @@ class _LinechartState extends State<Linechart> {
           borderRadius: BorderRadius.circular(40),
         ),
         child: const Center(
-          child: TestDashboard(),/*Text('PageView 2',
-              style: TextStyle(fontSize: 20, fontWeight: FontWeight.w700, color: Colors.white)),*/
+          child: TestDashboard(),
         ),
       ),
     );

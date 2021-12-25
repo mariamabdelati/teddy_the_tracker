@@ -2,12 +2,10 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 //import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import '../../constants.dart';
-//import 'category_more_options.dart';
 import 'category_expansion_tile.dart';
 import 'category_more_options.dart';
-import 'create_new_category.dart';
 
-
+int selectedSubCategoryID = -1;
 //changing the category labels to uppercase
 extension CapExtension on String {
   String get inCaps => '${this[0].toUpperCase()}${substring(1)}';
@@ -19,17 +17,17 @@ class SubcategoryExpansionTile extends StatefulWidget {
   final List index;
   final bool visible;
 
+
   const SubcategoryExpansionTile({Key? key, required this.index, required this.visible}) : super(key: key);
 
   @override
   _SubcategoryExpansionTileState createState() => _SubcategoryExpansionTileState();
 }
 
+
 class _SubcategoryExpansionTileState extends State<SubcategoryExpansionTile> {
   //this string is used to identify what subcategory has been selected
   late String selectedSubcategory;
-  late int selectedSubCategoryID;
-  bool different = false;
 
   static const double radius = 20;
 
@@ -48,7 +46,7 @@ class _SubcategoryExpansionTileState extends State<SubcategoryExpansionTile> {
     setState(() {
       _isExpanded = false;
       selectedSubcategory = "";
-      selectedSubCategoryID = 0;
+      selectedSubCategoryID = -1;
     });
   }
 
@@ -64,7 +62,7 @@ class _SubcategoryExpansionTileState extends State<SubcategoryExpansionTile> {
   @override
   void initState(){
     selectedSubcategory = "";
-    selectedSubCategoryID = 0;
+    selectedSubCategoryID = -1;
     _isExpanded = false;
     super.initState();
   }
@@ -99,7 +97,6 @@ class _SubcategoryExpansionTileState extends State<SubcategoryExpansionTile> {
   }
 
   Widget buildTile(BuildContext context) {
-
     return Theme(
       data: Theme.of(context).copyWith(dividerColor: Colors.transparent),
       child: ExpansionTile(
@@ -125,69 +122,68 @@ class _SubcategoryExpansionTileState extends State<SubcategoryExpansionTile> {
               fontSize: 18, fontWeight: FontWeight.w500, color: iconsColor),
         ),
         children: [
-          if (widget.index.isNotEmpty)
-            StreamBuilder<QuerySnapshot>(
-                stream: FirebaseFirestore.instance
-                    .collection("categories/JBSahpmjY2TtK0gRdT4s/category")
-                    .where("categoryID", whereIn: widget.index)
-                    .snapshots(),
-                builder: (BuildContext context,
-                    AsyncSnapshot<QuerySnapshot> snapshot) {
-                  if (snapshot.hasError) {
-                    return const Text("Something went wrong", style: TextStyle(color: Color(0xFFD32F2F)),);
-                  } else
-                  if (snapshot.connectionState == ConnectionState.waiting) {
-                    return const CircularProgressIndicator();
-                  }
-                  final data = snapshot.requireData;
-                  size = data.size;
-                  var contents = <Widget>[];
-                  List.generate(
-                      data.size,
-                          (index) {
-                        if (data.docs[index]["parentID"] != 0) {
-                          String chipName = data.docs[index]["label"];
-                          int chipID = data.docs[index]["categoryID"];
-                          contents.add(ActionChip(
-                              labelPadding: const EdgeInsets.all(5),
-                              label: Text(chipName.capitalize),
-                              labelStyle: const TextStyle(
-                                fontWeight: FontWeight.bold,
-                                color: Color(0xFFFFFFFA),
-                              ),
-                              avatar: CircleAvatar(radius: 16,
-                                child: Text(chipName[0].toUpperCase()),
-                                backgroundColor: Colors.white.withOpacity(0.8),
-                              ),
-                              backgroundColor: (chipName.compareTo(
-                                  selectedSubcategory) == 0)
-                                  ? const Color(0xFFF6BAB5)
-                                  : const Color(0xFF67B5FD),
-                              onPressed: () {
-                                if (selectedSubcategory != chipName) {
-                                  setState(() {
-                                    selectedSubcategory = chipName;
-                                    selectedSubCategoryID = chipID;
-                                  });
-                                } else {
-                                  setState(() {
-                                    selectedSubcategory = "";
-                                    selectedSubCategoryID = 0;
-                                  });
-                                }
+          StreamBuilder<QuerySnapshot>(
+              stream: FirebaseFirestore.instance
+                  .collection("categories/JBSahpmjY2TtK0gRdT4s/category")
+                  .where("parentID", isEqualTo: selectedCategoryID)
+                  .snapshots(),
+              builder: (BuildContext context,
+                  AsyncSnapshot<QuerySnapshot> snapshot) {
+                if (snapshot.hasError) {
+                  return const Text("Something went wrong", style: TextStyle(color: Color(0xFFD32F2F)),);
+                } else
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return const CircularProgressIndicator();
+                }
+                final data = snapshot.requireData;
+                //size = data.size;
+                var contents = <Widget>[];
+                List.generate(
+                    data.size,
+                        (index) {
+                      if (data.docs[index]["parentID"] != 0) {
+                        String chipName = data.docs[index]["label"];
+                        int chipID = data.docs[index]["categoryID"];
+                        contents.add(ActionChip(
+                            labelPadding: const EdgeInsets.all(5),
+                            label: Text(chipName.capitalize),
+                            labelStyle: const TextStyle(
+                              fontWeight: FontWeight.bold,
+                              color: Color(0xFFFFFFFA),
+                            ),
+                            avatar: CircleAvatar(radius: 16,
+                              child: Text(chipName[0].toUpperCase(), style: TextStyle(color: iconsColor),),
+                              backgroundColor: Colors.white.withOpacity(0.8),
+                            ),
+                            backgroundColor: (chipName.compareTo(
+                                selectedSubcategory) == 0)
+                                ? const Color(0xFFF6BAB5)
+                                : const Color(0xFF67B5FD),
+                            onPressed: () {
+                              if (selectedSubcategory != chipName) {
+                                setState(() {
+                                  selectedSubcategory = chipName;
+                                  selectedSubCategoryID = chipID;
+                                });
+                              } else {
+                                setState(() {
+                                  selectedSubcategory = "";
+                                  selectedSubCategoryID = -1;
+                                });
                               }
-                          ));
-                        }
+                            }
+                        ));
                       }
-                  );
+                    }
+                );
 
-                  return Wrap(
-                    spacing: 8,
-                    runSpacing: 6,
-                    alignment: WrapAlignment.center,
-                    children: contents,
-                  );
-                }),
+                return Wrap(
+                  spacing: 8,
+                  runSpacing: 6,
+                  alignment: WrapAlignment.center,
+                  children: contents,
+                );
+              }),
 
           TextButton.icon(
             label: const Text(

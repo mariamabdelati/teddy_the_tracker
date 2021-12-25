@@ -10,9 +10,8 @@ import '../../screens/dashboard/globals.dart';
 
 //global variable used to save category id to wallet
 var selectedCategoryID = 0;
-//var reset = false;
-//var selectedCategorySubs = [];
-//var different = false;
+//global string is used to identify what category has been selected
+var selectedCategory = "";
 
 class CategoryExpansionTile extends StatefulWidget {
   //this boolean is used for verification and is  sent from the expenses form to validate the category selection
@@ -24,18 +23,11 @@ class CategoryExpansionTile extends StatefulWidget {
 }
 
 class _CategoryExpansionTileState extends State<CategoryExpansionTile> {
-  //this string is used to identify what category has been selected
-  var selectedCategory = "";
-  //this boolean is used for displaying the sucategories if a category is selected
+
+  //this boolean is used for displaying the subcategories if a category is selected
   var isSelected = false;
 
   var selectedCategorySubs = [];
-
-  //this string will be used to take user input for the new category
-  //var newCategoryTitle = "";
-
-  //this variable is initialized with -1 to indicate no main category has been selected
-  //var index = -1;
 
   static const double radius = 20;
 
@@ -44,7 +36,13 @@ class _CategoryExpansionTileState extends State<CategoryExpansionTile> {
 
   UniqueKey keyTile = UniqueKey();
 
-
+  @override
+  void initState(){
+    selectedCategory = "";
+    selectedCategoryID = 0;
+    isExpanded = false;
+    super.initState();
+  }
   //expanding tile function
   void expandTile() {
     setState(() {
@@ -52,10 +50,6 @@ class _CategoryExpansionTileState extends State<CategoryExpansionTile> {
       keyTile = UniqueKey();
     });
   }
-
-  /*get catID{
-    return  selectedCategoryID;
-  }*/
 
   //shrinks the tile with a delay so that user can see what tey have selected; this function is triggered upon category selection
   void shrinkTile() {
@@ -106,7 +100,7 @@ class _CategoryExpansionTileState extends State<CategoryExpansionTile> {
           ),
         //the selectedCategoryID is passed to the subcategory so that we can show the related subcategory
         SubcategoryExpansionTile(
-          index: selectedCategorySubs, visible: isSelected, key: UniqueKey(),),
+          index: selectedCategorySubs, visible: isSelected, key: ValueKey(selectedCategoryID),),
       ],
     );
   }
@@ -114,20 +108,12 @@ class _CategoryExpansionTileState extends State<CategoryExpansionTile> {
 
 
   Widget buildTile(BuildContext context) {
-    //var w = globals.getWallet();
     //stream of categories from db
     final Stream<QuerySnapshot> categories = FirebaseFirestore.instance
         .collection("categories/JBSahpmjY2TtK0gRdT4s/category")
-        .where("walletID", isEqualTo: globals.getWallet()["walletID"]).snapshots();
-    //.orderBy("categoryId", descending: true)
-    /*.where("categoryId", whereIn: (globals.getWallet()["categoryIds"]))*/
-    //var contents = <Widget>[];
-    /*entryCategories.map((item) {
-      if (item.parentID == -1) {
-        contents.add(buildChips(item.label, item.categoryID));
-      }
-    }).toList();*/
-    //contents.add(
+        .where("walletID", isEqualTo: (globals.getWallet()["walletID"]))
+        .snapshots();
+
     return Theme(
       data: Theme.of(context).copyWith(dividerColor: Colors.transparent),
       child: ExpansionTile(
@@ -146,7 +132,7 @@ class _CategoryExpansionTileState extends State<CategoryExpansionTile> {
               child: Icon(Icons.category_rounded, color: mainColorList[1]),
             )) : SizedBox(width: 32, child: Icon(Icons.category_rounded, color: iconsColor)),
         collapsedTextColor: iconsColor,
-        //childrenPadding: const EdgeInsets.all(16).copyWith(top: 0),
+
         title: Text(
           "Categories",
           style: TextStyle(
@@ -170,9 +156,6 @@ class _CategoryExpansionTileState extends State<CategoryExpansionTile> {
                 List.generate(
                     data.size,
                         (index) {
-                      if (index == 0){
-                        size = data.docs[index]["categoryID"];
-                      }
                       if (data.docs[index]["parentID"] == 0) {
                         String chipName = data.docs[index]["label"];
                         int chipID = data.docs[index]["categoryID"];

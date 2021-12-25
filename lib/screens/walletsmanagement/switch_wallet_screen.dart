@@ -8,9 +8,7 @@ import '../dashboard/dashboard_navbar.dart';
 import 'add_new_wallet.dart';
 
 class SwitchWallet extends StatefulWidget {
-  const SwitchWallet({
-    Key? key,
-  }) : super(key: key);
+  const SwitchWallet({Key? key,}) : super(key: key);
 
   @override
   _SwitchWalletState createState() => _SwitchWalletState();
@@ -20,30 +18,30 @@ class _SwitchWalletState extends State<SwitchWallet> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      decoration: BoxDecoration(
-        boxShadow: [
-          BoxShadow(color: Colors.blue.withAlpha(100), blurRadius: 10.0)
-        ],
-        borderRadius: const BorderRadius.all(Radius.circular(40.0)),
-        color: mainColorList[1],
-      ),
+      decoration: BoxDecoration(boxShadow: [BoxShadow(color: Colors.blue.withAlpha(100), blurRadius: 10.0)], borderRadius: const BorderRadius.all(Radius.circular(40.0)), color: mainColorList[1],),
       height: 650,
-      child: SingleChildScrollView(
-        child: SafeArea(
-          top: false,
-          //bottom: false,
-          child: Column(
-            children: [
-              Center(
-                child: Row(
-                  mainAxisSize: MainAxisSize.min,
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: const [AddWalletButton(0), AddWalletButton(1)],
+      child: ClipRRect(
+        borderRadius: BorderRadius.circular(40),
+        child: SingleChildScrollView(
+          child: SafeArea(
+            top: false,
+            //bottom: false,
+            child: Column(
+              children: [
+                Center(
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: const [
+                      AddWalletButton(0),
+                      AddWalletButton(1)
+                    ],
+                  ),
                 ),
-              ),
-              _buildBody(context),
-            ],
+                _buildBody(context),
+              ],
+            ),
           ),
         ),
       ),
@@ -54,13 +52,11 @@ class _SwitchWalletState extends State<SwitchWallet> {
     return StreamBuilder<QuerySnapshot>(
         stream: FirebaseFirestore.instance
             .collection("/wallets/9Ho4oSCoaTrpsVn1U3H1/wallet")
-            .where("usersIDs",
-                arrayContains: FirebaseAuth.instance.currentUser!.uid)
+            .where("usersIDs", arrayContains: FirebaseAuth.instance.currentUser!.uid)
             .snapshots(),
         builder: (context, snapshot) {
           if (snapshot.hasError) {
-            return const Text("Something went wrong",
-                style: TextStyle(color: Colors.white));
+            return const Text("Something went wrong", style: TextStyle(color: Colors.white));
           } else if (snapshot.connectionState == ConnectionState.waiting) {
             return const CircularProgressIndicator();
           } else {
@@ -74,8 +70,7 @@ class _SwitchWalletState extends State<SwitchWallet> {
               shrinkWrap: true,
               padding: const EdgeInsets.all(8),
               itemCount: wallets.length,
-              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: 2),
+              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 2),
               itemBuilder: (BuildContext context, int index) {
                 return Padding(
                   padding: const EdgeInsets.all(4.0),
@@ -89,19 +84,20 @@ class _SwitchWalletState extends State<SwitchWallet> {
 
   Widget _createWalletCard(List<dynamic> wallets, int index) {
     return GestureDetector(
-      onTap: () {
+      onTap: (){
         //where wallet is switched
         /*print("wallet switched to " + (wallets[index].name as String));*/
         globals.setWallet(wallets[index]);
         Navigator.of(context).pushAndRemoveUntil(
             MaterialPageRoute(builder: (context) => const DashboardScreen()),
-            (route) => false);
+                (route) => false);
         //Navigator.pop(context);
       },
       child: Card(
         elevation: 4,
         color: const Color(0xFF0C43D5),
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(40)),
+        shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(40)),
         child: Padding(
           padding: const EdgeInsets.all(10.0),
           child: Column(
@@ -134,10 +130,7 @@ class _SwitchWalletState extends State<SwitchWallet> {
                   child: Text(
                     (wallets[index]["name"]).toString().capitalize,
                     textAlign: TextAlign.center,
-                    style: TextStyle(
-                      color: mainColorList[4],
-                      fontSize: 20,
-                    ),
+                    style: TextStyle(color: mainColorList[4], fontSize: 20,),
                   ),
                 ),
               ),

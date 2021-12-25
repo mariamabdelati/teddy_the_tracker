@@ -8,9 +8,7 @@ import '../dashboard/dashboard_navbar.dart';
 import 'add_new_wallet.dart';
 
 class SelectWallet extends StatefulWidget {
-  const SelectWallet({
-    Key? key,
-  }) : super(key: key);
+  const SelectWallet({Key? key,}) : super(key: key);
 
   @override
   _SelectWalletState createState() => _SelectWalletState();
@@ -35,7 +33,10 @@ class _SelectWalletState extends State<SelectWallet> {
                   mainAxisSize: MainAxisSize.min,
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   crossAxisAlignment: CrossAxisAlignment.start,
-                  children: const [AddWalletButton(0), AddWalletButton(1)],
+                  children: const [
+                    AddWalletButton(0),
+                    AddWalletButton(1)
+                  ],
                 ),
               ),
               _buildBody(context),
@@ -50,13 +51,11 @@ class _SelectWalletState extends State<SelectWallet> {
     return StreamBuilder<QuerySnapshot>(
         stream: FirebaseFirestore.instance
             .collection("/wallets/9Ho4oSCoaTrpsVn1U3H1/wallet")
-            .where("usersIDs",
-                arrayContains: FirebaseAuth.instance.currentUser!.uid)
+            .where("usersIDs", arrayContains: FirebaseAuth.instance.currentUser!.uid)
             .snapshots(),
         builder: (context, snapshot) {
           if (snapshot.hasError) {
-            return const Text("Something went wrong",
-                style: TextStyle(color: Colors.white));
+            return const Text("Something went wrong", style: TextStyle(color: Colors.white));
           } else if (snapshot.connectionState == ConnectionState.waiting) {
             return const CircularProgressIndicator();
           } else {
@@ -70,8 +69,7 @@ class _SelectWalletState extends State<SelectWallet> {
               shrinkWrap: true,
               padding: const EdgeInsets.all(8),
               itemCount: wallets.length,
-              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: 2),
+              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 2),
               itemBuilder: (BuildContext context, int index) {
                 return Padding(
                   padding: const EdgeInsets.all(4.0),
@@ -85,18 +83,19 @@ class _SelectWalletState extends State<SelectWallet> {
 
   Widget _createWalletCard(List<dynamic> wallets, int index) {
     return GestureDetector(
-      onTap: () {
+      onTap: (){
         //where wallet is switched
         /*print("wallet switched to " + (wallets[index].name as String));*/
         globals.setWallet(wallets[index]);
         Navigator.of(context).pushAndRemoveUntil(
             MaterialPageRoute(builder: (context) => const DashboardScreen()),
-            (route) => false);
+                (route) => false);
       },
       child: Card(
         elevation: 4,
         color: const Color(0xFF0C43D5),
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(40)),
+        shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(40)),
         child: Padding(
           padding: const EdgeInsets.all(10.0),
           child: Column(
@@ -129,10 +128,7 @@ class _SelectWalletState extends State<SelectWallet> {
                   child: Text(
                     (wallets[index]["name"]).toString().capitalize,
                     textAlign: TextAlign.center,
-                    style: TextStyle(
-                      color: mainColorList[4],
-                      fontSize: 20,
-                    ),
+                    style: TextStyle(color: mainColorList[4], fontSize: 20,),
                   ),
                 ),
               ),

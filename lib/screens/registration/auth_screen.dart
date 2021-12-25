@@ -3,11 +3,11 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:teddy_the_tracker/screens/registration/verification_screen.dart';
-//import '../../screens/walletmanagement/wallet_screen.dart';
+import 'package:teddy_the_tracker/screens/registration/verify.dart';
+import '../../components/error_dialog.dart';
 import '../../screens/dashboard/dashboard_navbar.dart';
 import '../../screens/welcome/welcome_page.dart';
-import '../walletsmanagement/switch_wallet_screen.dart';
+import '../walletsmanagement/wallet_selection_screen.dart';
 
 class AuthScreen extends StatefulWidget {
   const AuthScreen(this._isLogin);
@@ -21,6 +21,7 @@ class _AuthScreenState extends State<AuthScreen> {
   final _auth = FirebaseAuth.instance;
   bool _isLoading = false;
 
+  //function for authentication
   void _submitAuthForm(
     String email,
     String username,
@@ -30,10 +31,16 @@ class _AuthScreenState extends State<AuthScreen> {
   ) async {
     //auth logic is here;
     UserCredential authResult;
+    User user;
     try {
       setState(() {
         _isLoading = true;
       });
+
+      /*
+      if it is a login attempt the function waits for firebase authentication
+      otherwise, a new user is created and the username is updated
+       */
       if (isLogin) {
         authResult = await _auth.signInWithEmailAndPassword(
             email: email, password: password);
@@ -47,15 +54,22 @@ class _AuthScreenState extends State<AuthScreen> {
           "username": username,
           "email": email,
         });
-        FirebaseAuth.instance.currentUser!.updateDisplayName(username);
+        _auth.currentUser!.updateDisplayName(username);
       }
-      Navigator.push(
-          context,
-          MaterialPageRoute(
-              builder: (context) =>
-                  VerificationScreen(isLogin: widget._isLogin)));
-      // builder: (context) => VerificationScreen(isLogin: isLogin)),
-
+      user = _auth.currentUser!;
+      /*
+      upon successful login or signup the user is navigated to the select wallet page where
+      they can join an existing wallet or create a new wallet
+       */
+      await user.reload();
+      if (!user.emailVerified) {
+        Navigator.of(context).push(MaterialPageRoute(
+            builder: (context) => Verify(isLogin: isLogin, mauth: _auth)));
+      } else {
+        Navigator.of(context).pushAndRemoveUntil(
+            MaterialPageRoute(builder: (context) => const SelectWallet()),
+            (route) => false);
+      }
     } on FirebaseAuthException catch (err) {
       var msg = "Error occurred, please check your credentials";
 
@@ -63,20 +77,19 @@ class _AuthScreenState extends State<AuthScreen> {
         msg = err.message as String;
       }
 
-      Scaffold.of(ctx).showSnackBar(
-        SnackBar(
-          content: Text(msg),
-          backgroundColor: Theme.of(context).errorColor,
-        ),
-      );
+      /*
+      when the user enters invalid credentials they shown an error dialog detailing the error message
+       */
+      showErrorDialog(context, msg);
+
       setState(() {
         _isLoading = false;
       });
     } catch (err) {
-      print(err.runtimeType);
-      setState(() {
-        _isLoading = false;
-      });
+      print("error is: ${err.runtimeType}");
+      // setState(() {
+      //   _isLoading = false;
+      // });
     }
   }
 
@@ -84,11 +97,60 @@ class _AuthScreenState extends State<AuthScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Theme.of(context).primaryColor,
-      body: LoginPage(
+      body: RegistrationPage(
         _submitAuthForm,
         _isLoading,
         widget._isLogin,
       ),
     );
   }
+}
+
+// storing Extra user data 5:35;
+
+/*
+error dialog function that shows the dialog and details  the message
+the user can dismiss it by clicking okay
+ */
+void showErrorDialog(BuildContext context, String msg) {
+  showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return Dialog(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(20),
+          ),
+          child: Padding(
+            padding: const EdgeInsets.all(20.0),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                AnimatedError(),
+                const SizedBox(height: 12),
+                const Text(
+                  'Invalid Credentials',
+                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+                ),
+                const SizedBox(height: 12),
+                Text(
+                  msg,
+                  textAlign: TextAlign.center,
+                  //style: TextStyle(fontSize: 20),
+                ),
+                const SizedBox(height: 12),
+                Center(
+                  child: ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(50)),
+                    ),
+                    child: Text('Ok'),
+                    onPressed: () => Navigator.of(context).pop(),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        );
+      });
 }

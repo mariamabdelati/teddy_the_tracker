@@ -54,7 +54,7 @@ class _RadialProgressState extends State<RadialProgress>
         width: 150.0,
         padding: const EdgeInsets.symmetric(vertical: 40.0),
         child: AnimatedOpacity(
-          opacity: progressDegrees > 30 ? 1.0 : 0.0,
+          opacity: progressDegrees >= 0 ? 1.0 : 0.0,
           duration: fadeInDuration,
           child: Column(
             children: <Widget>[
@@ -77,7 +77,7 @@ class _RadialProgressState extends State<RadialProgress>
               ),
               Text(
                 widget.balance,
-                style: TextStyle(fontSize: 16.0, fontWeight: FontWeight.bold, color: Color(0xFFFFEDEC)),
+                style: const TextStyle(fontSize: 16.0, fontWeight: FontWeight.bold, color: Color(0xFFFFEDEC)),
               ),
               const SizedBox(
                 height: 4.0,

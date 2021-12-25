@@ -8,6 +8,7 @@ import 'package:flutter/material.dart';
 //import '../../data/expenses.dart';
 //import 'package:pie_chart/pie_chart.dart';
 import 'package:fl_chart/fl_chart.dart';
+import 'package:teddy_the_tracker/screens/dashboard/globals.dart';
 //import 'package:teddy_categories/constants.dart';
 
 //add another class named categories
@@ -45,8 +46,9 @@ class Entries {
 Widget _getExpenses(context) {
   return StreamBuilder<QuerySnapshot>(
       stream: FirebaseFirestore.instance
-          .collection("expenses/cFqsqHPIscrC6cY9iPs6/expense")
-          .orderBy("date", descending: true)
+          .collection("entries/7sQnsmHSjX5K8Sgz4PoD/expense")
+          // .orderBy("date", descending: true)
+          .where("walletID", isEqualTo: globals.getWallet()["walletID"])
           .snapshots(),
       builder: (context, snapshot) {
         if (snapshot.hasError) {
@@ -59,6 +61,8 @@ Widget _getExpenses(context) {
               .map((docSnapshot) =>
                   Entries.fromMap(docSnapshot.data() as Map<String, dynamic>))
               .toList();
+          print("printing expenses: ");
+          print(expenses);
           return Container(
             child: _getIncomes(context, expenses),
           );
@@ -69,8 +73,8 @@ Widget _getExpenses(context) {
 Widget _getIncomes(context, List<Entries> expenses) {
   return StreamBuilder<QuerySnapshot>(
       stream: FirebaseFirestore.instance
-          .collection("expenses/cFqsqHPIscrC6cY9iPs6/income")
-          .orderBy("date", descending: true)
+          .collection("entries/7sQnsmHSjX5K8Sgz4PoD/income")
+          .where("walletID", isEqualTo: globals.getWallet()["walletID"])
           .snapshots(),
       builder: (context, snapshot) {
         if (snapshot.hasError) {
@@ -95,8 +99,13 @@ Widget _getIncomes(context, List<Entries> expenses) {
 Widget _buildBody(context, List<Entries> expenses, List<Entries> incomes) {
   Map expensesData = {};
   Map incomesData = {};
-
-  for (var entry in expenses.reversed.toList()) {
+  if (expenses.isEmpty) {
+    expenses.add(Entries("10/12/2001", "0", ""));
+  }
+  if (incomes.isEmpty) {
+    incomes.add(Entries("10/12/2001", "0", ""));
+  }
+  for (var entry in expenses.toList()) {
     if (expensesData.containsKey(entry.date)) {
       expensesData[entry.date] =
           expensesData[entry.date] + double.parse(entry.amount as String);
@@ -104,7 +113,7 @@ Widget _buildBody(context, List<Entries> expenses, List<Entries> incomes) {
       expensesData[entry.date] = double.parse(entry.amount as String);
     }
   }
-  for (var entry in incomes.reversed.toList()) {
+  for (var entry in incomes.toList()) {
     if (incomesData.containsKey(entry.date)) {
       incomesData[entry.date] =
           incomesData[entry.date] + double.parse(entry.amount as String);
@@ -139,14 +148,38 @@ Widget _buildBody(context, List<Entries> expenses, List<Entries> incomes) {
     incomesList
         .add(FlSpot(date.indexWhere((element) => element == k).toDouble(), v));
   });
-
+  expensesList.sort((a, b) {
+    double ax = a.x;
+    double bx = b.x;
+    if (ax > bx) {
+      return 1;
+    } else if (ax == bx) {
+      return 0;
+    } else {
+      return -1;
+    }
+  });
+  incomesList.sort((a, b) {
+    double ax = a.x;
+    double bx = b.x;
+    if (ax > bx) {
+      return 1;
+    } else if (ax == bx) {
+      return 0;
+    } else {
+      return -1;
+    }
+  });
   if (expensesList[0].x != 0) {
     expensesList = [FlSpot(0, 0), ...expensesList];
   }
   if (expensesList.last.x != date.length - 1) {
     expensesList.add(FlSpot(date.length - 1, 0));
   }
-  if (incomesList[0].x != 0) incomesList = [const FlSpot(0, 0), ...incomesList];
+  if (incomesList[0].x != 0) {
+    incomesList = [const FlSpot(0, 0), ...incomesList];
+    print("added the zero to incomes");
+  }
   if (incomesList.last.x != date.length - 1) {
     incomesList.add(FlSpot(date.length - 1, 0));
   }
@@ -159,19 +192,6 @@ Widget _buildBody(context, List<Entries> expenses, List<Entries> incomes) {
 // Widget responsible for using List <FlSpots> passed to it and construct the graph
 Widget _buildChart(context, List<FlSpot> expensesList, List<FlSpot> incomesList,
     List<dynamic> dates) {
-  LineTitles lineTitle = LineTitles(dates);
-  LineChartBarData expensesLine = LineChartBarData(
-    spots: expensesList,
-    isCurved: true,
-    colors: [Colors.orange, Colors.red],
-    barWidth: 8,
-  );
-  LineChartBarData incomesLine = LineChartBarData(
-    spots: incomesList,
-    isCurved: true,
-    colors: [Colors.blue, Colors.green],
-    barWidth: 8,
-  );
   int maxY = 100;
   for (var spot in expensesList) {
     maxY = max(maxY, spot.y.ceil());
@@ -179,6 +199,30 @@ Widget _buildChart(context, List<FlSpot> expensesList, List<FlSpot> incomesList,
   for (var spot in incomesList) {
     maxY = max(maxY, spot.y.ceil());
   }
+  LineTitles lineTitle = LineTitles(dates, maxY);
+  LineChartBarData expensesLine = LineChartBarData(
+    spots: expensesList,
+    isCurved: true,
+    colors: [Colors.red, Colors.orange],
+    barWidth: 5,
+    // belowBarData: BarAreaData(
+    //     show: true,
+    //     colors: [Colors.orange, Colors.red]
+    //         .map((color) => color.withOpacity(0.6))
+    //         .toList()),
+  );
+  LineChartBarData incomesLine = LineChartBarData(
+    spots: incomesList,
+    isCurved: true,
+    colors: [Colors.blue, Colors.green],
+    barWidth: 5,
+    // belowBarData: BarAreaData(
+    //     show: true,
+    //     colors: [Colors.blue, Colors.green]
+    //         .map((color) => color.withOpacity(0.6))
+    //         .toList()),
+  );
+
   return LineChart(LineChartData(
       minX: 0,
       maxX: dates.length - 1,
@@ -199,22 +243,39 @@ Widget _buildChart(context, List<FlSpot> expensesList, List<FlSpot> incomesList,
         border: Border.all(color: const Color(0xAACCEDFF), width: 1),
       ),
       lineBarsData: <LineChartBarData>[expensesLine, incomesLine]));
+
+//   ListView.builder(
+//       padding: const EdgeInsets.all(8),
+//       itemCount: entries.length,
+//       itemBuilder: (BuildContext context, int index) {
+//         return Text(entries[index].toString());
+//       });
 }
 
 class LineTitles {
   List dates;
-  LineTitles(this.dates);
+  int maxY;
+  LineTitles(this.dates, this.maxY);
   FlTitlesData getTitle() {
     return FlTitlesData(
         show: true,
         bottomTitles: SideTitles(
           showTitles: true,
+          getTextStyles: (context, value) => const TextStyle(
+              color: Colors.white, fontWeight: FontWeight.bold, fontSize: 12),
           getTitles: (val) => dates[val.toInt()].replaceAll("-", "\n"),
           margin: 8,
           reservedSize: 60,
           rotateAngle: 30,
         ),
         rightTitles: SideTitles(showTitles: true, getTitles: (val) => ""),
+        leftTitles: SideTitles(
+          reservedSize: 30,
+          showTitles: true,
+          getTextStyles: (context, value) => const TextStyle(
+              color: Colors.white, fontWeight: FontWeight.bold, fontSize: 12),
+          interval: maxY / 10,
+        ),
         topTitles: SideTitles(showTitles: true, getTitles: (val) => ""));
   }
 }
@@ -235,12 +296,30 @@ class TtestDashBoardState extends State<TestDashboard> {
         const SizedBox(
           height: 37,
         ),
-        const Text(
-          "Expenses vs Income",
-          style: TextStyle(
-              fontSize: 16, color: Colors.white, fontWeight: FontWeight.bold),
-          textAlign: TextAlign.center,
-        ),
+        Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+          Text(
+            "Expenses ",
+            style: TextStyle(
+                fontSize: 20,
+                color: Colors.redAccent[400],
+                fontWeight: FontWeight.bold),
+            textAlign: TextAlign.center,
+          ),
+          Text(
+            "vs",
+            style: TextStyle(
+                fontSize: 20, color: Colors.white, fontWeight: FontWeight.bold),
+            textAlign: TextAlign.center,
+          ),
+          Text(
+            " Incomes",
+            style: TextStyle(
+                fontSize: 20,
+                color: Colors.greenAccent[400],
+                fontWeight: FontWeight.bold),
+            textAlign: TextAlign.center,
+          )
+        ]),
         const SizedBox(
           height: 4,
         ),
