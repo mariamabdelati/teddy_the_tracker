@@ -301,7 +301,7 @@ class TtestDashBoardState extends State<TestDashboard> {
             "Expenses ",
             style: TextStyle(
                 fontSize: 20,
-                color: Colors.redAccent[400],
+                color: Colors.orange,
                 fontWeight: FontWeight.bold),
             textAlign: TextAlign.center,
           ),

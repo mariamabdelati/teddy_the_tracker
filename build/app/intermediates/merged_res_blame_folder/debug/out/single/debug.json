@@ -12,16 +12,20 @@
         "source": "E:\\Coding projects\\Flutter projects\\teddy-the-tracker\\teddy_the_tracker\\android\\app\\src\\main\\res\\drawable-xxxhdpi\\splash.png"
     },
     {
-        "merged": "E:\\Coding projects\\Flutter projects\\teddy-the-tracker\\teddy_the_tracker\\build\\app\\intermediates\\res\\merged\\debug\\drawable-mdpi_ic_launcher_foreground.png.flat",
-        "source": "E:\\Coding projects\\Flutter projects\\teddy-the-tracker\\teddy_the_tracker\\android\\app\\src\\main\\res\\drawable-mdpi\\ic_launcher_foreground.png"
-    },
-    {
         "merged": "E:\\Coding projects\\Flutter projects\\teddy-the-tracker\\teddy_the_tracker\\build\\app\\intermediates\\res\\merged\\debug\\drawable-xhdpi_splash.png.flat",
         "source": "E:\\Coding projects\\Flutter projects\\teddy-the-tracker\\teddy_the_tracker\\android\\app\\src\\main\\res\\drawable-xhdpi\\splash.png"
     },
     {
+        "merged": "E:\\Coding projects\\Flutter projects\\teddy-the-tracker\\teddy_the_tracker\\build\\app\\intermediates\\res\\merged\\debug\\drawable-mdpi_ic_launcher_foreground.png.flat",
+        "source": "E:\\Coding projects\\Flutter projects\\teddy-the-tracker\\teddy_the_tracker\\android\\app\\src\\main\\res\\drawable-mdpi\\ic_launcher_foreground.png"
+    },
+    {
         "merged": "E:\\Coding projects\\Flutter projects\\teddy-the-tracker\\teddy_the_tracker\\build\\app\\intermediates\\res\\merged\\debug\\mipmap-xhdpi_ic_launcher.png.flat",
         "source": "E:\\Coding projects\\Flutter projects\\teddy-the-tracker\\teddy_the_tracker\\android\\app\\src\\main\\res\\mipmap-xhdpi\\ic_launcher.png"
+    },
+    {
+        "merged": "E:\\Coding projects\\Flutter projects\\teddy-the-tracker\\teddy_the_tracker\\build\\app\\intermediates\\res\\merged\\debug\\drawable-v21_background.png.flat",
+        "source": "E:\\Coding projects\\Flutter projects\\teddy-the-tracker\\teddy_the_tracker\\android\\app\\src\\main\\res\\drawable-v21\\background.png"
     },
     {
         "merged": "E:\\Coding projects\\Flutter projects\\teddy-the-tracker\\teddy_the_tracker\\build\\app\\intermediates\\res\\merged\\debug\\mipmap-anydpi-v26_ic_launcher.xml.flat",
@@ -30,10 +34,6 @@
     {
         "merged": "E:\\Coding projects\\Flutter projects\\teddy-the-tracker\\teddy_the_tracker\\build\\app\\intermediates\\res\\merged\\debug\\drawable-v21_launch_background.xml.flat",
         "source": "E:\\Coding projects\\Flutter projects\\teddy-the-tracker\\teddy_the_tracker\\android\\app\\src\\main\\res\\drawable-v21\\launch_background.xml"
-    },
-    {
-        "merged": "E:\\Coding projects\\Flutter projects\\teddy-the-tracker\\teddy_the_tracker\\build\\app\\intermediates\\res\\merged\\debug\\drawable-v21_background.png.flat",
-        "source": "E:\\Coding projects\\Flutter projects\\teddy-the-tracker\\teddy_the_tracker\\android\\app\\src\\main\\res\\drawable-v21\\background.png"
     },
     {
         "merged": "E:\\Coding projects\\Flutter projects\\teddy-the-tracker\\teddy_the_tracker\\build\\app\\intermediates\\res\\merged\\debug\\mipmap-xxhdpi_ic_launcher.png.flat",
@@ -56,12 +56,12 @@
         "source": "E:\\Coding projects\\Flutter projects\\teddy-the-tracker\\teddy_the_tracker\\android\\app\\src\\main\\res\\drawable-mdpi\\splash.png"
     },
     {
-        "merged": "E:\\Coding projects\\Flutter projects\\teddy-the-tracker\\teddy_the_tracker\\build\\app\\intermediates\\res\\merged\\debug\\drawable-hdpi_ic_launcher_foreground.png.flat",
-        "source": "E:\\Coding projects\\Flutter projects\\teddy-the-tracker\\teddy_the_tracker\\android\\app\\src\\main\\res\\drawable-hdpi\\ic_launcher_foreground.png"
-    },
-    {
         "merged": "E:\\Coding projects\\Flutter projects\\teddy-the-tracker\\teddy_the_tracker\\build\\app\\intermediates\\res\\merged\\debug\\drawable-xxhdpi_splash.png.flat",
         "source": "E:\\Coding projects\\Flutter projects\\teddy-the-tracker\\teddy_the_tracker\\android\\app\\src\\main\\res\\drawable-xxhdpi\\splash.png"
+    },
+    {
+        "merged": "E:\\Coding projects\\Flutter projects\\teddy-the-tracker\\teddy_the_tracker\\build\\app\\intermediates\\res\\merged\\debug\\drawable-hdpi_ic_launcher_foreground.png.flat",
+        "source": "E:\\Coding projects\\Flutter projects\\teddy-the-tracker\\teddy_the_tracker\\android\\app\\src\\main\\res\\drawable-hdpi\\ic_launcher_foreground.png"
     },
     {
         "merged": "E:\\Coding projects\\Flutter projects\\teddy-the-tracker\\teddy_the_tracker\\build\\app\\intermediates\\res\\merged\\debug\\mipmap-mdpi_ic_launcher.png.flat",

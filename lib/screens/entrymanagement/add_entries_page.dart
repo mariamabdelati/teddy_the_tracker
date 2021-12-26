@@ -16,7 +16,9 @@ class AddNewEntryPage extends StatefulWidget {
   final String title;
   final ScrollController controller;
 
-  const AddNewEntryPage({Key? key, required this.title, required this.controller}) : super(key: key);
+  const AddNewEntryPage(
+      {Key? key, required this.title, required this.controller})
+      : super(key: key);
 
   @override
   AddNewEntryPageState createState() => AddNewEntryPageState();
@@ -58,7 +60,6 @@ class AddNewEntryPageState extends State<AddNewEntryPage> {
   var initialDate = DateTime.now();
   bool isChecked = false;
 
-
   CollectionReference expenseRef = FirebaseFirestore.instance
       .collection('/entries/7sQnsmHSjX5K8Sgz4PoD/expense');
 
@@ -68,20 +69,20 @@ class AddNewEntryPageState extends State<AddNewEntryPage> {
   var _dateTime = DateTime.now();
   String dateText = '';
 
-  String getDateText(){
+  String getDateText() {
     if (dateText == '') {
       return 'Date';
-    }else{
+    } else {
       return DateFormat('yyyy-MM-dd').format(_dateTime);
     }
   }
 
   void _showDatePicker() {
     showDatePicker(
-        context: context,
-        initialDate: DateTime.now(),
-        firstDate: DateTime(2021),
-        lastDate: DateTime(2023))
+            context: context,
+            initialDate: DateTime.now(),
+            firstDate: DateTime(2021),
+            lastDate: DateTime(2023))
         .then((value) {
       setState(() {
         _dateTime = value!;
@@ -157,7 +158,7 @@ class AddNewEntryPageState extends State<AddNewEntryPage> {
         prefixIcon: SizedBox(
             width: 60,
             child:
-            Icon(Icons.label_outline_rounded, size: 25, color: iconsColor)),
+                Icon(Icons.label_outline_rounded, size: 25, color: iconsColor)),
         suffixIcon: SizedBox(
           width: 60,
           child: IconButton(
@@ -194,8 +195,8 @@ class AddNewEntryPageState extends State<AddNewEntryPage> {
         border: OutlineInputBorder(borderRadius: BorderRadius.circular(20)),
         prefixIcon: SizedBox(
             width: 60,
-            child:
-            Icon(Icons.account_balance_wallet_outlined, size: 25, color: iconsColor)),
+            child: Icon(Icons.account_balance_wallet_outlined,
+                size: 25, color: iconsColor)),
         suffixIcon: SizedBox(
           width: 60,
           child: IconButton(
@@ -228,7 +229,7 @@ class AddNewEntryPageState extends State<AddNewEntryPage> {
     );
   }
 
-  buildDate(){
+  buildDate() {
     return TextFormField(
       readOnly: true,
       onTap: () {
@@ -236,7 +237,9 @@ class AddNewEntryPageState extends State<AddNewEntryPage> {
       },
       decoration: InputDecoration(
         hintText: getDateText(),
-        hintStyle: getDateText() != 'Date' ? const TextStyle(color: Colors.black87) : null,
+        hintStyle: getDateText() != 'Date'
+            ? const TextStyle(color: Colors.black87)
+            : null,
         border: OutlineInputBorder(borderRadius: BorderRadius.circular(20)),
         prefixIcon: SizedBox(
             width: 60,
@@ -260,20 +263,21 @@ class AddNewEntryPageState extends State<AddNewEntryPage> {
             color: validType ? Colors.grey : const Color(0xFFD32F2F),
             width: 1,
           ),
-          borderRadius: BorderRadius.circular(20)
-      ),
+          borderRadius: BorderRadius.circular(20)),
       child: Row(
         children: [
           SizedBox(
             width: 60,
-            child: Icon(EvaIcons.creditCardOutline, color: iconsColor, size: 26),
+            child:
+                Icon(EvaIcons.creditCardOutline, color: iconsColor, size: 26),
           ),
           OutlinedButton(
-            style: OutlinedButton.styleFrom(shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(20)),
-              side: BorderSide(color: (type == "Income")
-                  ? mainColorList[8]
-                  : iconsColor, width: 2),
+            style: OutlinedButton.styleFrom(
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(20)),
+              side: BorderSide(
+                  color: (type == "Income") ? mainColorList[8] : iconsColor,
+                  width: 2),
               primary: (type == "Income") ? mainColorList[8] : iconsColor,
               //backgroundColor: (recurring == "No") ? Colors.grey[100]: null,
             ),
@@ -281,35 +285,37 @@ class AddNewEntryPageState extends State<AddNewEntryPage> {
               setState(() {
                 type = "Income";
                 isExpense = false;
-                validType =  true;
+                validType = true;
               });
             },
             child: Center(
               child: Text(
                 "Income",
                 style: TextStyle(
-                    color: (type == "Income")
-                        ? mainColorList[8] : iconsColor,
-                    fontSize: 16
-                ),
+                    color: (type == "Income") ? mainColorList[8] : iconsColor,
+                    fontSize: 16),
               ),
             ),
           ),
-          const SizedBox(width: 15,),
+          const SizedBox(
+            width: 15,
+          ),
           OutlinedButton(
-            style: OutlinedButton.styleFrom(shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(20)),
-              side: BorderSide(color: (type == "Expense")
-                  ? progressbarColorWhite : iconsColor, width: 2),
-              primary: (type == "Expense")
-                  ? progressbarColorWhite : iconsColor,
+            style: OutlinedButton.styleFrom(
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(20)),
+              side: BorderSide(
+                  color:
+                      (type == "Expense") ? progressbarColorWhite : iconsColor,
+                  width: 2),
+              primary: (type == "Expense") ? progressbarColorWhite : iconsColor,
               //backgroundColor: (recurring == "Yes") ? Colors.grey: null,
             ),
             onPressed: () {
               setState(() {
                 type = "Expense";
                 isExpense = true;
-                validType =  true;
+                validType = true;
               });
             },
             child: Center(
@@ -317,9 +323,9 @@ class AddNewEntryPageState extends State<AddNewEntryPage> {
                 "Expense",
                 style: TextStyle(
                     color: (type == "Expense")
-                        ? progressbarColorWhite : iconsColor,
-                    fontSize: 16
-                ),
+                        ? progressbarColorWhite
+                        : iconsColor,
+                    fontSize: 16),
               ),
             ),
           ),
@@ -333,8 +339,11 @@ class AddNewEntryPageState extends State<AddNewEntryPage> {
         visible: x,
         child: Padding(
           padding: const EdgeInsets.only(top: 8, left: 12),
-          child: Text("Please select the $w of your entry", style: const TextStyle(fontSize: 12,  color: Color(0xFFD32F2F)),),)
-    );
+          child: Text(
+            "Please select the $w of your entry",
+            style: const TextStyle(fontSize: 12, color: Color(0xFFD32F2F)),
+          ),
+        ));
   }
 
   buildRecurring() {
@@ -346,8 +355,7 @@ class AddNewEntryPageState extends State<AddNewEntryPage> {
             color: validReccuring ? Colors.grey : const Color(0xFFD32F2F),
             width: 1,
           ),
-          borderRadius: BorderRadius.circular(20)
-      ),
+          borderRadius: BorderRadius.circular(20)),
       child: Row(
         children: [
           SizedBox(
@@ -362,16 +370,17 @@ class AddNewEntryPageState extends State<AddNewEntryPage> {
                 fontWeight: FontWeight.bold,
                 color: Colors.black54),
           ),
-          const SizedBox(width: 30,),
+          const SizedBox(
+            width: 30,
+          ),
           OutlinedButton(
-            style: OutlinedButton.styleFrom(shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(20)),
-              side: BorderSide(color: (recurring == "Yes")
-                  ? mainColorList[8]
-                  : iconsColor, width: 2),
-              primary: (recurring == "Yes")
-                  ? mainColorList[8]
-                  : iconsColor,
+            style: OutlinedButton.styleFrom(
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(20)),
+              side: BorderSide(
+                  color: (recurring == "Yes") ? mainColorList[8] : iconsColor,
+                  width: 2),
+              primary: (recurring == "Yes") ? mainColorList[8] : iconsColor,
               //backgroundColor: (recurring == "Yes") ? Colors.grey: null,
             ),
             onPressed: () {
@@ -385,21 +394,22 @@ class AddNewEntryPageState extends State<AddNewEntryPage> {
               child: Text(
                 "Yes",
                 style: TextStyle(
-                    color: (recurring == "Yes")
-                        ? mainColorList[8]
-                        : iconsColor,
-                    fontSize: 16
-                ),
+                    color: (recurring == "Yes") ? mainColorList[8] : iconsColor,
+                    fontSize: 16),
               ),
             ),
           ),
-          const SizedBox(width: 15,),
+          const SizedBox(
+            width: 15,
+          ),
           OutlinedButton(
-            style: OutlinedButton.styleFrom(shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(20)),
-              side: BorderSide(color: (recurring == "No")
-                  ? progressbarColorWhite
-                  : iconsColor, width: 2),
+            style: OutlinedButton.styleFrom(
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(20)),
+              side: BorderSide(
+                  color:
+                      (recurring == "No") ? progressbarColorWhite : iconsColor,
+                  width: 2),
               primary: (recurring == "No") ? progressbarColorWhite : iconsColor,
               //backgroundColor: (recurring == "No") ? Colors.grey[100]: null,
             ),
@@ -417,8 +427,7 @@ class AddNewEntryPageState extends State<AddNewEntryPage> {
                     color: (recurring == "No")
                         ? progressbarColorWhite
                         : iconsColor,
-                    fontSize: 16
-                ),
+                    fontSize: 16),
               ),
             ),
           ),
@@ -432,13 +441,12 @@ class AddNewEntryPageState extends State<AddNewEntryPage> {
       builder: (context) {
         return SubmitButtonWidget(
           onClicked: () async {
-
             //checks if the data is valid
             final isValid = formKey.currentState!.validate();
             FocusScope.of(context).unfocus();
             var isSelected = true;
 
-            if (selectedCategoryID == 0){
+            if (selectedCategoryID == 0) {
               setState(() {
                 catSelect = false;
               });
@@ -448,14 +456,14 @@ class AddNewEntryPageState extends State<AddNewEntryPage> {
               });
             }
 
-            if (recurring.isEmpty){
+            if (recurring.isEmpty) {
               setState(() {
                 validReccuring = false;
                 isSelected = false;
               });
             }
 
-            if (type.isEmpty){
+            if (type.isEmpty) {
               setState(() {
                 validType = false;
                 isSelected = false;
@@ -467,8 +475,8 @@ class AddNewEntryPageState extends State<AddNewEntryPage> {
               formKey.currentState!.save();
 
               //add to db
-              createNewEntry(newTitle.toLowerCase(), amount, _dateTime, isChecked, isExpense);
-
+              createNewEntry(newTitle.toLowerCase(), amount, _dateTime,
+                  isChecked, isExpense);
 
               //shows snackbar with details upon adding
               final message =
@@ -483,55 +491,58 @@ class AddNewEntryPageState extends State<AddNewEntryPage> {
   }
 
   void buildSuccessDialog(BuildContext context, String message) {
-    showDialog(context: context, builder: (BuildContext context)
-    {
-      return Dialog(
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(20),
-        ),
-        child: Padding(
-          padding: const EdgeInsets.all(20.0),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              AnimatedCheck(),
-              SizedBox(height: 12),
-              const Text(
-                'Success!',
-                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
-              ),
-              const SizedBox(height: 12),
-              Text(
-                message,
-                textAlign: TextAlign.center,
-                //style: TextStyle(fontSize: 20),
-              ),
-              const SizedBox(height: 12),
-              Center(
-                child: ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(50)),
+    showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return Dialog(
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(20),
+            ),
+            child: Padding(
+              padding: const EdgeInsets.all(20.0),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  AnimatedCheck(),
+                  SizedBox(height: 12),
+                  const Text(
+                    'Success!',
+                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
                   ),
-                  child: Text('Ok'),
-                  onPressed: () => Navigator.of(context).pop(),
-                ),
+                  const SizedBox(height: 12),
+                  Text(
+                    message,
+                    textAlign: TextAlign.center,
+                    //style: TextStyle(fontSize: 20),
+                  ),
+                  const SizedBox(height: 12),
+                  Center(
+                    child: ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(50)),
+                      ),
+                      child: Text('Ok'),
+                      onPressed: () => Navigator.of(context).pop(),
+                    ),
+                  ),
+                ],
               ),
-            ],
-          ),
-        ),
-      );
-    });
+            ),
+          );
+        });
   }
 }
 
-void createNewEntry(String label, String amount, DateTime date, bool recurring, bool isExpense) async {
+void createNewEntry(String label, String amount, DateTime date, bool recurring,
+    bool isExpense) async {
   QuerySnapshot entry;
-  if (isExpense){
+  if (isExpense) {
     entry = await FirebaseFirestore.instance
         .collection("/entries/7sQnsmHSjX5K8Sgz4PoD/expense")
         .orderBy("expenseID")
         .get();
-  } else{
+  } else {
     entry = await FirebaseFirestore.instance
         .collection("/entries/7sQnsmHSjX5K8Sgz4PoD/income")
         .orderBy("incomeID")
@@ -541,14 +552,13 @@ void createNewEntry(String label, String amount, DateTime date, bool recurring, 
   var entriesList = entry.docs;
   var maxId = 0;
   for (var doc in entriesList) {
-    if (isExpense){
+    if (isExpense) {
       maxId = max(maxId, doc["expenseID"]);
-    } else{
+    } else {
       maxId = max(maxId, doc["incomeID"]);
     }
   }
   var newID = maxId + 1;
-
 
   if (isExpense) {
     var createdEntry = FirebaseFirestore.instance
@@ -583,11 +593,12 @@ void createNewEntry(String label, String amount, DateTime date, bool recurring, 
   //var existingCatsList = globals.getWallet()["categoriesIDs"];
   QuerySnapshot categoriesRef = await FirebaseFirestore.instance
       .collection("/categories/JBSahpmjY2TtK0gRdT4s/category")
-      .where("categoryID", isEqualTo: selectedCategoryID).get();
+      .where("categoryID", isEqualTo: selectedCategoryID)
+      .get();
 
   var categ = categoriesRef.docs[0];
 
-  if (isExpense){
+  if (isExpense) {
     List existingEntries = categ["expenseIDs"];
     existingEntries.add(newID);
 
@@ -605,15 +616,16 @@ void createNewEntry(String label, String amount, DateTime date, bool recurring, 
         .set({"incomeIDs": existingEntries}, SetOptions(merge: true));
   }
 
-  if (selectedSubCategoryID != -1){
+  if (selectedSubCategoryID != -1) {
     QuerySnapshot subcategoriesRef = await FirebaseFirestore.instance
         .collection("/categories/JBSahpmjY2TtK0gRdT4s/category")
-        .where("categoryID", isEqualTo: selectedSubCategoryID).get();
+        .where("categoryID", isEqualTo: selectedSubCategoryID)
+        .get();
 
     var subcateg = subcategoriesRef.docs[0];
     print(subcateg.id.toString());
 
-    if (isExpense){
+    if (isExpense) {
       List existingEntries = subcateg["expenseIDs"];
       existingEntries.add(newID);
 
