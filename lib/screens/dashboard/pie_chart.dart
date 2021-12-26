@@ -167,7 +167,7 @@ Widget _buildBody(
   if (expensesDataNoOther.isNotEmpty) {
     expensesDataNoOther.forEach((k, v) {
       if (index < 9) {
-        if (k == 13) {
+        if (k == other) {
           expensesDataTrimmed["other categories"] = v;
         } else {
           expensesDataTrimmed[k] = v;

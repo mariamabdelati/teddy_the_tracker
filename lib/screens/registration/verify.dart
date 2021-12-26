@@ -32,73 +32,82 @@ class _VerifyState extends State<Verify> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Column(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        //mainAxisSize: MainAxisSize.min,
-        children: <Widget>[
-          Column(
-            mainAxisSize: MainAxisSize.min,
-            children: <Widget>[
-              Container(
-                margin: const EdgeInsets.only(bottom: 20),
-                child: Text(
-                  _isLogin
-                      ? "You need to Verify Your Email before using the app"
-                      : "Check your email, a verification email has been sent",
-                  style: TextStyle(fontSize: 20),
+      backgroundColor: Colors.white,
+      appBar: AppBar(
+        leading: null,
+        automaticallyImplyLeading: false,
+        title: Title(color: Colors.green, child: Text("Hello")),
+        centerTitle: true,
+      ),
+      body: Padding(
+        padding: const EdgeInsets.all(32.0),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          //mainAxisSize: MainAxisSize.min,
+          children: <Widget>[
+            Column(
+              mainAxisSize: MainAxisSize.min,
+              children: <Widget>[
+                Container(
+                  margin: const EdgeInsets.only(bottom: 20),
+                  child: Text(
+                    _isLogin
+                        ? "You need to verify your email before using Teddy to track your expenses"
+                        : "Check your email, a verification email has been sent",
+                    style: TextStyle(fontSize: 20),
+                    textAlign: TextAlign.center,
+                  ),
                 ),
-              ),
-              Flexible(
-                flex: 1,
-                //padding: const EdgeInsets.symmetric(horizontal: 32),
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 25),
-                  child: Center(
-                    child: SvgPicture.asset(
-                      "assets/icons/Email Verification.svg",
-                      height: (MediaQuery.of(context).size.height * 0.3),
-                      width: (MediaQuery.of(context).size.width * 0.5),
+                Flexible(
+                  flex: 1,
+                  //padding: const EdgeInsets.symmetric(horizontal: 32),
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 25),
+                    child: Center(
+                      child: SvgPicture.asset(
+                        "assets/icons/Email Verification.svg",
+                        height: (MediaQuery.of(context).size.height * 0.3),
+                        width: (MediaQuery.of(context).size.width * 0.5),
+                      ),
                     ),
                   ),
                 ),
-              ),
-              const SizedBox(
-                height: 20,
-              ),
-            ],
-          ),
-          Column(
-            children: <Widget>[
-              RoundButton(
-                text: "Send Verification Email",
-                onClicked: () {
-                  _mauth.currentUser!.sendEmailVerification().then((_) {
-                    buildSuccessDialog(context);
-                  });
-                },
-              ),
-              const SizedBox(
-                height: 10,
-              ),
-              GestureDetector(
-                onTap: () {
-                  setState(() {
-                    _isLogin = !_isLogin;
-                    Navigator.of(context).pushAndRemoveUntil(
-                        MaterialPageRoute(
-                            builder: (context) => AuthScreen(true)),
-                        (route) => false);
-                    ;
-                    print("pressed on the pop button");
-                  });
-                },
-                child: const RoundOutlinedButton(
-                  text: "Go back to Welcome page",
+                const SizedBox(
+                  height: 20,
                 ),
-              )
-            ],
-          ),
-        ],
+              ],
+            ),
+            Column(
+              children: <Widget>[
+                RoundButton(
+                  text: "Send Verification Email",
+                  onClicked: () {
+                    _mauth.currentUser!.sendEmailVerification().then((_) {
+                      buildSuccessDialog(context);
+                    });
+                  },
+                ),
+                const SizedBox(
+                  height: 10,
+                ),
+                GestureDetector(
+                  onTap: () {
+                    setState(() {
+                      Navigator.of(context).pushAndRemoveUntil(
+                          MaterialPageRoute(
+                              builder: (context) => AuthScreen(true)),
+                          (route) => false);
+                      ;
+                    });
+                  },
+                  child: const RoundOutlinedButton(
+                    text: "Back to Welcome Page",
+                  ),
+                )
+              ],
+            ),
+          ],
+        ),
       ),
     );
   }

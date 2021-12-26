@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:teddy_the_tracker/screens/walletsmanagement/wallet_dialog.dart';
 import '../walletsmanagement/switch_wallet_screen.dart';
 import 'balance_progress_bar.dart';
 import 'dashboard_charts.dart';
@@ -15,16 +16,15 @@ class DashboardPage extends StatefulWidget {
 }
 
 class _DashboardPageState extends State<DashboardPage> {
-
   bool dashboard = true;
 
   @override
   Widget build(BuildContext context) {
-
     final screenHeight = MediaQuery.of(context).size.height;
     return Scaffold(
       appBar: AppBar(
-        title: dashboard ? const Text('Dashboard') : const Text('Switch Wallet'),
+        title:
+            dashboard ? const Text('Dashboard') : const Text('Switch Wallet'),
         centerTitle: true,
         elevation: 0,
       ),
@@ -62,50 +62,76 @@ class _DashboardPageState extends State<DashboardPage> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
-            GestureDetector(
-              onTap: () {
-                setState(() {
-                  dashboard = false;
-                });
-                showModalBottomSheet(
-                  barrierColor: Colors.black.withAlpha(1),
-                  isScrollControlled: true,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(40),
-                  ),
-                  elevation: 40.0,
-                  context: context,
-                  builder: (BuildContext context) {
-                    return const SwitchWallet();
+            Row(
+              children: [
+                GestureDetector(
+                  onTap: () {
+                    setState(() {
+                      dashboard = false;
+                    });
+                    showModalBottomSheet(
+                      barrierColor: Colors.black.withAlpha(1),
+                      isScrollControlled: true,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(40),
+                      ),
+                      elevation: 40.0,
+                      context: context,
+                      builder: (BuildContext context) {
+                        return const SwitchWallet();
+                      },
+                    ).whenComplete(() {
+                      setState(() {
+                        dashboard = true;
+                      });
+                    });
                   },
-                ).whenComplete(() {
-                  setState(() {
-                    dashboard = true;
-                  });
-                });
-              },
-              child: Row(
-                //mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: <Widget>[
-                  Text(
-                    'HI, $user_name'.toUpperCase(),
-                    style: const TextStyle(
-                      color: Color(0xFFFFD2CE), //const Color(0xFF1D67A6),
-                      fontSize: 25.0,
-                      fontWeight: FontWeight.w900,
-                    ),
+                  child: Row(
+                    //mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: <Widget>[
+                      Text(
+                        'HI, $user_name'.toUpperCase(),
+                        style: const TextStyle(
+                          color: Color(0xFFFFD2CE), //const Color(0xFF1D67A6),
+                          fontSize: 25.0,
+                          fontWeight: FontWeight.w900,
+                        ),
+                      ),
+                      const SizedBox(
+                        width: 10,
+                      ),
+                      const Padding(
+                        padding: EdgeInsets.only(bottom: 4.0),
+                        child: Icon(
+                          Icons.autorenew_rounded,
+                          size: 23,
+                          color: Color(0xFFFFD2CE),
+                        ),
+                      ),
+                    ],
                   ),
-                  const SizedBox(width: 10,),
-                  const Padding(
-                    padding: EdgeInsets.only(bottom: 4.0),
-                    child: Icon(
-                      Icons.autorenew_rounded,
-                      size: 23,
-                      color: Color(0xFFFFD2CE),
-                    ),
+                ),
+                const SizedBox(
+                  width: 11 * 1.5,
+                ),
+                GestureDetector(
+                  onTap: () {
+                    buildWalletDialog(context, globals.getWallet()["joinCode"]);
+                  },
+                  child: Row(
+                    children: const [
+                      Padding(
+                        padding: EdgeInsets.only(bottom: 4.0),
+                        child: Icon(
+                          Icons.group_add_rounded,
+                          size: 23,
+                          color: Color(0xFFFFD2CE),
+                        ),
+                      )
+                    ],
                   ),
-                ],
-              ),
+                ),
+              ],
             ),
             Text(
               'VIEWING $wallet_name'.toUpperCase(),
@@ -126,11 +152,11 @@ class _DashboardPageState extends State<DashboardPage> {
                 ),
                 SizedBox(height: screenHeight * 0.01),
                 Align(
-                    alignment: Alignment.center,
-                    child: Padding(
-                      padding: EdgeInsets.all(12.0),
-                      child: _getExpenses(context),
-                    ),
+                  alignment: Alignment.center,
+                  child: Padding(
+                    padding: EdgeInsets.all(12.0),
+                    child: _getExpenses(context),
+                  ),
                 ),
               ],
             ),
@@ -155,7 +181,8 @@ Widget _getExpenses(context) {
   return StreamBuilder<QuerySnapshot>(
       stream: FirebaseFirestore.instance
           .collection("/entries/7sQnsmHSjX5K8Sgz4PoD/expense")
-          .where("walletID", isEqualTo: (globals.getWallet()["walletID"])).snapshots(),
+          .where("walletID", isEqualTo: (globals.getWallet()["walletID"]))
+          .snapshots(),
       builder: (context, snapshot) {
         if (snapshot.hasError) {
           return const Text("Something went wrong",
@@ -165,7 +192,7 @@ Widget _getExpenses(context) {
         } else {
           List<Entries> expenses = snapshot.data!.docs
               .map((docSnapshot) =>
-              Entries.fromMap(docSnapshot.data() as Map<String, dynamic>))
+                  Entries.fromMap(docSnapshot.data() as Map<String, dynamic>))
               .toList();
           return Container(
             child: _getIncomes(context, expenses),
@@ -178,7 +205,8 @@ Widget _getIncomes(context, List<Entries> expenses) {
   return StreamBuilder<QuerySnapshot>(
       stream: FirebaseFirestore.instance
           .collection("/entries/7sQnsmHSjX5K8Sgz4PoD/income")
-          .where("walletID", isEqualTo: (globals.getWallet()["walletID"])).snapshots(),
+          .where("walletID", isEqualTo: (globals.getWallet()["walletID"]))
+          .snapshots(),
       builder: (context, snapshot) {
         if (snapshot.hasError) {
           print("error retreiving income");
@@ -189,7 +217,7 @@ Widget _getIncomes(context, List<Entries> expenses) {
         } else {
           List<Entries> incomes = snapshot.data!.docs
               .map((docSnapshot) =>
-              Entries.fromMap(docSnapshot.data() as Map<String, dynamic>))
+                  Entries.fromMap(docSnapshot.data() as Map<String, dynamic>))
               .toList();
           return Container(
             child: _buildBody(context, expenses, incomes),
@@ -211,13 +239,13 @@ Widget _buildBody(context, List<Entries> expenses, List<Entries> incomes) {
 
   String balance = "0";
   double percentage = 0;
-  if (incTotal <= expTotal){
-    balance = (incTotal-expTotal).toStringAsFixed(2);
+  if (incTotal <= expTotal) {
+    balance = (incTotal - expTotal).toStringAsFixed(2);
     percentage = 0.0;
-  } else{
-    balance = (incTotal-expTotal).toStringAsFixed(2);
+  } else {
+    balance = (incTotal - expTotal).toStringAsFixed(2);
     //print(balance);
-    percentage = (incTotal-expTotal)/incTotal;
+    percentage = (incTotal - expTotal) / incTotal;
     //print(percentage);
   }
 
