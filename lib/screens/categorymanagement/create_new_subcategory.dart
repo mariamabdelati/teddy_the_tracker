@@ -9,7 +9,6 @@ import '../../components/submission_button.dart';
 import '../../constants.dart';
 import 'category_expansion_tile.dart';
 import 'subcategory_expansion_tile.dart';
-//import 'category_expansion_tile.dart';
 
 class CreateNewSubcategory extends StatefulWidget {
   final String title;
@@ -95,7 +94,6 @@ class _CreateNewSubcategoryState extends State<CreateNewSubcategory> {
         //form for new subcategory
         body: Form(
           key: formKey,
-          //autovalidateMode: AutovalidateMode.onUserInteraction,
           child: ListView(
             padding: const EdgeInsets.all(16),
             children: [
@@ -272,7 +270,6 @@ class _CreateNewSubcategoryState extends State<CreateNewSubcategory> {
                         Text(
                           message,
                           textAlign: TextAlign.center,
-                          //style: TextStyle(fontSize: 20),
                         ),
                         const SizedBox(height: 12),
                         Center(
@@ -291,7 +288,6 @@ class _CreateNewSubcategoryState extends State<CreateNewSubcategory> {
                   ),
                 );
               });
-              //Navigator.pop(context, MaterialPageRoute(builder: (context) => const CategoryExpansionTile()));
             }
           },
         );
