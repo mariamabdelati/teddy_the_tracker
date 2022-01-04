@@ -1,5 +1,4 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-//import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import '../../constants.dart';
 import 'category_expansion_tile.dart';
@@ -115,7 +114,6 @@ class _SubcategoryExpansionTileState extends State<SubcategoryExpansionTile> {
               child: Icon(Icons.account_tree_rounded, color: mainColorList[1]),
             )) : Icon(Icons.account_tree_rounded, color: iconsColor),
         collapsedTextColor: iconsColor,
-        //childrenPadding: const EdgeInsets.all(16).copyWith(top: 0),
         title: Text(
           "Subcategories",
           style: TextStyle(
@@ -136,7 +134,6 @@ class _SubcategoryExpansionTileState extends State<SubcategoryExpansionTile> {
                   return const CircularProgressIndicator();
                 }
                 final data = snapshot.requireData;
-                //size = data.size;
                 var contents = <Widget>[];
                 List.generate(
                     data.size,
@@ -198,7 +195,7 @@ class _SubcategoryExpansionTileState extends State<SubcategoryExpansionTile> {
                 elevation: 20.0,
                 context: context,
                 builder: (BuildContext context) {
-                  return const Options("Subcategory"); //CHANGED
+                  return const Options("Subcategory");
                 },
               );
             },
@@ -208,6 +205,3 @@ class _SubcategoryExpansionTileState extends State<SubcategoryExpansionTile> {
     );
   }
 }
-
-//on save then
-//set catID in expenses table to selectedCategoryID
