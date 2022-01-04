@@ -7,7 +7,6 @@ import '../../screens/dashboard/globals.dart';
 import '../../components/submission_button.dart';
 import '../../components/success_dialog.dart';
 import '../../constants.dart';
-//import 'category_expansion_tile.dart';
 
 class CreateNewCategory extends StatefulWidget {
   final String title;
@@ -95,7 +94,6 @@ class _CreateNewCategoryState extends State<CreateNewCategory> {
         //form for new category
         body: Form(
           key: formKey,
-          //autovalidateMode: AutovalidateMode.onUserInteraction,
           child: ListView(
             padding: const EdgeInsets.all(16),
             children: [
@@ -242,7 +240,6 @@ class _CreateNewCategoryState extends State<CreateNewCategory> {
                         Text(
                           message,
                           textAlign: TextAlign.center,
-                          //style: TextStyle(fontSize: 20),
                         ),
                         const SizedBox(height: 12),
                         Center(
