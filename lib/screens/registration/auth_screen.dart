@@ -1,5 +1,3 @@
-// ignore_for_file: deprecated_member_use, avoid_print
-
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -87,9 +85,6 @@ class _AuthScreenState extends State<AuthScreen> {
       });
     } catch (err) {
       print("error is: ${err.runtimeType}");
-      // setState(() {
-      //   _isLoading = false;
-      // });
     }
   }
 
@@ -105,8 +100,6 @@ class _AuthScreenState extends State<AuthScreen> {
     );
   }
 }
-
-// storing Extra user data 5:35;
 
 /*
 error dialog function that shows the dialog and details  the message
@@ -135,7 +128,6 @@ void showErrorDialog(BuildContext context, String msg) {
               Text(
                 msg,
                 textAlign: TextAlign.center,
-                //style: TextStyle(fontSize: 20),
               ),
               const SizedBox(height: 12),
               Center(
