@@ -3,10 +3,8 @@ import '../../screens/entrymanagement/view_entries_page.dart';
 import '../../screens/profilemanagement/profile.dart';
 import '../../constants.dart';
 import "package:flutter/material.dart";
-//import 'package:firebase_auth/firebase_auth.dart';
 import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 import 'package:curved_navigation_bar/curved_navigation_bar.dart';
-//import '../walletsmanagement/wallet_selection_screen.dart';
 import 'dashboard_screen.dart';
 import 'hide_navbar.dart';
 
@@ -46,12 +44,8 @@ class _DashboardScreenState extends State<DashboardScreen> {
       ),
       Padding(
         padding: EdgeInsets.all(4.0),
-        child: Icon(Icons.post_add_rounded/*add_rounded*/, size: 27),
+        child: Icon(Icons.post_add_rounded, size: 27),
       ),
-      /*Padding(
-        padding: EdgeInsets.all(4.0),
-        child: Icon(Icons.assessment_outlined, size: 27),
-      ),*/
       Padding(
         padding: EdgeInsets.all(4.0),
         child: Icon(Icons.person_outline_rounded, size: 27),
