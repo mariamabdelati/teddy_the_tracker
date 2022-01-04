@@ -2,8 +2,6 @@ import 'dart:collection';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:fl_chart/fl_chart.dart';
-//import 'package:quiver/iterables.dart';
-//import 'package:async/async.dart';
 import '../../constants.dart';
 import '../../screens/categorymanagement/subcategory_expansion_tile.dart';
 import 'globals.dart';
@@ -99,7 +97,6 @@ Widget _getCategories(context, List<Entries> incomes) {
 Widget _buildBody(context, List<Entries> incomes, List<Categories> categories) {
   Map incomesData = {};
   Map categoriesData = {};
-  //Map categoryNames = {};
   List<Data> data = [];
 
   for (var entry in incomes.toList()) {
@@ -120,19 +117,16 @@ Widget _buildBody(context, List<Entries> incomes, List<Categories> categories) {
     }
     categoriesData[category.catID] = category.label;
   }
-  //print(categoriesData);
 
   double total = 0;
   incomesData.forEach((k, v) {
     total += v;
-    //print(total);
   });
 
   var sortedIncomesKeys = incomesData.keys.toList(growable:false)
     ..sort((k1, k2) => incomesData[k2].compareTo(incomesData[k1]));
   LinkedHashMap sortedIncomesData = LinkedHashMap
       .fromIterable(sortedIncomesKeys, key: (k) => k, value: (k) => incomesData[k]);
-  //print(sortedIncomesData);
 
   Map incomesDataTrimmed = {};
   Map incomesDataNoOther = {};
@@ -140,7 +134,6 @@ Widget _buildBody(context, List<Entries> incomes, List<Categories> categories) {
 
   var list = sortedIncomesData.keys.toList(growable:false);
   var other = list.indexOf(otherID);
-  //print(other);
 
   int count = 0;
   var key;
@@ -158,7 +151,6 @@ Widget _buildBody(context, List<Entries> incomes, List<Categories> categories) {
     });
     incomesDataNoOther[key] = value;
   }
-  //print(incomesDataNoOther);
 
   if(incomesDataNoOther.isNotEmpty) {
     incomesDataNoOther.forEach((k, v) {
@@ -168,7 +160,6 @@ Widget _buildBody(context, List<Entries> incomes, List<Categories> categories) {
         } else{
           incomesDataTrimmed[k] = v;
           index++;
-          //print(index);
         }
       } else {
         if (index == 9){
@@ -191,7 +182,6 @@ Widget _buildBody(context, List<Entries> incomes, List<Categories> categories) {
     });
   }
 
-  //print(incomesDataTrimmed);
 
 
   int i = 0;
@@ -251,7 +241,7 @@ class IncomePieChartState extends State<IncomePieChart> {
   @override
   Widget build(BuildContext context) {
     return Container(
-        child: _getIncomes(context)//_buildBody(context),
+        child: _getIncomes(context)
     );
   }
 }
@@ -271,8 +261,6 @@ List<PieChartSectionData> getSections(int touchedIndex, List<Data> piechartData)
   return piechartData.asMap().map<int, PieChartSectionData>((index, data) {
     final isTouched = index == touchedIndex;
     final opacity = isTouched  ? 1.0 : 0.9;
-    //final widgetSize = isTouched ? 55.0 : 40.0;
-    //final double fontSize = isTouched ? 20 : 16;
     final double radius = isTouched ? 70 : 60;
 
     final value = PieChartSectionData(
@@ -313,7 +301,7 @@ class _PieChartPageState extends State<PieChartPage> {
 
   @override
   Widget build(BuildContext context) {
-    return /*buildPieChart(widget.list);*/Row(
+    return Row(
       children: <Widget>[
         Expanded(
           flex: 1,
@@ -336,14 +324,6 @@ class _PieChartPageState extends State<PieChartPage> {
         pieTouchData: PieTouchData(
           touchCallback: (FlTouchEvent event, PieTouchResponse? response) {
             setState(() {
-              /*if (!event.isInterestedForInteractions || response == null || response.touchedSection == null) {
-                touchedIndex = -1;
-                return;
-              }
-              if (event is FlLongPressEnd || event is FlPanEndEvent) {
-                touchedIndex = -1;
-              }
-              touchedIndex = response.touchedSection!.touchedSectionIndex;*/
               if (event is FlLongPressEnd || event is FlPanEndEvent) {
                 touchedIndex = -1;
               } else {
@@ -360,7 +340,6 @@ class _PieChartPageState extends State<PieChartPage> {
         sections: getSections(touchedIndex, piechartData),
       ),
 
-      //swapAnimationCurve: Curves.linearToEaseOut,
     );
   }
 }
@@ -380,13 +359,10 @@ class IndicatorsWidget extends StatelessWidget {
           return Expanded(
             flex: 1,
             child: Container(
-              //margin: const EdgeInsets.symmetric(vertical: 6),
-              //padding: const EdgeInsets.symmetric(vertical: 6),
                 child: buildIndicator(
                   touched: touchedIndex  == index,
                   color: list[index].color,
                   text: (list[index].name).capitalize,
-                  // isSquare: true,
                 )),
           );
         })
@@ -398,7 +374,6 @@ class IndicatorsWidget extends StatelessWidget {
     required String text,
     required bool touched,
     bool isSquare = false,
-    //double size = touched ? 18: 16,
     Color textColor = const Color(0xFFFFFFFA),
   }) {
     return Row(
