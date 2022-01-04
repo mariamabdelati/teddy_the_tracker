@@ -79,8 +79,6 @@ class _DeleteCategoryState extends State<DeleteCategory> {
           ),
         ],
       ),
-
-      /**/
     );
   }
 
@@ -101,7 +99,6 @@ class _DeleteCategoryState extends State<DeleteCategory> {
             return const CircularProgressIndicator();
           }
           final data = snapshot.requireData;
-          //size = data.size;
           var contents = <Widget>[];
           List.generate(
               data.size,
@@ -149,7 +146,6 @@ class _DeleteCategoryState extends State<DeleteCategory> {
                     const Text(
                       "No categories can be deleted since they are all used by expenses or incomes",
                       textAlign: TextAlign.center,
-                      //style: TextStyle(fontSize: 20),
                     ),
                     const SizedBox(height: 12),
                     Center(
@@ -206,7 +202,6 @@ class _DeleteCategoryState extends State<DeleteCategory> {
                 Text(
                   "Are you sure you want to delete '$x' from your categories?",
                   textAlign: TextAlign.center,
-                  //style: TextStyle(fontSize: 20),
                 ),
                 const SizedBox(height: 12),
                 Row(
@@ -233,7 +228,6 @@ class _DeleteCategoryState extends State<DeleteCategory> {
                     )
                   ],
                 ),
-                //const SizedBox(height: 12),
               ],
             ),
           ),
