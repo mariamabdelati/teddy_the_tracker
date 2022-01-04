@@ -1,8 +1,5 @@
-//import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:vector_math/vector_math_64.dart' as math;
-
-//import '../../constants.dart';
 
 class RadialProgress extends StatefulWidget {
   final String balance;
@@ -114,7 +111,7 @@ class RadialPainter extends CustomPainter {
 
     Paint progressPaint = Paint()
       ..shader = const LinearGradient(
-          colors: [Color(0xFFFE6A68), Color(0xFFF6BAB5), Color(0xFFFF9E9E)])//[const Color(0xFF1D67A6), const Color(0xFF3493E3), const Color(0xFF61ADEB)])
+          colors: [Color(0xFFFE6A68), Color(0xFFF6BAB5), Color(0xFFFF9E9E)])
           .createShader(Rect.fromCircle(center: center, radius: size.width / 2))
       ..strokeCap = StrokeCap.round
       ..style = PaintingStyle.stroke
