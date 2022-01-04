@@ -81,7 +81,6 @@ class _DashboardPageState extends State<DashboardPage> {
                         borderRadius: BorderRadius.circular(40),
                       ),
                       elevation: 40.0,
-                      //backgroundColor: mainColorList[1],
                       context: context,
                       builder: (BuildContext context) {
                         return const SwitchWallet();
@@ -93,12 +92,11 @@ class _DashboardPageState extends State<DashboardPage> {
                     });
                   },
                   child: Row(
-                    //mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: <Widget>[
                       Text(
                         'HI, $user_name'.toUpperCase(),
                         style: const TextStyle(
-                          color: Color(0xFFFFD2CE), //const Color(0xFF1D67A6),
+                          color: Color(0xFFFFD2CE),
                           fontSize: 25.0,
                           fontWeight: FontWeight.w900,
                         ),
@@ -178,7 +176,6 @@ class _DashboardPageState extends State<DashboardPage> {
     return SliverToBoxAdapter(
       child: Container(
         height: 450,
-        //width: 400,
         child: ChartsPageView(),
       ),
     );
@@ -250,11 +247,8 @@ Widget _buildBody(context, List<Entries> expenses, List<Entries> incomes) {
     percentage = 0.0;
   } else{
     balance = (incTotal-expTotal).toStringAsFixed(2);
-    //print(balance);
     percentage = (incTotal-expTotal)/incTotal;
-    //print(percentage);
   }
-
   return Container(
     child: RadialProgress(balance, percentage),
   );
