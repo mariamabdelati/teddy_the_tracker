@@ -1,5 +1,4 @@
 import 'dart:ui';
-
 import 'package:flutter/material.dart';
 import '../../constants.dart';
 
@@ -95,12 +94,10 @@ void buildWalletDialog(BuildContext context, String message) {
                 SelectableText(
                   message,
                   textAlign: TextAlign.center,
-                  //selectionHeightStyle: BoxHeightStyle.max,
                   style: const TextStyle(
                       fontSize: 30, fontWeight: FontWeight.w700),
                   enableInteractiveSelection: true,
                   toolbarOptions: const ToolbarOptions(cut: false, paste: false, copy: true, selectAll: true),
-                  //style: TextStyle(fontSize: 20),
                 ),
                 const SizedBox(height: 12),
                 Center(
