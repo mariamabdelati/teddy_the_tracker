@@ -2,8 +2,6 @@ import 'dart:collection';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:fl_chart/fl_chart.dart';
-//import 'package:quiver/iterables.dart';
-//import 'package:async/async.dart';
 import '../../screens/categorymanagement/subcategory_expansion_tile.dart';
 import '../../constants.dart';
 import 'globals.dart';
@@ -97,7 +95,6 @@ Widget _getCategories(context, List<Entries> expenses) {
 Widget _buildBody(context, List<Entries> expenses, List<Categories> categories) {
   Map expensesData = {};
   Map categoriesData = {};
-  //Map categoryNames = {};
   List<Data> data = [];
 
   for (var entry in expenses.toList()) {
@@ -109,7 +106,6 @@ Widget _buildBody(context, List<Entries> expenses, List<Categories> categories) 
     }
   }
 
-  //print(expensesData);
 
   var otherID = 0;
   for (var category in categories.toList()) {
@@ -118,19 +114,16 @@ Widget _buildBody(context, List<Entries> expenses, List<Categories> categories) 
     }
     categoriesData[category.catID] = category.label;
   }
-  //print(categoriesData);
 
   double total = 0;
   expensesData.forEach((k, v) {
     total += v;
-    //print(total);
   });
 
   var sortedExpensesKeys = expensesData.keys.toList(growable:false)
     ..sort((k1, k2) => expensesData[k2].compareTo(expensesData[k1]));
   LinkedHashMap sortedExpensesData = LinkedHashMap
       .fromIterable(sortedExpensesKeys, key: (k) => k, value: (k) => expensesData[k]);
-  //print(sortedExpensesData);
 
   Map expensesDataTrimmed = {};
   Map expensesDataNoOther = {};
@@ -138,7 +131,6 @@ Widget _buildBody(context, List<Entries> expenses, List<Categories> categories) 
 
   var list = sortedExpensesData.keys.toList(growable:false);
   var other = list.indexOf(otherID);
-  //print(other);
 
   int count = 0;
   var key;
@@ -156,7 +148,6 @@ Widget _buildBody(context, List<Entries> expenses, List<Categories> categories) 
     });
     expensesDataNoOther[key] = value;
   }
-  //print(expensesDataNoOther);
 
   if(expensesDataNoOther.isNotEmpty) {
     expensesDataNoOther.forEach((k, v) {
@@ -166,7 +157,6 @@ Widget _buildBody(context, List<Entries> expenses, List<Categories> categories) 
         } else{
           expensesDataTrimmed[k] = v;
           index++;
-          //print(index);
         }
       } else {
         if (index == 9){
@@ -343,8 +333,6 @@ class _PieChartPageState extends State<PieChartPage> {
         centerSpaceRadius: 35,
         sections: getSections(touchedIndex, piechartData),
       ),
-
-      //swapAnimationCurve: Curves.linearToEaseOut,
     );
   }
 }
@@ -368,7 +356,6 @@ class IndicatorsWidget extends StatelessWidget {
                   touched: touchedIndex  == index,
                   color: list[index].color,
                   text: (list[index].name).capitalize,
-                  // isSquare: true,
                 )),
           );
         })
@@ -380,7 +367,6 @@ class IndicatorsWidget extends StatelessWidget {
     required String text,
     required bool touched,
     bool isSquare = false,
-    //double size = touched ? 18: 16,
     Color textColor = const Color(0xFFFFFFFA),
   }) {
     return Row(
