@@ -42,7 +42,6 @@ class _DeleteSubcategoryState extends State<DeleteSubcategory> {
           Align(
             alignment: Alignment.topCenter,
             child: Container(
-              //margin: const EdgeInsets.symmetric(vertical: 2),
               padding: const EdgeInsets.symmetric(vertical: 10),
               decoration: BoxDecoration(
                   border: Border.all(
@@ -112,8 +111,6 @@ class _DeleteSubcategoryState extends State<DeleteSubcategory> {
           ),
         ],
       ),
-
-      /**/
     );
   }
 
@@ -183,7 +180,6 @@ class _DeleteSubcategoryState extends State<DeleteSubcategory> {
                     const Text(
                       "No subcategories can be deleted since they are all used by expenses or incomes",
                       textAlign: TextAlign.center,
-                      //style: TextStyle(fontSize: 20),
                     ),
                     const SizedBox(height: 12),
                     Center(
@@ -201,10 +197,6 @@ class _DeleteSubcategoryState extends State<DeleteSubcategory> {
                 ),
               ),
             );
-            /*return const Padding(
-              padding: EdgeInsets.all(10.0),
-              child: *//*Text("No categories can be deleted since they are all used by expenses or incomes", style: TextStyle(color: Color(0xFFD32F2F))),*//*
-            );*/
           }  else {
             //used to display the chips in the expansion tile
             return Padding(
@@ -244,7 +236,6 @@ class _DeleteSubcategoryState extends State<DeleteSubcategory> {
                 Text(
                   "Are you sure you want to delete '$x' from your '$categoryName' subcategories?",
                   textAlign: TextAlign.center,
-                  //style: TextStyle(fontSize: 20),
                 ),
                 const SizedBox(height: 12),
                 Row(
@@ -271,7 +262,6 @@ class _DeleteSubcategoryState extends State<DeleteSubcategory> {
                     )
                   ],
                 ),
-                //const SizedBox(height: 12),
               ],
             ),
           ),
