@@ -107,7 +107,6 @@ class AddNewEntryPageState extends State<AddNewEntryPage> {
           shrinkWrap: true,
           padding: const EdgeInsets.all(16),
           children: [
-            //const SizedBox(height: 16),
             Padding(
               padding: const EdgeInsets.only(left: 6.0),
               child: Text(
@@ -133,7 +132,6 @@ class AddNewEntryPageState extends State<AddNewEntryPage> {
             validateType(!validReccuring, "recurrence"),
             const SizedBox(height: 16),
             CategoryExpansionTile(catSelect),
-            //validateType(!catSelect, "category"),
             const SizedBox(height: 32),
             const Divider(
               color: Color(0xFF67B5FD),
@@ -154,7 +152,6 @@ class AddNewEntryPageState extends State<AddNewEntryPage> {
       focusNode: _titleFocus,
       decoration: InputDecoration(
         hintText: "Entry Title",
-        //labelText: "New Title",
         border: OutlineInputBorder(borderRadius: BorderRadius.circular(20)),
         prefixIcon: SizedBox(
             width: 60,
@@ -192,7 +189,6 @@ class AddNewEntryPageState extends State<AddNewEntryPage> {
       focusNode: _amountFocus,
       decoration: InputDecoration(
         hintText: "Amount",
-        //labelText: "Amount",
         border: OutlineInputBorder(borderRadius: BorderRadius.circular(20)),
         prefixIcon: SizedBox(
             width: 60,
@@ -277,7 +273,6 @@ class AddNewEntryPageState extends State<AddNewEntryPage> {
                   ? mainColorList[8]
                   : iconsColor, width: 2),
               primary: (type == "Income") ? mainColorList[8] : iconsColor,
-              //backgroundColor: (recurring == "No") ? Colors.grey[100]: null,
             ),
             onPressed: () {
               setState(() {
@@ -305,7 +300,6 @@ class AddNewEntryPageState extends State<AddNewEntryPage> {
                   ? progressbarColorWhite : iconsColor, width: 2),
               primary: (type == "Expense")
                   ? progressbarColorWhite : iconsColor,
-              //backgroundColor: (recurring == "Yes") ? Colors.grey: null,
             ),
             onPressed: () {
               setState(() {
@@ -341,7 +335,6 @@ class AddNewEntryPageState extends State<AddNewEntryPage> {
 
   buildRecurring() {
     return Container(
-      //margin: const EdgeInsets.symmetric(vertical: 2),
       padding: const EdgeInsets.symmetric(vertical: 6),
       decoration: BoxDecoration(
           border: Border.all(
@@ -374,7 +367,6 @@ class AddNewEntryPageState extends State<AddNewEntryPage> {
               primary: (recurring == "Yes")
                   ? mainColorList[8]
                   : iconsColor,
-              //backgroundColor: (recurring == "Yes") ? Colors.grey: null,
             ),
             onPressed: () {
               setState(() {
@@ -403,7 +395,6 @@ class AddNewEntryPageState extends State<AddNewEntryPage> {
                   ? progressbarColorWhite
                   : iconsColor, width: 2),
               primary: (recurring == "No") ? progressbarColorWhite : iconsColor,
-              //backgroundColor: (recurring == "No") ? Colors.grey[100]: null,
             ),
             onPressed: () {
               setState(() {
@@ -465,15 +456,11 @@ class AddNewEntryPageState extends State<AddNewEntryPage> {
             }
 
             if (isValid && isSelected && catSelect) {
-              //saves the values (triggers onsaved)
               formKey.currentState!.save();
 
-              //add to db
               createNewEntry(newTitle.toLowerCase(), amount, _dateTime, isChecked, isExpense);
 
 
-
-              //shows success dialog with details upon adding
               final message =
                   "'$newTitle' with amount '$amount' has been successfully added to your entries";
 
@@ -507,7 +494,6 @@ class AddNewEntryPageState extends State<AddNewEntryPage> {
               Text(
                 message,
                 textAlign: TextAlign.center,
-                //style: TextStyle(fontSize: 20),
               ),
               const SizedBox(height: 12),
               Center(
@@ -583,7 +569,6 @@ void createNewEntry(String label, String amount, DateTime date, bool recurring, 
     });
   }
 
-  //var existingCatsList = globals.getWallet()["categoriesIDs"];
   QuerySnapshot categoriesRef = await FirebaseFirestore.instance
       .collection("/categories/JBSahpmjY2TtK0gRdT4s/category")
       .where("categoryID", isEqualTo: selectedCategoryID).get();
