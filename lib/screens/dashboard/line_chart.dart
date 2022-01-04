@@ -4,14 +4,8 @@ import 'dart:math';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-//import '../../data/categories.dart';
-//import '../../data/expenses.dart';
-//import 'package:pie_chart/pie_chart.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'globals.dart';
-//import 'package:teddy_categories/constants.dart';
-
-//add another class named categories
 
 class Entries {
   Entries(this.date, this.amount, this.label);
@@ -48,7 +42,6 @@ Widget _getExpenses(context) {
       stream: FirebaseFirestore.instance
           .collection("/entries/7sQnsmHSjX5K8Sgz4PoD/expense")
           .where("walletID", isEqualTo: globals.getWallet()["walletID"])
-      //.orderBy("date", descending: true)/
           .snapshots(),
       builder: (context, snapshot) {
         if (snapshot.hasError) {
@@ -73,7 +66,6 @@ Widget _getIncomes(context, List<Entries> expenses) {
       stream: FirebaseFirestore.instance
           .collection("/entries/7sQnsmHSjX5K8Sgz4PoD/income")
           .where("walletID", isEqualTo: globals.getWallet()["walletID"])
-      //.orderBy("date", descending: true)/
           .snapshots(),
       builder: (context, snapshot) {
         if (snapshot.hasError) {
@@ -124,11 +116,6 @@ Widget _buildBody(context, List<Entries> expenses, List<Entries> incomes) {
   List<FlSpot> expensesList = [];
   List<FlSpot> incomesList = [];
   List<String> date = [];
-  // for (var i; i < data.keys.length; i++) {
-  //   data_list.add(FlSpot(i.toDouble(), data[data.keys.elementAt(i)]));
-  // }
-  //int i = 0;
-  //int index = 0;
   expensesData.forEach((k, v) {
     if (!date.contains(k)) {
       date.add(k);
@@ -193,9 +180,6 @@ Widget _buildBody(context, List<Entries> expenses, List<Entries> incomes) {
 
 // Widget responsible for using List <FlSpots> passed to it and construct the graph
 Widget _buildChart(context, List<FlSpot> expensesList, List<FlSpot> incomesList, List<dynamic> dates) {
-  //print("expenses: $expensesList");
-  //print("incomes: $incomesList");
-  //print("dates: $dates");
   int maxY = 100;
   for (var spot in expensesList) {
     maxY = max(maxY, spot.y.ceil());
@@ -209,22 +193,12 @@ Widget _buildChart(context, List<FlSpot> expensesList, List<FlSpot> incomesList,
     isCurved: true,
     colors: [Colors.orange, Colors.red],
     barWidth: 5,
-    /*belowBarData: BarAreaData(
-          show: true,
-          colors: [Colors.orange, Colors.red]
-              .map((color) => color.withOpacity(0.6))
-              .toList())*/
   );
   LineChartBarData incomesLine = LineChartBarData(
     spots: incomesList,
     isCurved: true,
     colors: [Colors.green, Colors.greenAccent],
     barWidth: 5,
-    /*belowBarData: BarAreaData(
-          show: true,
-          colors: [Colors.blue, Colors.green]
-              .map((color) => color.withOpacity(0.6))
-              .toList())*/
   );
 
   return LineChart(LineChartData(
@@ -251,12 +225,6 @@ Widget _buildChart(context, List<FlSpot> expensesList, List<FlSpot> incomesList,
       ),
       lineBarsData: <LineChartBarData>[expensesLine, incomesLine]));
 
-//   ListView.builder(
-//       padding: const EdgeInsets.all(8),
-//       itemCount: entries.length,
-//       itemBuilder: (BuildContext context, int index) {
-//         return Text(entries[index].toString());
-//       });
 }
 
 class LineTitles {
@@ -324,7 +292,6 @@ class TtestDashBoardState extends State<TestDashboard> {
                       fontSize: 16,
                       color: Colors.orangeAccent.shade400,
                       fontWeight: FontWeight.bold),
-                  //textAlign: TextAlign.center,
                 ),
                 const Text(
                   "  vs  ",
@@ -332,7 +299,6 @@ class TtestDashBoardState extends State<TestDashboard> {
                       fontSize: 16,
                       color: Colors.white,
                       fontWeight: FontWeight.bold),
-                  //textAlign: TextAlign.center,
                 ),
                 const Text(
                   "Incomes",
@@ -340,7 +306,6 @@ class TtestDashBoardState extends State<TestDashboard> {
                       fontSize: 16,
                       color: Color(0xFF5CD561),
                       fontWeight: FontWeight.bold),
-                  //textAlign: TextAlign.center,
                 ),
               ],
             ),
