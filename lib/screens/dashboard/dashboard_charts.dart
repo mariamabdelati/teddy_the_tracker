@@ -14,7 +14,6 @@ class ChartsPageView extends StatefulWidget {
 }
 
 class _ChartsPageViewState extends State<ChartsPageView> {
-  //int touchedIndex = -1;
   String bal = '0';
   int currentPage = 0;
   PageController controller = PageController();
@@ -60,8 +59,6 @@ class _ChartsPageViewState extends State<ChartsPageView> {
                       dotHeight: 13,
                       dotWidth: 13,
                       type: WormType.thin,
-                      //jumpScale: .7,
-                      //verticalOffset: 15,
                     ),
                   ),
                 ],
@@ -89,7 +86,6 @@ class _ExpensesPiechartPanelState extends State<ExpensesPiechartPanel> {
     return Align(
       alignment: Alignment.topCenter,
       child: Container(
-        //width: 400,
         height: 400,
         margin: const EdgeInsets.all(6),
         decoration: BoxDecoration(
@@ -130,7 +126,6 @@ class _IncomesPiechartPanelState extends State<IncomesPiechartPanel> {
     return Align(
       alignment: Alignment.topCenter,
       child: Container(
-        //width: 400,
         height: 400,
         margin: const EdgeInsets.all(6),
         decoration: BoxDecoration(
@@ -171,7 +166,6 @@ class _LinechartState extends State<Linechart> {
     return Align(
       alignment: Alignment.topCenter,
       child: Container(
-        //width: 400,
         height: 400,
         margin: const EdgeInsets.all(6),
         decoration: BoxDecoration(
