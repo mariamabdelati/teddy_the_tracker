@@ -428,6 +428,7 @@ class _RegistrationPageState extends State<RegistrationPage> {
         return null;
       },
       keyboardType: TextInputType.text,
+      maxLength: 10,
       onSaved: (value) { _userUsername = value as String;},
     );
   }

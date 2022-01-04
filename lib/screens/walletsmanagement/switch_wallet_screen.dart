@@ -70,6 +70,13 @@ class _SwitchWalletState extends State<SwitchWallet> {
             return const CircularProgressIndicator();
           } else {
             List wallets = snapshot.data!.docs.toList();
+            int used_index = 0;
+            for (int i = 0; i < wallets.length; i++) {
+              if (wallets[i]["walletID"] == globals.getWallet()["walletID"]) {
+                used_index = i;
+              }
+            }
+            wallets.removeAt(used_index);
             return GridView.builder(
               physics: const NeverScrollableScrollPhysics(),
               shrinkWrap: true,

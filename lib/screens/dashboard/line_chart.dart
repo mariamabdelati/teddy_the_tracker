@@ -48,7 +48,7 @@ Widget _getExpenses(context) {
       stream: FirebaseFirestore.instance
           .collection("/entries/7sQnsmHSjX5K8Sgz4PoD/expense")
           .where("walletID", isEqualTo: globals.getWallet()["walletID"])
-      /*.orderBy("date", descending: true)*/
+      //.orderBy("date", descending: true)/
           .snapshots(),
       builder: (context, snapshot) {
         if (snapshot.hasError) {
@@ -73,7 +73,7 @@ Widget _getIncomes(context, List<Entries> expenses) {
       stream: FirebaseFirestore.instance
           .collection("/entries/7sQnsmHSjX5K8Sgz4PoD/income")
           .where("walletID", isEqualTo: globals.getWallet()["walletID"])
-      /*.orderBy("date", descending: true)*/
+      //.orderBy("date", descending: true)/
           .snapshots(),
       builder: (context, snapshot) {
         if (snapshot.hasError) {
@@ -99,10 +99,10 @@ Widget _buildBody(context, List<Entries> expenses, List<Entries> incomes) {
   Map expensesData = {};
   Map incomesData = {};
   if (expenses.isEmpty) {
-    expenses.add(Entries("10-12-2001", "0", ""));
+    expenses.add(Entries(" ", "0", ""));
   }
   if (incomes.isEmpty) {
-    incomes.add(Entries("10-12-2001", "0", ""));
+    incomes.add(Entries(" ", "0", ""));
   }
 
   for (var entry in expenses.toList()) {
@@ -192,8 +192,10 @@ Widget _buildBody(context, List<Entries> expenses, List<Entries> incomes) {
 }
 
 // Widget responsible for using List <FlSpots> passed to it and construct the graph
-Widget _buildChart(context, List<FlSpot> expensesList,
-    List<FlSpot> incomesList, List<dynamic> dates) {
+Widget _buildChart(context, List<FlSpot> expensesList, List<FlSpot> incomesList, List<dynamic> dates) {
+  //print("expenses: $expensesList");
+  //print("incomes: $incomesList");
+  //print("dates: $dates");
   int maxY = 100;
   for (var spot in expensesList) {
     maxY = max(maxY, spot.y.ceil());
@@ -226,9 +228,11 @@ Widget _buildChart(context, List<FlSpot> expensesList,
   );
 
   return LineChart(LineChartData(
-      lineTouchData: LineTouchData(touchTooltipData: LineTouchTooltipData(tooltipBgColor: Colors.white,tooltipRoundedRadius: 20)),
+      lineTouchData: LineTouchData(
+          touchTooltipData: LineTouchTooltipData(
+              tooltipBgColor: Colors.white, tooltipRoundedRadius: 20)),
       minX: 0,
-      maxX: dates.length - 1,
+      maxX: dates.length ==1 ? dates.length.toDouble() :(dates.length - 1),
       minY: 0,
       maxY: maxY.toDouble(),
       titlesData: lineTitle.getTitle(),
@@ -260,13 +264,25 @@ class LineTitles {
   int maxY;
   LineTitles(this.dates, this.maxY);
   FlTitlesData getTitle() {
+    List<int> visited_titles = [];
     return FlTitlesData(
         show: true,
         bottomTitles: SideTitles(
           showTitles: true,
           getTextStyles: (context, value) => const TextStyle(
               color: Colors.white, fontWeight: FontWeight.bold, fontSize: 12),
-          getTitles: (val) => dates[val.toInt()].replaceAll("-", "\n"),
+          getTitles: (val) {
+            var diff = val - val.toInt().toDouble();
+            if (diff <=0.099){
+              print("the label for point $val is ${dates[val.toInt()]}");
+              return dates[val.toInt()].replaceAll("-", "\n");}
+            else if (diff >=0.9){
+              print("the label for point $val is ${dates[val.ceil()]}");
+              return dates[val.ceil()].replaceAll("-", "\n");}
+            else {
+              return "";
+            }
+          },
           margin: 8,
           reservedSize: 60,
           rotateAngle: 30,
@@ -305,19 +321,25 @@ class TtestDashBoardState extends State<TestDashboard> {
                 Text(
                   "Expenses",
                   style: TextStyle(
-                      fontSize: 16, color: Colors.orangeAccent.shade400, fontWeight: FontWeight.bold),
+                      fontSize: 16,
+                      color: Colors.orangeAccent.shade400,
+                      fontWeight: FontWeight.bold),
                   //textAlign: TextAlign.center,
                 ),
                 const Text(
                   "  vs  ",
                   style: TextStyle(
-                      fontSize: 16, color: Colors.white, fontWeight: FontWeight.bold),
+                      fontSize: 16,
+                      color: Colors.white,
+                      fontWeight: FontWeight.bold),
                   //textAlign: TextAlign.center,
                 ),
                 const Text(
                   "Incomes",
                   style: TextStyle(
-                      fontSize: 16, color: Color(0xFF5CD561), fontWeight: FontWeight.bold),
+                      fontSize: 16,
+                      color: Color(0xFF5CD561),
+                      fontWeight: FontWeight.bold),
                   //textAlign: TextAlign.center,
                 ),
               ],

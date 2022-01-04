@@ -174,7 +174,7 @@ class AddWalletPopupCardState extends State<AddWalletPopupCard> {
                             createNewWallet(_text.text.trim().toLowerCase());
                             Navigator.pop(context);
                             buildSuccessDialog(context,
-                                "Wallet ${_text.text} was created successfully");
+                                "Wallet '${_text.text}' was created successfully");
                           }
                         },
                         child: const Text('Add'),
