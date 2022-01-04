@@ -187,7 +187,7 @@ class _SubcategoryExpansionTileState extends State<SubcategoryExpansionTile> {
 
           TextButton.icon(
             label: const Text(
-                "more", style: TextStyle(color: Color(0xFF67B5FD))),
+                "options", style: TextStyle(color: Color(0xFF67B5FD))),
             icon: Icon(Icons.more_horiz, color: mainColorList[3]),
             onPressed: () {
               showModalBottomSheet(

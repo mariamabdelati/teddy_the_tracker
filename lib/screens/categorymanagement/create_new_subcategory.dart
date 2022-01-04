@@ -50,6 +50,8 @@ class _CreateNewSubcategoryState extends State<CreateNewSubcategory> {
 
   final _subcategorytext = TextEditingController();
   final _budgettext = TextEditingController();
+  final _subcategoryfocus = FocusNode();
+  final _budgetfocus = FocusNode();
 
   //checks if a category exists or not
   var documents;
@@ -70,7 +72,6 @@ class _CreateNewSubcategoryState extends State<CreateNewSubcategory> {
     documents = docs;
   }
 
-  //used to determine if a subcategory exists or not
   bool subcategoryCheck(String newCat) {
     for (var document in documents) {
       if (document["label"] == newCat) return false;
@@ -91,7 +92,7 @@ class _CreateNewSubcategoryState extends State<CreateNewSubcategory> {
           ),
         ),
 
-        //form for new category
+        //form for new subcategory
         body: Form(
           key: formKey,
           //autovalidateMode: AutovalidateMode.onUserInteraction,
@@ -163,7 +164,7 @@ class _CreateNewSubcategoryState extends State<CreateNewSubcategory> {
   Widget buildSubcategory() {
     return TextFormField(
       controller: _subcategorytext,
-      focusNode: FocusNode(),
+      focusNode: _subcategoryfocus,
       decoration: InputDecoration(
         prefixIcon: SizedBox(width: 60,child: Icon(Icons.account_tree_rounded, size: 20, color: iconsColor)),
         labelText: "New Subcategory",
@@ -195,7 +196,7 @@ class _CreateNewSubcategoryState extends State<CreateNewSubcategory> {
   Widget buildBudget() {
     return TextFormField(
       controller: _budgettext,
-      focusNode: FocusNode(),
+      focusNode: _budgetfocus,
       decoration: InputDecoration(
         prefixIcon: SizedBox(width: 60,child: Icon(Icons.attach_money_rounded, size: 20, color: iconsColor)),
         labelText: "Budget",
@@ -250,7 +251,6 @@ class _CreateNewSubcategoryState extends State<CreateNewSubcategory> {
               //message showing verification
               final message =
                   "'$newSubcategory' has been successfully added to '$categoryName' subcategories";
-
               showDialog(context: context, builder: (BuildContext context)
               {
                 return Dialog(

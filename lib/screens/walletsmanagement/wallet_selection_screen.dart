@@ -34,8 +34,13 @@ class _SelectWalletState extends State<SelectWallet> {
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: const [
-                    AddWalletButton(0),
-                    AddWalletButton(1)
+                    Expanded(flex: 1,child: Padding(
+                      padding: EdgeInsets.only(left: 8.0),
+                      child: AddWalletButton(0),
+                    )),
+                    Expanded(flex:1,child: Padding(
+                        padding: EdgeInsets.only(right: 8),
+                        child: AddWalletButton(1)))
                   ],
                 ),
               ),
@@ -60,10 +65,6 @@ class _SelectWalletState extends State<SelectWallet> {
             return const CircularProgressIndicator();
           } else {
             List wallets = snapshot.data!.docs.toList();
-            /*List<Wallets> wallets = snapshot.data!.docs
-              .map((docSnapshot) =>
-              Wallets.fromMap(docSnapshot.data() as Map<String, dynamic>))
-              .toList();*/
             return GridView.builder(
               physics: const NeverScrollableScrollPhysics(),
               shrinkWrap: true,

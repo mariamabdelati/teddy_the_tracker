@@ -10,7 +10,7 @@ import '../../screens/dashboard/globals.dart';
 
 //global variable used to save category id to wallet
 var selectedCategoryID = 0;
-//global string is used to identify what category has been selected
+//this string is used to identify what category has been selected
 var selectedCategory = "";
 
 class CategoryExpansionTile extends StatefulWidget {
@@ -23,8 +23,7 @@ class CategoryExpansionTile extends StatefulWidget {
 }
 
 class _CategoryExpansionTileState extends State<CategoryExpansionTile> {
-
-  //this boolean is used for displaying the subcategories if a category is selected
+  //this boolean is used for displaying the sucategories if a category is selected
   var isSelected = false;
 
   var selectedCategorySubs = [];
@@ -132,7 +131,6 @@ class _CategoryExpansionTileState extends State<CategoryExpansionTile> {
               child: Icon(Icons.category_rounded, color: mainColorList[1]),
             )) : SizedBox(width: 32, child: Icon(Icons.category_rounded, color: iconsColor)),
         collapsedTextColor: iconsColor,
-
         title: Text(
           "Categories",
           style: TextStyle(

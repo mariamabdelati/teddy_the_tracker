@@ -1,6 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import '../../constants.dart';
+import '../walletsmanagement/wallet_dialog.dart';
 import '../walletsmanagement/switch_wallet_screen.dart';
 import 'balance_progress_bar.dart';
 import 'dashboard_charts.dart';
@@ -8,7 +10,8 @@ import 'globals.dart';
 import 'line_chart.dart';
 
 class DashboardPage extends StatefulWidget {
-  const DashboardPage({Key? key}) : super(key: key);
+  final ScrollController controller;
+  const DashboardPage({Key? key, required this.controller}) : super(key: key);
 
   @override
   _DashboardPageState createState() => _DashboardPageState();
@@ -29,6 +32,7 @@ class _DashboardPageState extends State<DashboardPage> {
         elevation: 0,
       ),
       body: CustomScrollView(
+        controller: widget.controller,
         physics: const ClampingScrollPhysics(),
         slivers: <Widget>[
           _buildHeader(screenHeight),
@@ -62,50 +66,81 @@ class _DashboardPageState extends State<DashboardPage> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
-            GestureDetector(
-              onTap: () {
-                setState(() {
-                  dashboard = false;
-                });
-                showModalBottomSheet(
-                  barrierColor: Colors.black.withAlpha(1),
-                  isScrollControlled: true,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(40),
-                  ),
-                  elevation: 40.0,
-                  context: context,
-                  builder: (BuildContext context) {
-                    return const SwitchWallet();
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                GestureDetector(
+                  onTap: () {
+                    setState(() {
+                      dashboard = false;
+                    });
+                    showModalBottomSheet(
+                      barrierColor: Colors.black.withAlpha(1),
+                      isScrollControlled: true,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(40),
+                      ),
+                      elevation: 40.0,
+                      //backgroundColor: mainColorList[1],
+                      context: context,
+                      builder: (BuildContext context) {
+                        return const SwitchWallet();
+                      },
+                    ).whenComplete(() {
+                      setState(() {
+                        dashboard = true;
+                      });
+                    });
                   },
-                ).whenComplete(() {
-                  setState(() {
-                    dashboard = true;
-                  });
-                });
-              },
-              child: Row(
-                //mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: <Widget>[
-                  Text(
-                    'HI, $user_name'.toUpperCase(),
-                    style: const TextStyle(
-                      color: Color(0xFFFFD2CE), //const Color(0xFF1D67A6),
-                      fontSize: 25.0,
-                      fontWeight: FontWeight.w900,
+                  child: Row(
+                    //mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: <Widget>[
+                      Text(
+                        'HI, $user_name'.toUpperCase(),
+                        style: const TextStyle(
+                          color: Color(0xFFFFD2CE), //const Color(0xFF1D67A6),
+                          fontSize: 25.0,
+                          fontWeight: FontWeight.w900,
+                        ),
+                      ),
+                      const SizedBox(width: 10,),
+                      const Padding(
+                        padding: EdgeInsets.only(bottom: 4.0),
+                        child: Icon(
+                          Icons.autorenew_rounded,
+                          size: 23,
+                          color: Color(0xFFFFD2CE),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                const SizedBox(
+                  width: 50,
+                ),
+                GestureDetector(
+                  onTap: () {
+                    buildWalletDialog(context, globals.getWallet()["joinCode"]);
+                  },
+                  child: Container(
+                    padding: const EdgeInsets.symmetric(horizontal: 12.0),
+                    height: 40.0,
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(30.0),
+                    ),
+                    child: Row(
+                      children: <Widget>[
+                        Icon(
+                          Icons.group_add_rounded,
+                          size: 23,
+                          color: iconsColor,
+                        ),
+                      ],
                     ),
                   ),
-                  const SizedBox(width: 10,),
-                  const Padding(
-                    padding: EdgeInsets.only(bottom: 4.0),
-                    child: Icon(
-                      Icons.autorenew_rounded,
-                      size: 23,
-                      color: Color(0xFFFFD2CE),
-                    ),
-                  ),
-                ],
-              ),
+                ),
+              ],
             ),
             Text(
               'VIEWING $wallet_name'.toUpperCase(),
@@ -130,8 +165,7 @@ class _DashboardPageState extends State<DashboardPage> {
                     child: Padding(
                       padding: EdgeInsets.all(12.0),
                       child: _getExpenses(context),
-                    ),
-                ),
+                    )),
               ],
             ),
           ],
@@ -141,10 +175,10 @@ class _DashboardPageState extends State<DashboardPage> {
   }
 
   SliverToBoxAdapter _buildChartsSection(double screenHeight) {
-    return const SliverToBoxAdapter(
-      child: SizedBox(
+    return SliverToBoxAdapter(
+      child: Container(
         height: 450,
-        width: 400,
+        //width: 400,
         child: ChartsPageView(),
       ),
     );

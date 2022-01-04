@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import '../../components/hero_dialog_route.dart';
+import '../../components/success_dialog.dart';
 import '../../constants.dart';
 import 'dart:math';
 
@@ -25,9 +26,9 @@ class AddWalletButton extends StatelessWidget {
         },
         child: Hero(
           tag: idx == 0 ? _heroAddWallet : _heroJoinWallet,
-          child: SizedBox(
+          child: Container(
             height: 120,
-            width: 180,
+            //width: 180,
             child: Card(
               elevation: 4,
               color: const Color(0xFF0C43D5),
@@ -42,7 +43,7 @@ class AddWalletButton extends StatelessWidget {
                       child: Padding(
                         padding: const EdgeInsets.all(15.0),
                         child: Text(
-                          idx == 0 ? "Create New Wallet" : "Join Wallet",
+                          idx == 0 ? "Create New\n Wallet" : "Join Wallet",
                           textAlign: TextAlign.center,
                           style: TextStyle(color: mainColorList[4], fontSize: 17,),
                         ),
@@ -171,6 +172,9 @@ class AddWalletPopupCardState extends State<AddWalletPopupCard> {
                           });
                           if (!_validate) {
                             createNewWallet(_text.text.trim().toLowerCase());
+                            Navigator.pop(context);
+                            buildSuccessDialog(context,
+                                "Wallet ${_text.text} was created successfully");
                           }
                         },
                         child: const Text('Add'),
@@ -215,6 +219,7 @@ void createNewWallet(String name) async {
     "walletID": maxId + 1,
     "categoriesIDs": [],
     "usersIDs": [FirebaseAuth.instance.currentUser!.uid],
+    "joinCode": createJoinCode(),
   });
   // globals.setWallet(createdWallet as Map);
 
@@ -295,11 +300,12 @@ class JoinWalletPopupCardState extends State<JoinWalletPopupCard> {
                       decoration: InputDecoration(
                         labelText: "Wallet Code",
                         errorText: _validate ? errorText : null,
-                        border: OutlineInputBorder(borderRadius: BorderRadius.circular(20)),
+                        border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(20)),
                         prefixIcon: SizedBox(
                             width: 60,
-                            child:
-                            Icon(Icons.account_balance_wallet_outlined, size: 25, color: iconsColor)),
+                            child: Icon(Icons.account_balance_wallet_outlined,
+                                size: 25, color: iconsColor)),
                         suffixIcon: SizedBox(
                           width: 60,
                           child: IconButton(
@@ -320,18 +326,57 @@ class JoinWalletPopupCardState extends State<JoinWalletPopupCard> {
                       thickness: 0.5,
                     ),
                     TextButton(
-                        onPressed: () {
+                        onPressed: () async {
                           setState(() {
                             if (_text.text.isEmpty) {
                               _validate = true;
-                              errorText =  "Wallet can't be empty";
+                              errorText = "Wallet code can not be empty";
                             } else {
                               _validate = false;
                             }
                             //get results from the class and search for duplicate names
                           });
                           if (!_validate) {
-                            createNewWallet(_text.text.trim().toLowerCase());
+                            // Joining wallet logic
+                            String join_code = _text.text;
+                            QuerySnapshot joinableWallet =
+                            await FirebaseFirestore.instance
+                                .collection(
+                                "wallets/9Ho4oSCoaTrpsVn1U3H1/wallet")
+                                .where("joinCode", isEqualTo: join_code)
+                                .limit(1)
+                                .get();
+                            if (joinableWallet.size == 0) {
+                              setState(() {
+                                _validate = true;
+                                errorText =
+                                "There is no wallet with this join code";
+                              });
+                            } else if (joinableWallet.size == 1) {
+                              DocumentReference joinableWalletRef =
+                                  joinableWallet.docs[0].reference;
+                              DocumentSnapshot joinableWalletSnp =
+                              await joinableWalletRef.get();
+                              List newUsersList = joinableWalletSnp["usersIDs"];
+                              String user_id =
+                                  FirebaseAuth.instance.currentUser!.uid;
+                              if (newUsersList.contains(user_id)) {
+                                setState(() {
+                                  _validate = true;
+                                  errorText = "You already are in this wallet";
+                                });
+                              } else {
+                                // user can join it
+                                newUsersList.add(
+                                    FirebaseAuth.instance.currentUser!.uid);
+                                joinableWalletRef.update(
+                                    {"usersIDs": newUsersList}).then((value) {
+                                  Navigator.pop(context);
+                                  buildSuccessDialog(context,
+                                      "You have successfully joined '${joinableWalletSnp["name"]}'");
+                                });
+                              }
+                            }
                           }
                         },
                         child: const Text('Join'),
@@ -345,4 +390,52 @@ class JoinWalletPopupCardState extends State<JoinWalletPopupCard> {
       ),
     );
   }
+}
+
+String createJoinCode() {
+  var r = Random();
+  String joinCode = String.fromCharCodes(
+      List.generate(8, (index) => r.nextInt(122 - 65) + 65));
+  return joinCode;
+}
+
+void buildSuccessDialog(BuildContext context, String s) {
+  showDialog(context: context, builder: (BuildContext context)
+  {
+    return Dialog(
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(20),
+      ),
+      child: Padding(
+        padding: const EdgeInsets.all(20.0),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            AnimatedCheck(),
+            SizedBox(height: 12),
+            const Text(
+              'Success!',
+              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+            ),
+            const SizedBox(height: 12),
+            Text(
+              s,
+              textAlign: TextAlign.center,
+              //style: TextStyle(fontSize: 20),
+            ),
+            const SizedBox(height: 12),
+            Center(
+              child: ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(50)),
+                ),
+                child: Text('Ok'),
+                onPressed: () => Navigator.of(context).pop(),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  });
 }

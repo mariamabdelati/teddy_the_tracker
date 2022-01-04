@@ -1,13 +1,19 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import '../../screens/categorymanagement/subcategory_expansion_tile.dart';
 import '../../screens/dashboard/globals.dart';
+import '../dashboard/expense_pie_chart.dart';
 
 class Entries {
   Entries(this.date, this.amount, this.label);
   String? date;
   String? amount;
   String? label;
+  int? expenseID;
+  int? incomeID;
+  int? categoryID;
+  int? subcategoryID;
   DocumentReference? reference;
 
   int year = 2021;
@@ -25,8 +31,72 @@ class Entries {
     date = map["date"];
     amount = map["amount"];
     label = map["label"];
+    expenseID = map["expenseID"];
+    incomeID = map["incomeID"];
+    categoryID = map["categoryID"];
+    subcategoryID = map["subcategoryID"];
     cleanDate();
   }
+}
+void deleteExpense(int id) async {
+  QuerySnapshot categoriesRef = await FirebaseFirestore.instance
+      .collection("/categories/JBSahpmjY2TtK0gRdT4s/category")
+      .where("expensesIDs", arrayContains: id)
+      .get();
+
+  // deletes it from all the categories
+  for (int i = 0; i < categoriesRef.docs.length; i++) {
+    var catDoc = categoriesRef.docs[i];
+    var existingExpenses = catDoc["expenseIDs"];
+    existingExpenses.remove(id);
+
+    FirebaseFirestore.instance
+        .collection("/categories/JBSahpmjY2TtK0gRdT4s/category")
+        .doc(catDoc.id)
+        .set({"expenseIDs": existingExpenses}, SetOptions(merge: true));
+  }
+  // deletes the actual document
+  QuerySnapshot expenseRef = await FirebaseFirestore.instance
+      .collection("/entries/7sQnsmHSjX5K8Sgz4PoD/expense")
+      .where("expenseID", isEqualTo: id)
+      .get();
+
+  var exp = expenseRef.docs[0];
+
+  FirebaseFirestore.instance
+      .collection("/entries/7sQnsmHSjX5K8Sgz4PoD/expense")
+      .doc(exp.id)
+      .delete();
+}
+
+void deleteIncome(int id) async {
+  QuerySnapshot incomeRef = await FirebaseFirestore.instance
+      .collection("/entries/7sQnsmHSjX5K8Sgz4PoD/income")
+      .where("incomeID", isEqualTo: id)
+      .get();
+
+  QuerySnapshot categoriesRef = await FirebaseFirestore.instance
+      .collection("/categories/JBSahpmjY2TtK0gRdT4s/category")
+      .where("incomeIDs", arrayContains: id)
+      .get();
+
+  // deletes it from all the categories
+  for (int i = 0; i < categoriesRef.docs.length; i++) {
+    var catDoc = categoriesRef.docs[i];
+    var existingIncomes = catDoc["incomeIDs"];
+    existingIncomes.remove(id);
+
+    FirebaseFirestore.instance
+        .collection("/categories/JBSahpmjY2TtK0gRdT4s/category")
+        .doc(catDoc.id)
+        .set({"incomeIDs": existingIncomes}, SetOptions(merge: true));
+  }
+  var inc = incomeRef.docs[0];
+
+  FirebaseFirestore.instance
+      .collection("/entries/7sQnsmHSjX5K8Sgz4PoD/income")
+      .doc(inc.id)
+      .delete();
 }
 
 // widget responsible for fetching the data from firebase and convert them to List <Entries>
@@ -36,7 +106,6 @@ Widget _getExpenses(context) {
           .collection("/entries/7sQnsmHSjX5K8Sgz4PoD/expense")
           .where("walletID", isEqualTo: (globals.getWallet()["walletID"]))
           .snapshots(),
-
       builder: (context, snapshot) {
         if (snapshot.hasError) {
           return const Text("Something went wrong",
@@ -61,7 +130,6 @@ Widget _getIncomes(context, List<Entries> expenses) {
           .collection("/entries/7sQnsmHSjX5K8Sgz4PoD/income")
           .where("walletID", isEqualTo: (globals.getWallet()["walletID"]))
           .snapshots(),
-
       builder: (context, snapshot) {
         if (snapshot.hasError) {
           print("error retreiving income");
@@ -75,17 +143,41 @@ Widget _getIncomes(context, List<Entries> expenses) {
               Entries.fromMap(docSnapshot.data() as Map<String, dynamic>))
               .toList();
           return Container(
-            child: _buildBody(context, expenses, incomes),
+              child: _getCategories(context, expenses, incomes)
+          );
+        }
+      });
+}
+
+Widget _getCategories(context, List<Entries> expenses, List<Entries> incomes) {
+  return StreamBuilder<QuerySnapshot>(
+      stream: FirebaseFirestore.instance
+          .collection("/categories/JBSahpmjY2TtK0gRdT4s/category")
+          .where("walletID", isEqualTo: (globals.getWallet()["walletID"])).snapshots(),
+      builder: (context, snapshot) {
+        if (snapshot.hasError) {
+          print("error retreiving categories");
+          return const Text("Something went wrong",
+              style: TextStyle(color: Colors.white));
+        } else if (snapshot.connectionState == ConnectionState.waiting) {
+          return const CircularProgressIndicator();
+        } else {
+          List<Categories> categories = snapshot.data!.docs
+              .map((docSnapshot) =>
+              Categories.fromMap(docSnapshot.data() as Map<String, dynamic>))
+              .toList();
+          return Container(
+            child: _buildBody(context, expenses, incomes, categories),
           );
         }
       });
 }
 
 // Widget responsible for converting List <Entries> to List <FlSpot>
-Widget _buildBody(context, List<Entries> expenses, List<Entries> incomes) {
+Widget _buildBody(context, List<Entries> expenses, List<Entries> incomes, List<Categories> categories) {
   Map expensesData = {};
   Map incomesData = {};
-  //List<String> dates = [];
+  Map categoriesData = {};
 
   for (var entry in expenses.reversed.toList()) {
     if (expensesData.containsKey(entry.date)) {
@@ -102,6 +194,10 @@ Widget _buildBody(context, List<Entries> expenses, List<Entries> incomes) {
     } else {
       incomesData[entry.date] = double.parse(entry.amount as String);
     }
+  }
+
+  for (var category in categories.toList()) {
+    categoriesData[category.catID] = category.label;
   }
 
   List<String> date = [];
@@ -124,6 +220,11 @@ Widget _buildBody(context, List<Entries> expenses, List<Entries> incomes) {
     expansionChildren = [];
     for(Entries exp in expenses){
       if (d == exp.date){
+        String subcategoryName = "";
+        String categoryName = categoriesData[exp.categoryID];
+        if (exp.subcategoryID != -1){
+          subcategoryName = categoriesData[exp.subcategoryID];
+        }
         expansionChildren.add(Card(
           margin: const EdgeInsets.symmetric(vertical: 5, horizontal: 13),
           //margin: EdgeInsets.symmetric(horizontal: 10),
@@ -157,23 +258,33 @@ Widget _buildBody(context, List<Entries> expenses, List<Entries> incomes) {
               ),
               SizedBox(
                 width: 140,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: <Widget>[
-                    Text(
-                      exp.label.toString(),
-                      style: const TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.bold,
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 4.0),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: <Widget>[
+                      Text(
+                        exp.label.toString().capitalize,
+                        style: const TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold,
+                        ),
                       ),
-                    ),
-                    Text(
-                      exp.date.toString(),
-                      style: const TextStyle(
-                        color: Colors.black45,
+                      Text(
+                        categoryName.capitalize,//exp.date.toString(),
+                        style: const TextStyle(
+                          color: Colors.black45,
+                        ),
                       ),
-                    ),
-                  ],
+                      if (subcategoryName.isNotEmpty)
+                        Text(
+                          subcategoryName.capitalize,//exp.date.toString(),
+                          style: const TextStyle(
+                            color: Colors.black45,
+                          ),
+                        ),
+                    ],
+                  ),
                 ),
               ),
               const SizedBox(width: 30),
@@ -195,30 +306,60 @@ Widget _buildBody(context, List<Entries> expenses, List<Entries> incomes) {
                         size: 20,
                       ),
                       onPressed: () {
+                        var expLabel = exp.label.toString();
                         showDialog<String>(
                           context: context,
                           builder: (BuildContext context) {
-                            return AlertDialog(
-                              title: const Text('Delete Entry'),
-                              content: const Text(
-                                  'Are you sure you want to delete this entry?'),
-                              actions: <Widget>[
-                                TextButton(
-                                  onPressed: () =>
-                                      Navigator.pop(context, 'Cancel'),
-                                  child: const Text('Cancel'),
-                                ),
-                                TextButton(
-                                  onPressed: ()  {
-                                  },
-                                  child: const Text(
-                                    'Delete',
-                                    style: TextStyle(
-                                      color: Color(0xFFD32F2F),
+                            return Dialog(
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(20),
+                              ),
+                              child: Padding(
+                                padding: const EdgeInsets.all(20.0),
+                                child: Column(
+                                  mainAxisSize: MainAxisSize.min,
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    const SizedBox(height: 12),
+                                    const Text(
+                                      'Delete Entry',
+                                      style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
                                     ),
-                                  ),
+                                    const SizedBox(height: 12),
+                                    Text(
+                                      "Are you sure you want to delete '$expLabel' from your entries?",
+                                      textAlign: TextAlign.center,
+                                      //style: TextStyle(fontSize: 20),
+                                    ),
+                                    const SizedBox(height: 12),
+                                    Row(
+                                      mainAxisAlignment: MainAxisAlignment.center,
+                                      children: [
+                                        ElevatedButton(
+                                          style: ElevatedButton.styleFrom(
+                                            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(50)),
+                                          ),
+                                          child: Text('Cancel'),
+                                          onPressed: () => Navigator.of(context).pop(),
+                                        ),
+                                        const SizedBox(width: 15.0,),
+                                        ElevatedButton(
+                                          child: Text('Delete'),
+                                          style: ElevatedButton.styleFrom(
+                                            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(50))  ,
+                                            primary: const Color(0xFFD32F2F),
+                                          ),
+                                          onPressed: () {
+                                            deleteExpense(exp.expenseID!.toInt());
+                                            Navigator.of(context).pop();
+                                          },
+                                        )
+                                      ],
+                                    ),
+                                    //const SizedBox(height: 12),
+                                  ],
                                 ),
-                              ],
+                              ),
                             );
                           },
                         );
@@ -234,6 +375,11 @@ Widget _buildBody(context, List<Entries> expenses, List<Entries> incomes) {
     }
     for(Entries inc in incomes){
       if(d == inc.date){
+        String subcategoryName = "";
+        String categoryName = categoriesData[inc.categoryID];
+        if (inc.subcategoryID != -1){
+          subcategoryName = categoriesData[inc.subcategoryID];
+        }
         expansionChildren.add(Card(
           margin: const EdgeInsets.symmetric(vertical: 5, horizontal: 13),
 
@@ -268,23 +414,33 @@ Widget _buildBody(context, List<Entries> expenses, List<Entries> incomes) {
               ),
               SizedBox(
                 width: 140,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: <Widget>[
-                    Text(
-                      inc.label.toString(),
-                      style: const TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.bold,
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 4.0),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: <Widget>[
+                      Text(
+                        inc.label.toString().capitalize,
+                        style: const TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold,
+                        ),
                       ),
-                    ),
-                    Text(
-                      inc.date.toString(),
-                      style: const TextStyle(
-                        color: Colors.black45,
+                      Text(
+                        categoryName.capitalize,//exp.date.toString(),
+                        style: const TextStyle(
+                          color: Colors.black45,
+                        ),
                       ),
-                    ),
-                  ],
+                      if (subcategoryName.isNotEmpty)
+                        Text(
+                          subcategoryName.capitalize,//exp.date.toString(),
+                          style: const TextStyle(
+                            color: Colors.black45,
+                          ),
+                        ),
+                    ],
+                  ),
                 ),
               ),
               const SizedBox(width: 30),
@@ -306,30 +462,60 @@ Widget _buildBody(context, List<Entries> expenses, List<Entries> incomes) {
                         size: 20,
                       ),
                       onPressed: () {
+                        var incLabel = inc.label.toString().capitalize;
                         showDialog<String>(
                           context: context,
                           builder: (BuildContext context) {
-                            return AlertDialog(
-                              title: const Text('Delete Entry'),
-                              content: const Text(
-                                  'Are you sure you want to delete this entry?'),
-                              actions: <Widget>[
-                                TextButton(
-                                  onPressed: () =>
-                                      Navigator.pop(context, 'Cancel'),
-                                  child: const Text('Cancel'),
-                                ),
-                                TextButton(
-                                  onPressed: ()  {
-                                  },
-                                  child: const Text(
-                                    'Delete',
-                                    style: TextStyle(
-                                      color: Color(0xFFD32F2F),
+                            return Dialog(
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(20),
+                              ),
+                              child: Padding(
+                                padding: const EdgeInsets.all(20.0),
+                                child: Column(
+                                  mainAxisSize: MainAxisSize.min,
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    const SizedBox(height: 12),
+                                    const Text(
+                                      'Delete Entry',
+                                      style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
                                     ),
-                                  ),
+                                    const SizedBox(height: 12),
+                                    Text(
+                                      "Are you sure you want to delete '$incLabel' from your entries?",
+                                      textAlign: TextAlign.center,
+                                      //style: TextStyle(fontSize: 20),
+                                    ),
+                                    const SizedBox(height: 12),
+                                    Row(
+                                      mainAxisAlignment: MainAxisAlignment.center,
+                                      children: [
+                                        ElevatedButton(
+                                          style: ElevatedButton.styleFrom(
+                                            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(50)),
+                                          ),
+                                          child: Text('Cancel'),
+                                          onPressed: () => Navigator.of(context).pop(),
+                                        ),
+                                        const SizedBox(width: 15.0,),
+                                        ElevatedButton(
+                                          child: Text('Delete'),
+                                          style: ElevatedButton.styleFrom(
+                                            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(50))  ,
+                                            primary: const Color(0xFFD32F2F),
+                                          ),
+                                          onPressed: () {
+                                            deleteIncome(inc.incomeID!.toInt());
+                                            Navigator.of(context).pop();
+                                          },
+                                        )
+                                      ],
+                                    ),
+                                    //const SizedBox(height: 12),
+                                  ],
                                 ),
-                              ],
+                              ),
                             );
                           },
                         );
@@ -377,6 +563,7 @@ class ViewEntriesPageState extends State<ViewEntriesPage> {
     return Scaffold(
         appBar: AppBar(
           title: const Text('View Entries'),
+          centerTitle: true,
         ),
         //form containing list view of the fields
         body: SingleChildScrollView(

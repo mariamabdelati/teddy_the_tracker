@@ -48,6 +48,8 @@ class _CreateNewCategoryState extends State<CreateNewCategory> {
 
   final _categorytext = TextEditingController();
   final _budgettext = TextEditingController();
+  final _categoryfocus = FocusNode();
+  final _budgetfocus = FocusNode();
 
 
   //checks if a category exists or not
@@ -70,7 +72,6 @@ class _CreateNewCategoryState extends State<CreateNewCategory> {
     documents = docs;
   }
 
-  //used to determine if a category exists or not
   bool categoryCheck(String newCat) {
     for (var document in documents) {
       if (document["label"] == newCat) return false;
@@ -130,7 +131,7 @@ class _CreateNewCategoryState extends State<CreateNewCategory> {
   Widget buildCategory() {
     return TextFormField(
       controller: _categorytext,
-      focusNode: FocusNode(),
+      focusNode: _categoryfocus,
       decoration: InputDecoration(
         prefixIcon: SizedBox(width: 60,child: Icon(Icons.category_rounded, size: 20, color: iconsColor)),
         labelText: "New Category",
@@ -162,7 +163,7 @@ class _CreateNewCategoryState extends State<CreateNewCategory> {
   Widget buildBudget() {
     return TextFormField(
       controller: _budgettext,
-      focusNode: FocusNode(),
+      focusNode: _budgetfocus,
       decoration: InputDecoration(
         prefixIcon: SizedBox(width: 60,child: Icon(Icons.attach_money_rounded, size: 20, color: iconsColor)),
         labelText: "Budget",

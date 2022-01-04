@@ -17,30 +17,39 @@ class SwitchWallet extends StatefulWidget {
 class _SwitchWalletState extends State<SwitchWallet> {
   @override
   Widget build(BuildContext context) {
-    return Container(
-      decoration: BoxDecoration(boxShadow: [BoxShadow(color: Colors.blue.withAlpha(100), blurRadius: 10.0)], borderRadius: const BorderRadius.all(Radius.circular(40.0)), color: mainColorList[1],),
-      height: 650,
-      child: ClipRRect(
-        borderRadius: BorderRadius.circular(40),
-        child: SingleChildScrollView(
-          child: SafeArea(
-            top: false,
-            //bottom: false,
-            child: Column(
-              children: [
-                Center(
-                  child: Row(
-                    mainAxisSize: MainAxisSize.min,
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: const [
-                      AddWalletButton(0),
-                      AddWalletButton(1)
-                    ],
+    return SafeArea(
+      //maintainBottomViewPadding: true,
+      bottom: false,
+      child: Container(
+        decoration: BoxDecoration(boxShadow: [BoxShadow(color: Colors.blue.withAlpha(100), blurRadius: 10.0)], borderRadius: const BorderRadius.only(topLeft: Radius.circular(40), topRight: Radius.circular(40)), color: mainColorList[1],),
+        height: 640,
+        child: ClipRRect(
+          borderRadius: const BorderRadius.only(topLeft: Radius.circular(40), topRight: Radius.circular(40)),
+          child: SingleChildScrollView(
+            child: SafeArea(
+              top: false,
+              //bottom: false,
+              child: Column(
+                children: [
+                  Center(
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: const [
+                        Expanded(flex: 1,child: Padding(
+                          padding: EdgeInsets.only(left: 8.0),
+                          child: AddWalletButton(0),
+                        )),
+                        Expanded(flex:1,child: Padding(
+                            padding: EdgeInsets.only(right: 8),
+                            child: AddWalletButton(1)))
+                      ],
+                    ),
                   ),
-                ),
-                _buildBody(context),
-              ],
+                  _buildBody(context),
+                ],
+              ),
             ),
           ),
         ),
@@ -61,10 +70,6 @@ class _SwitchWalletState extends State<SwitchWallet> {
             return const CircularProgressIndicator();
           } else {
             List wallets = snapshot.data!.docs.toList();
-            /*List<Wallets> wallets = snapshot.data!.docs
-              .map((docSnapshot) =>
-              Wallets.fromMap(docSnapshot.data() as Map<String, dynamic>))
-              .toList();*/
             return GridView.builder(
               physics: const NeverScrollableScrollPhysics(),
               shrinkWrap: true,

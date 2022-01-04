@@ -1,7 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-import '../../screens/categorymanagement/subcategory_expansion_tile.dart';
+import 'subcategory_expansion_tile.dart';
 import '../../components/error_dialog.dart';
 import '../../constants.dart';
 import '../../screens/dashboard/globals.dart';
@@ -62,13 +62,7 @@ class _DeleteCategoryState extends State<DeleteCategory> {
                   width: 1,
                 ),
                 borderRadius: BorderRadius.circular(20),
-              ),/*BoxDecoration(
-                  borderRadius: const BorderRadius.all(Radius.circular(20)),
-                  color: mainColorList[1],
-                  boxShadow: [
-                    BoxShadow(
-                        color: Colors.blue.withAlpha(100), blurRadius: 5.0),
-                  ]),*/
+              ),
               child: ClipRRect(
                 borderRadius: BorderRadius.circular(20),
                 child: SingleChildScrollView(

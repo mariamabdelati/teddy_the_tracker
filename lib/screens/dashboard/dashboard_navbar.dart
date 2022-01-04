@@ -6,7 +6,7 @@ import "package:flutter/material.dart";
 //import 'package:firebase_auth/firebase_auth.dart';
 import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 import 'package:curved_navigation_bar/curved_navigation_bar.dart';
-import '../walletsmanagement/wallet_selection_screen.dart';
+//import '../walletsmanagement/wallet_selection_screen.dart';
 import 'dashboard_screen.dart';
 import 'hide_navbar.dart';
 
@@ -46,19 +46,21 @@ class _DashboardScreenState extends State<DashboardScreen> {
       ),
       Padding(
         padding: EdgeInsets.all(4.0),
-        child: Icon(Icons.add_rounded, size: 27),
+        child: Icon(Icons.post_add_rounded/*add_rounded*/, size: 27),
       ),
-      Padding(
+      /*Padding(
         padding: EdgeInsets.all(4.0),
         child: Icon(Icons.assessment_outlined, size: 27),
-      ),
+      ),*/
       Padding(
         padding: EdgeInsets.all(4.0),
         child: Icon(Icons.person_outline_rounded, size: 27),
       ),
     ];
     List<Widget> pages = [
-      const DashboardPage()/*withSwitch()*/,
+      DashboardPage(
+        controller: controller,
+      ),
       ViewEntriesPage(
         title: "View All Entries",
         controller: controller,
@@ -67,7 +69,6 @@ class _DashboardScreenState extends State<DashboardScreen> {
         title: 'Create New Entry',
         controller: controller,
       ),
-      const SelectWallet(),
       const Profile(),
     ];
     return Scaffold(

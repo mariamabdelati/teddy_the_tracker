@@ -1,4 +1,5 @@
 import 'package:firebase_auth/firebase_auth.dart';
+import '../../screens/registration/verify.dart';
 import '../../screens/walletsmanagement/wallet_selection_screen.dart';
 import '../../screens/dashboard/dashboard_navbar.dart';
 //import '../../screens/entrymanagement/view_entries.dart';
@@ -49,8 +50,15 @@ class MyApp extends StatelessWidget {
         home: StreamBuilder(
           stream: FirebaseAuth.instance.authStateChanges(),
           builder: (ctx, userSnapshot) {
-            if (userSnapshot.hasData && globals.getWallet() == null) {
+            FirebaseAuth auth = FirebaseAuth.instance;
+            if (userSnapshot.hasData &&
+                globals.getWallet() == null &&
+                FirebaseAuth.instance.currentUser!.emailVerified) {
+              //print("returned to the main");
               return const SelectWallet();
+            } else if (userSnapshot.hasData &&
+                !FirebaseAuth.instance.currentUser!.emailVerified) {
+              return Verify(isLogin: true, mauth: auth);
             }
             return const Scaffold(
               resizeToAvoidBottomInset: false,
@@ -61,3 +69,4 @@ class MyApp extends StatelessWidget {
     );
   }
 }
+//FINISHED ADDING AN APP THEME

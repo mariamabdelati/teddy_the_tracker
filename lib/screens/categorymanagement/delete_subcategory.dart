@@ -1,7 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-import '../../screens/categorymanagement/subcategory_expansion_tile.dart';
+import 'subcategory_expansion_tile.dart';
 import '../../components/error_dialog.dart';
 import '../../constants.dart';
 import '../../screens/dashboard/globals.dart';
@@ -34,6 +34,7 @@ class _DeleteSubcategoryState extends State<DeleteSubcategory> {
         ),
       ),
 
+      //form for deleting subcategory
       body: ListView(
         padding: const EdgeInsets.all(16),
         children: [
@@ -93,7 +94,7 @@ class _DeleteSubcategoryState extends State<DeleteSubcategory> {
                   color: Colors.grey,
                   width: 1,
                 ),
-                  borderRadius: BorderRadius.circular(20),
+                borderRadius: BorderRadius.circular(20),
               ),
               child: ClipRRect(
                 borderRadius: BorderRadius.circular(20),
@@ -149,7 +150,7 @@ class _DeleteSubcategoryState extends State<DeleteSubcategory> {
                         deleteIcon: const Icon(Icons.cancel_rounded, ),
                         onDeleted: () {
                           showCustomDialog(context, chipName, chipID);
-                       },
+                        },
                         labelPadding: const EdgeInsets.only(left: 8, right: 5, bottom: 5, top: 5),
                         label: Text(chipName.capitalize),
                         labelStyle: const TextStyle(
@@ -157,7 +158,7 @@ class _DeleteSubcategoryState extends State<DeleteSubcategory> {
                           color: Color(0xFFFFFFFA),
                         ),
                         backgroundColor: mainColorList[2],
-                  ));
+                      ));
                 }
               }
           );
@@ -221,62 +222,62 @@ class _DeleteSubcategoryState extends State<DeleteSubcategory> {
 
   void showCustomDialog(BuildContext context, String x, int y) {
     showDialog(
-    context: context,
-    barrierDismissible: false,
-    builder: (BuildContext context) {
-      return Dialog(
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(20),
-        ),
-        child: Padding(
-          padding: const EdgeInsets.all(20.0),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              SizedBox(height: 12),
-              const Text(
-                'Delete Subategory',
-                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
-              ),
-              const SizedBox(height: 12),
-              Text(
-                "Are you sure you want to delete '$x' from your '$categoryName' subcategories?",
-                textAlign: TextAlign.center,
-                //style: TextStyle(fontSize: 20),
-              ),
-              const SizedBox(height: 12),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(50)),
-                    ),
-                    child: Text('Cancel'),
-                    onPressed: () => Navigator.of(context).pop(),
-                  ),
-                  const SizedBox(width: 15.0,),
-                  ElevatedButton(
-                    child: Text('Delete'),
-                    style: ElevatedButton.styleFrom(
-                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(50))  ,
-                      primary: const Color(0xFFD32F2F),
-                    ),
-                    onPressed: () {
-                      deleteCategory(y);
-                      Navigator.of(context).pop();
-                    },
-                  )
-                ],
-              ),
-              //const SizedBox(height: 12),
-            ],
+      context: context,
+      barrierDismissible: false,
+      builder: (BuildContext context) {
+        return Dialog(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(20),
           ),
-        ),
-      );
-    },
-  );
+          child: Padding(
+            padding: const EdgeInsets.all(20.0),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                SizedBox(height: 12),
+                const Text(
+                  'Delete Subcategory',
+                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+                ),
+                const SizedBox(height: 12),
+                Text(
+                  "Are you sure you want to delete '$x' from your '$categoryName' subcategories?",
+                  textAlign: TextAlign.center,
+                  //style: TextStyle(fontSize: 20),
+                ),
+                const SizedBox(height: 12),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(50)),
+                      ),
+                      child: Text('Cancel'),
+                      onPressed: () => Navigator.of(context).pop(),
+                    ),
+                    const SizedBox(width: 15.0,),
+                    ElevatedButton(
+                      child: Text('Delete'),
+                      style: ElevatedButton.styleFrom(
+                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(50))  ,
+                        primary: const Color(0xFFD32F2F),
+                      ),
+                      onPressed: () {
+                        deleteCategory(y);
+                        Navigator.of(context).pop();
+                      },
+                    )
+                  ],
+                ),
+                //const SizedBox(height: 12),
+              ],
+            ),
+          ),
+        );
+      },
+    );
   }
 }
 
@@ -293,12 +294,12 @@ void deleteCategory(int idx) async {
       .delete();
 
   QuerySnapshot categoriesRef = await FirebaseFirestore.instance
-        .collection("/categories/JBSahpmjY2TtK0gRdT4s/category")
-        .where("categoryID", isEqualTo: selectedCategoryID).get();
+      .collection("/categories/JBSahpmjY2TtK0gRdT4s/category")
+      .where("categoryID", isEqualTo: selectedCategoryID).get();
 
-    var catDoc = categoriesRef.docs[0];
-    var existingSubCats = catDoc["childIDs"];
-    existingSubCats.remove(idx);
+  var catDoc = categoriesRef.docs[0];
+  var existingSubCats = catDoc["childIDs"];
+  existingSubCats.remove(idx);
 
   FirebaseFirestore.instance
       .collection("/categories/JBSahpmjY2TtK0gRdT4s/category")

@@ -4,9 +4,10 @@ import 'package:flutter/material.dart';
 import 'package:fl_chart/fl_chart.dart';
 //import 'package:quiver/iterables.dart';
 //import 'package:async/async.dart';
-import '../../constants.dart';
 import '../../screens/categorymanagement/subcategory_expansion_tile.dart';
+import '../../constants.dart';
 import 'globals.dart';
+
 //add another class named categories
 
 class Entries {
@@ -49,7 +50,6 @@ Widget _getExpenses(context) {
       stream: FirebaseFirestore.instance
           .collection("/entries/7sQnsmHSjX5K8Sgz4PoD/expense")
           .where("walletID", isEqualTo: (globals.getWallet()["walletID"])).snapshots(),
-
       builder: (context, snapshot) {
         if (snapshot.hasError) {
           return const Text("Something went wrong",
@@ -118,7 +118,7 @@ Widget _buildBody(context, List<Entries> expenses, List<Categories> categories) 
     }
     categoriesData[category.catID] = category.label;
   }
-  print(categoriesData);
+  //print(categoriesData);
 
   double total = 0;
   expensesData.forEach((k, v) {
@@ -130,7 +130,7 @@ Widget _buildBody(context, List<Entries> expenses, List<Categories> categories) 
     ..sort((k1, k2) => expensesData[k2].compareTo(expensesData[k1]));
   LinkedHashMap sortedExpensesData = LinkedHashMap
       .fromIterable(sortedExpensesKeys, key: (k) => k, value: (k) => expensesData[k]);
-  print(sortedExpensesData);
+  //print(sortedExpensesData);
 
   Map expensesDataTrimmed = {};
   Map expensesDataNoOther = {};
@@ -161,7 +161,7 @@ Widget _buildBody(context, List<Entries> expenses, List<Categories> categories) 
   if(expensesDataNoOther.isNotEmpty) {
     expensesDataNoOther.forEach((k, v) {
       if (index < 9) {
-        if (k == 13){
+        if (k == other){
           expensesDataTrimmed["other categories"] = v;
         } else{
           expensesDataTrimmed[k] = v;
@@ -188,7 +188,6 @@ Widget _buildBody(context, List<Entries> expenses, List<Categories> categories) 
       expensesDataTrimmed[k] = v;
     });
   }
-
   int i = 0;
   expensesDataTrimmed.forEach((k, v) {
     categoriesData.forEach((key, value) {
@@ -233,14 +232,7 @@ Widget _buildBody(context, List<Entries> expenses, List<Categories> categories) 
           )
         ])
       ]));
-  /*return Container(
-   child: PieChartPage(data),
-  );*/
 }
-
-/*_buildChart(context, Map<dynamic, dynamic> categoryNames) {
-
-} */
 
 class ExpensePieChart extends StatefulWidget {
   const ExpensePieChart({Key? key}) : super(key: key);
@@ -253,7 +245,7 @@ class ExpensePieChartState extends State<ExpensePieChart> {
   @override
   Widget build(BuildContext context) {
     return Container(
-        child: _getExpenses(context)//_buildBody(context),
+        child: _getExpenses(context)
     );
   }
 }
@@ -273,8 +265,6 @@ List<PieChartSectionData> getSections(int touchedIndex, List<Data> piechartData)
   return piechartData.asMap().map<int, PieChartSectionData>((index, data) {
     final isTouched = index == touchedIndex;
     final opacity = isTouched  ? 1.0 : 0.9;
-    //final widgetSize = isTouched ? 55.0 : 40.0;
-    //final double fontSize = isTouched ? 20 : 16;
     final double radius = isTouched ? 70 : 60;
 
     final value = PieChartSectionData(
@@ -315,7 +305,7 @@ class _PieChartPageState extends State<PieChartPage> {
 
   @override
   Widget build(BuildContext context) {
-    return /*buildPieChart(widget.list);*/Row(
+    return Row(
       children: <Widget>[
         Expanded(
           flex: 1,
@@ -338,14 +328,13 @@ class _PieChartPageState extends State<PieChartPage> {
         pieTouchData: PieTouchData(
           touchCallback: (FlTouchEvent event, PieTouchResponse? response) {
             setState(() {
-              if (!event.isInterestedForInteractions || response == null || response.touchedSection == null) {
-                touchedIndex = -1;
-                return;
-              }
               if (event is FlLongPressEnd || event is FlPanEndEvent) {
                 touchedIndex = -1;
+              } else {
+                if (event.isInterestedForInteractions || response != null || response?.touchedSection != null) {
+                  touchedIndex = response?.touchedSection!.touchedSectionIndex as int;
+                }
               }
-              touchedIndex = response.touchedSection!.touchedSectionIndex;
             });
           },
         ),
@@ -375,8 +364,6 @@ class IndicatorsWidget extends StatelessWidget {
           return Expanded(
             flex: 1,
             child: Container(
-              //margin: const EdgeInsets.symmetric(vertical: 6),
-              //padding: const EdgeInsets.symmetric(vertical: 6),
                 child: buildIndicator(
                   touched: touchedIndex  == index,
                   color: list[index].color,
@@ -454,7 +441,7 @@ class _Badge extends StatelessWidget {
   Widget build(BuildContext context) {
     return AnimatedContainer(
       duration: PieChart.defaultDuration,
-      width: size*2,
+      width: size*2.05,
       height: size,
       decoration: BoxDecoration(
         color: Colors.white,

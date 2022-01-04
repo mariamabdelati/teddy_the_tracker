@@ -111,7 +111,7 @@ Widget _buildBody(context, List<Entries> incomes, List<Categories> categories) {
     }
   }
 
-  print(incomesData);
+  //print(incomesData);
 
   var otherID = 0;
   for (var category in categories.toList()) {
@@ -120,7 +120,7 @@ Widget _buildBody(context, List<Entries> incomes, List<Categories> categories) {
     }
     categoriesData[category.catID] = category.label;
   }
-  print(categoriesData);
+  //print(categoriesData);
 
   double total = 0;
   incomesData.forEach((k, v) {
@@ -132,7 +132,7 @@ Widget _buildBody(context, List<Entries> incomes, List<Categories> categories) {
     ..sort((k1, k2) => incomesData[k2].compareTo(incomesData[k1]));
   LinkedHashMap sortedIncomesData = LinkedHashMap
       .fromIterable(sortedIncomesKeys, key: (k) => k, value: (k) => incomesData[k]);
-  print(sortedIncomesData);
+  //print(sortedIncomesData);
 
   Map incomesDataTrimmed = {};
   Map incomesDataNoOther = {};
@@ -162,29 +162,29 @@ Widget _buildBody(context, List<Entries> incomes, List<Categories> categories) {
 
   if(incomesDataNoOther.isNotEmpty) {
     incomesDataNoOther.forEach((k, v) {
-    if (index < 9) {
-      if (k == 13){
-        incomesDataTrimmed["other categories"] = v;
-      } else{
-        incomesDataTrimmed[k] = v;
-        index++;
-        //print(index);
-      }
-    } else {
-      if (index == 9){
-        if (incomesDataTrimmed["other categories"] == null){
+      if (index < 9) {
+        if (k == other){
           incomesDataTrimmed["other categories"] = v;
+        } else{
+          incomesDataTrimmed[k] = v;
           index++;
-        }  else{
+          //print(index);
+        }
+      } else {
+        if (index == 9){
+          if (incomesDataTrimmed["other categories"] == null){
+            incomesDataTrimmed["other categories"] = v;
+            index++;
+          }  else{
+            incomesDataTrimmed["other categories"] = incomesDataTrimmed["other categories"] + v;
+            index++;
+          }
+        } else{
           incomesDataTrimmed["other categories"] = incomesDataTrimmed["other categories"] + v;
           index++;
         }
-      } else{
-        incomesDataTrimmed["other categories"] = incomesDataTrimmed["other categories"] + v;
-        index++;
       }
-    }
-  });
+    });
   } else {
     sortedIncomesData.forEach((k, v){
       incomesDataTrimmed[k] = v;
@@ -213,23 +213,6 @@ Widget _buildBody(context, List<Entries> incomes, List<Categories> categories) {
     data.add(Data(name: "no incomes available", percent: 100.00, color: pieChartColors[1]));
   }
 
-  //print(data);
-
-  //print(categoryNames);
-  /*expensesData.forEach((k, v) {
-    if (!total.contains(k)) {
-      total[0] += v;
-    }
-  });*/
-  //date.sort();
-  /*expensesData.forEach((k, v) {
-    expensesList
-        .add(FlSpot(date.indexWhere((element) => element == k).toDouble(), v));
-  });
-  incomesData.forEach((k, v) {
-    incomesList
-        .add(FlSpot(date.indexWhere((element) => element == k).toDouble(), v));
-  });*/
   return Container(
       child: Stack(children: <Widget>[
         Column(crossAxisAlignment: CrossAxisAlignment.stretch, children: <Widget>[
@@ -255,14 +238,7 @@ Widget _buildBody(context, List<Entries> incomes, List<Categories> categories) {
           )
         ])
       ]));
-  /*return Container(
-   child: PieChartPage(data),
-  );*/
 }
-
-/*_buildChart(context, Map<dynamic, dynamic> categoryNames) {
-
-} */
 
 class IncomePieChart extends StatefulWidget {
   const IncomePieChart({Key? key}) : super(key: key);
@@ -275,7 +251,7 @@ class IncomePieChartState extends State<IncomePieChart> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      child: _getIncomes(context)//_buildBody(context),
+        child: _getIncomes(context)//_buildBody(context),
     );
   }
 }
@@ -293,33 +269,33 @@ class Data {
 
 List<PieChartSectionData> getSections(int touchedIndex, List<Data> piechartData) {
   return piechartData.asMap().map<int, PieChartSectionData>((index, data) {
-        final isTouched = index == touchedIndex;
-        final opacity = isTouched  ? 1.0 : 0.9;
-        //final widgetSize = isTouched ? 55.0 : 40.0;
-        //final double fontSize = isTouched ? 20 : 16;
-        final double radius = isTouched ? 70 : 60;
+    final isTouched = index == touchedIndex;
+    final opacity = isTouched  ? 1.0 : 0.9;
+    //final widgetSize = isTouched ? 55.0 : 40.0;
+    //final double fontSize = isTouched ? 20 : 16;
+    final double radius = isTouched ? 70 : 60;
 
-        final value = PieChartSectionData(
-          color: data.color.withOpacity(opacity),
-          value: data.percent,
-          title: '${data.percent}%',
-          radius: radius,
-          titleStyle: const TextStyle(
-            fontSize: 18,
-            fontWeight: FontWeight.bold,
-            color: Color(0xff044d7c),
-          ),
-          badgeWidget: isTouched? _Badge(text: '${data.percent}%', borderColor: data.color, size: 37, ) : null,
-          badgePositionPercentageOffset: .65,
-          showTitle: false,//isTouched,
-          titlePositionPercentageOffset: 0.60,
-          borderSide: isTouched
-              ? const BorderSide(color: Color(0xff0293ee), width: 4)
-              : null,
-        );
+    final value = PieChartSectionData(
+      color: data.color.withOpacity(opacity),
+      value: data.percent,
+      title: '${data.percent}%',
+      radius: radius,
+      titleStyle: const TextStyle(
+        fontSize: 18,
+        fontWeight: FontWeight.bold,
+        color: Color(0xff044d7c),
+      ),
+      badgeWidget: isTouched? _Badge(text: '${data.percent}%', borderColor: data.color, size: 37, ) : null,
+      badgePositionPercentageOffset: .65,
+      showTitle: false,//isTouched,
+      titlePositionPercentageOffset: 0.60,
+      borderSide: isTouched
+          ? const BorderSide(color: Color(0xff0293ee), width: 4)
+          : null,
+    );
 
-        return MapEntry(index, value);
-      })
+    return MapEntry(index, value);
+  })
       .values
       .toList();
 }
@@ -360,14 +336,21 @@ class _PieChartPageState extends State<PieChartPage> {
         pieTouchData: PieTouchData(
           touchCallback: (FlTouchEvent event, PieTouchResponse? response) {
             setState(() {
-              if (!event.isInterestedForInteractions || response == null || response.touchedSection == null) {
+              /*if (!event.isInterestedForInteractions || response == null || response.touchedSection == null) {
                 touchedIndex = -1;
                 return;
               }
               if (event is FlLongPressEnd || event is FlPanEndEvent) {
                 touchedIndex = -1;
               }
-              touchedIndex = response.touchedSection!.touchedSectionIndex;
+              touchedIndex = response.touchedSection!.touchedSectionIndex;*/
+              if (event is FlLongPressEnd || event is FlPanEndEvent) {
+                touchedIndex = -1;
+              } else {
+                if (event.isInterestedForInteractions || response != null || response?.touchedSection != null) {
+                  touchedIndex = response?.touchedSection!.touchedSectionIndex as int;
+                }
+              }
             });
           },
         ),
@@ -476,7 +459,7 @@ class _Badge extends StatelessWidget {
   Widget build(BuildContext context) {
     return AnimatedContainer(
       duration: PieChart.defaultDuration,
-      width: size*2,
+      width: size*2.05,
       height: size,
       decoration: BoxDecoration(
         color: Colors.white,
@@ -497,110 +480,9 @@ class _Badge extends StatelessWidget {
       padding: EdgeInsets.all(size * .15),
       child: Center(
         child: Text(
-          text
+            text
         ),
       ),
     );
   }
 }
-
-/*
-class IndicatorsWidget extends StatefulWidget {
-  final List<Data> list;
-  final int touchedIndex;
-  const IndicatorsWidget(this.list, this.touchedIndex, {Key? key}) : super(key: key);
-
-  @override
-  State<IndicatorsWidget> createState() => _IndicatorsWidgetState();
-}
-
-class _IndicatorsWidgetState extends State<IndicatorsWidget> {
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      mainAxisSize: MainAxisSize.min,
-      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: List.generate(widget.list.length, (index) {
-        return Expanded(
-          flex: 1,
-          child: Container(
-              //margin: const EdgeInsets.symmetric(vertical: 6),
-              //padding: const EdgeInsets.symmetric(vertical: 6),
-              child: buildIndicator(
-                touched: widget.touchedIndex  == index,
-                color: widget.list[index].color,
-                text: (widget.list[index].name).capitalize,
-                // isSquare: true,
-              )),
-        );
-      })
-
-      /*widget.list.map(
-            (data) {
-          return Expanded(
-            flex: 1,
-            child: Container(
-                padding: const EdgeInsets.symmetric(vertical: 2),
-                child: buildIndicator(
-                  touched: widget.touchedIndex,
-                  color: data.color,
-                  text: (data.name).capitalize,
-                  // isSquare: true,
-                )),
-          );
-        },
-      ).toList(),*/
-    );
-  }
-
-  Widget buildIndicator({
-    required Color color,
-    required String text,
-    required bool touched,
-    bool isSquare = false,
-    //double size = touched ? 18: 16,
-    Color textColor = const Color(0xFFFFFFFA),
-  }) {
-    return Row(
-      children: <Widget>[
-        Container(
-          width: touched? 18 : 16,
-          height: touched? 18 : 16,
-          decoration: BoxDecoration(
-            shape: isSquare ? BoxShape.rectangle : BoxShape.circle,
-            color: color,
-          ),
-        ),
-        const SizedBox(width: 8),
-        Column(
-          mainAxisSize: MainAxisSize.min,
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Flexible(
-              child: SizedBox(
-                width: 95,
-                child: SingleChildScrollView(
-                  scrollDirection: Axis.horizontal,
-                  child: Text(
-                    text,
-                    overflow: TextOverflow.fade,
-                    maxLines: 1,
-                    softWrap: false,
-                    style: TextStyle(
-                      fontSize: 14,
-                      fontWeight: touched? FontWeight.w900 : FontWeight.w100,
-                      color: touched ? const Color(0xFFFEC768) : textColor,
-                    ),
-                  ),
-                ),
-              ),
-            ),
-          ],
-        )
-      ],
-    );
-  }
-}
- */

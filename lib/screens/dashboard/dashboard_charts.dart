@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 import '../../constants.dart';
-import 'expense_pie_chart.dart';
+import '../../screens/dashboard/expense_pie_chart.dart';
 import 'income_pie_chart.dart';
 import 'line_chart.dart';
 
@@ -89,7 +89,7 @@ class _ExpensesPiechartPanelState extends State<ExpensesPiechartPanel> {
     return Align(
       alignment: Alignment.topCenter,
       child: Container(
-        width: 400,
+        //width: 400,
         height: 400,
         margin: const EdgeInsets.all(6),
         decoration: BoxDecoration(
@@ -99,7 +99,7 @@ class _ExpensesPiechartPanelState extends State<ExpensesPiechartPanel> {
               Color(0xFF049BD6),
             ],
             center: Alignment(1.0, 2.0),
-            focal: Alignment(1.0,0.6),
+            focal: Alignment(1.0,1.0),
             focalRadius: 1.1,
           ),
           boxShadow: const <BoxShadow>[
@@ -130,7 +130,7 @@ class _IncomesPiechartPanelState extends State<IncomesPiechartPanel> {
     return Align(
       alignment: Alignment.topCenter,
       child: Container(
-        width: 400,
+        //width: 400,
         height: 400,
         margin: const EdgeInsets.all(6),
         decoration: BoxDecoration(
@@ -140,7 +140,7 @@ class _IncomesPiechartPanelState extends State<IncomesPiechartPanel> {
               Color(0xFF049BD6),
             ],
             center: Alignment(1.0, 2.0),
-            focal: Alignment(1.0,0.6),
+            focal: Alignment(1.0,1.0),
             focalRadius: 1.1,
           ),
           boxShadow: const <BoxShadow>[
@@ -171,7 +171,7 @@ class _LinechartState extends State<Linechart> {
     return Align(
       alignment: Alignment.topCenter,
       child: Container(
-        width: 400,
+        //width: 400,
         height: 400,
         margin: const EdgeInsets.all(6),
         decoration: BoxDecoration(
@@ -181,7 +181,7 @@ class _LinechartState extends State<Linechart> {
               Color(0xFF049BD6),
             ],
             center: Alignment(1.0, 2.0),
-            focal: Alignment(1.0,0.6),
+            focal: Alignment(1.0,1.0),
             focalRadius: 1.1,
           ),
           boxShadow: const <BoxShadow>[

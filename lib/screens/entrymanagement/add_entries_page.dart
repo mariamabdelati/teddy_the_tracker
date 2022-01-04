@@ -1,5 +1,4 @@
 import 'dart:math';
-
 import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -54,6 +53,8 @@ class AddNewEntryPageState extends State<AddNewEntryPage> {
 
   final _titletext = TextEditingController();
   final _amounttext = TextEditingController();
+  final _titleFocus = FocusNode();
+  final _amountFocus = FocusNode();
 
   var initialDate = DateTime.now();
   bool isChecked = false;
@@ -95,6 +96,7 @@ class AddNewEntryPageState extends State<AddNewEntryPage> {
     return Scaffold(
       appBar: AppBar(
         title: Text(widget.title),
+        centerTitle: true,
       ),
       //form containing list view of the fields
       body: Form(
@@ -149,7 +151,7 @@ class AddNewEntryPageState extends State<AddNewEntryPage> {
   buildTitle() {
     return TextFormField(
       controller: _titletext,
-      focusNode: FocusNode(),
+      focusNode: _titleFocus,
       decoration: InputDecoration(
         hintText: "Entry Title",
         //labelText: "New Title",
@@ -187,7 +189,7 @@ class AddNewEntryPageState extends State<AddNewEntryPage> {
   buildAmount() {
     return TextFormField(
       controller: _amounttext,
-      focusNode: FocusNode(),
+      focusNode: _amountFocus,
       decoration: InputDecoration(
         hintText: "Amount",
         //labelText: "Amount",
@@ -222,7 +224,7 @@ class AddNewEntryPageState extends State<AddNewEntryPage> {
       // only allow numbers and decimal places up to 2 places
       keyboardType: TextInputType.number,
       inputFormatters: <TextInputFormatter>[
-        FilteringTextInputFormatter.allow(RegExp(r"^\d*\.?\d{0,2}"))
+        FilteringTextInputFormatter.allow(RegExp(r"^\d*\.?\d{0,2}\b"))
       ],
       onSaved: (value) => setState(() => amount = zeroCheck(value!)),
     );
@@ -462,7 +464,7 @@ class AddNewEntryPageState extends State<AddNewEntryPage> {
               });
             }
 
-            if (isValid && isSelected) {
+            if (isValid && isSelected && catSelect) {
               //saves the values (triggers onsaved)
               formKey.currentState!.save();
 
@@ -470,7 +472,8 @@ class AddNewEntryPageState extends State<AddNewEntryPage> {
               createNewEntry(newTitle.toLowerCase(), amount, _dateTime, isChecked, isExpense);
 
 
-              //shows snackbar with details upon adding
+
+              //shows success dialog with details upon adding
               final message =
                   "'$newTitle' with amount '$amount' has been successfully added to your entries";
 
