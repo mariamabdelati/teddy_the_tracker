@@ -28,7 +28,6 @@ class AddWalletButton extends StatelessWidget {
           tag: idx == 0 ? _heroAddWallet : _heroJoinWallet,
           child: Container(
             height: 120,
-            //width: 180,
             child: Card(
               elevation: 4,
               color: const Color(0xFF0C43D5),
@@ -65,7 +64,6 @@ class AddWalletButton extends StatelessWidget {
 const String _heroAddWallet = 'add-wallet-hero';
 
 class AddWalletPopupCard extends StatefulWidget {
-  // {@macro add_category_popup_card}
   AddWalletPopupCard({Key? key}) : super(key: key);
 
   @override
@@ -221,7 +219,6 @@ void createNewWallet(String name) async {
     "usersIDs": [FirebaseAuth.instance.currentUser!.uid],
     "joinCode": createJoinCode(),
   });
-  // globals.setWallet(createdWallet as Map);
 
   const budget = -1;
   List defaultCategoriesList = [
@@ -260,7 +257,6 @@ void createNewWallet(String name) async {
 const String _heroJoinWallet = 'join-wallet-hero';
 
 class JoinWalletPopupCard extends StatefulWidget {
-  // {@macro add_category_popup_card}
   JoinWalletPopupCard({Key? key}) : super(key: key);
 
   @override
@@ -421,7 +417,6 @@ void buildSuccessDialog(BuildContext context, String s) {
             Text(
               s,
               textAlign: TextAlign.center,
-              //style: TextStyle(fontSize: 20),
             ),
             const SizedBox(height: 12),
             Center(
