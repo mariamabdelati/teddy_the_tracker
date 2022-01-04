@@ -115,7 +115,7 @@ class _DeleteCategoryState extends State<DeleteCategory> {
                         deleteIconColor: Color(0xFFFFFFFA),
                         deleteIcon: const Icon(Icons.cancel_rounded, ),
                         onDeleted: () {
-                          showCustomDialog(context, chipName, chipID);
+                          showCustomDialog(context, chipName.capitalize, chipID);
                         },
                         labelPadding: const EdgeInsets.only(left: 8, right: 5, bottom: 5, top: 5),
                         label: Text(chipName.capitalize),

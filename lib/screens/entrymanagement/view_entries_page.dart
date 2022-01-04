@@ -234,60 +234,65 @@ Widget _buildBody(context, List<Entries> expenses, List<Entries> incomes, List<C
               borderRadius: BorderRadius.circular(15)),
           child:
           Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: <Widget>[
-              Container(
-                width: 100,
-                margin: const EdgeInsets.symmetric(vertical: 10, horizontal: 13),
-                decoration: BoxDecoration(
-                    borderRadius:
-                    const BorderRadius.all(Radius.circular(15.0)),
-                    border: Border.all(
-                      color: Colors.red,
-                      width: 2,
-                    )),
-                padding: const EdgeInsets.all(7),
-                child: Text(
-                  'EGP ' + exp.amount.toString(),
-                  textAlign: TextAlign.center,
-                  style: const TextStyle(
-                    fontWeight: FontWeight.bold,
-                    fontSize: 17,
-                    color: Colors.red,
+              Row(
+                children: [
+                  Container(
+                    width: 100,
+                    margin: const EdgeInsets.symmetric(vertical: 10, horizontal: 13),
+                    decoration: BoxDecoration(
+                        borderRadius:
+                        const BorderRadius.all(Radius.circular(15.0)),
+                        border: Border.all(
+                          color: Colors.red,
+                          width: 2,
+                        )),
+                    padding: const EdgeInsets.all(7),
+                    child: Text(
+                      'EGP ' + exp.amount.toString(),
+                      textAlign: TextAlign.center,
+                      style: const TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 17,
+                        color: Colors.red,
+                      ),
+                    ),
                   ),
-                ),
-              ),
-              SizedBox(
-                width: 140,
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 4.0),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: <Widget>[
-                      Text(
-                        exp.label.toString().capitalize,
-                        style: const TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                      Text(
-                        categoryName.capitalize,//exp.date.toString(),
-                        style: const TextStyle(
-                          color: Colors.black45,
-                        ),
-                      ),
-                      if (subcategoryName.isNotEmpty)
-                        Text(
-                          subcategoryName.capitalize,//exp.date.toString(),
-                          style: const TextStyle(
-                            color: Colors.black45,
+                  SizedBox(
+                    width: 140,
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 4.0),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: <Widget>[
+                          Text(
+                            exp.label.toString().capitalize,
+                            style: const TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.bold,
+                            ),
                           ),
-                        ),
-                    ],
+                          Text(
+                            categoryName.capitalize,//exp.date.toString(),
+                            style: const TextStyle(
+                              color: Colors.black45,
+                            ),
+                          ),
+                          if (subcategoryName.isNotEmpty)
+                            Text(
+                              subcategoryName.capitalize,//exp.date.toString(),
+                              style: const TextStyle(
+                                color: Colors.black45,
+                              ),
+                            ),
+                        ],
+                      ),
+                    ),
                   ),
-                ),
+                  //const SizedBox(width: 30),
+                ],
               ),
-              const SizedBox(width: 30),
               Column(
                 mainAxisAlignment: MainAxisAlignment.end,
                 crossAxisAlignment: CrossAxisAlignment.end,
@@ -306,7 +311,7 @@ Widget _buildBody(context, List<Entries> expenses, List<Entries> incomes, List<C
                         size: 20,
                       ),
                       onPressed: () {
-                        var expLabel = exp.label.toString();
+                        var expLabel = exp.label.toString().capitalize;
                         showDialog<String>(
                           context: context,
                           builder: (BuildContext context) {
@@ -390,60 +395,65 @@ Widget _buildBody(context, List<Entries> expenses, List<Entries> incomes, List<C
               borderRadius: BorderRadius.circular(15)),
           child:
           Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: <Widget>[
-              Container(
-                width: 100,
-                margin: const EdgeInsets.symmetric(vertical: 10, horizontal: 13),
-                decoration: BoxDecoration(
-                    borderRadius:
-                    const BorderRadius.all(Radius.circular(15.0)),
-                    border: Border.all(
-                      color: Colors.green,
-                      width: 2,
-                    )),
-                padding: const EdgeInsets.all(7),
-                child: Text(
-                  'EGP ' + inc.amount.toString(),
-                  textAlign: TextAlign.center,
-                  style: const TextStyle(
-                    fontWeight: FontWeight.bold,
-                    fontSize: 17,
-                    color: Colors.green,
+              Row(
+                children: [
+                  Container(
+                    width: 100,
+                    margin: const EdgeInsets.symmetric(vertical: 10, horizontal: 13),
+                    decoration: BoxDecoration(
+                        borderRadius:
+                        const BorderRadius.all(Radius.circular(15.0)),
+                        border: Border.all(
+                          color: Colors.green,
+                          width: 2,
+                        )),
+                    padding: const EdgeInsets.all(7),
+                    child: Text(
+                      'EGP ' + inc.amount.toString(),
+                      textAlign: TextAlign.center,
+                      style: const TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 17,
+                        color: Colors.green,
+                      ),
+                    ),
                   ),
-                ),
-              ),
-              SizedBox(
-                width: 140,
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 4.0),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: <Widget>[
-                      Text(
-                        inc.label.toString().capitalize,
-                        style: const TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                      Text(
-                        categoryName.capitalize,//exp.date.toString(),
-                        style: const TextStyle(
-                          color: Colors.black45,
-                        ),
-                      ),
-                      if (subcategoryName.isNotEmpty)
-                        Text(
-                          subcategoryName.capitalize,//exp.date.toString(),
-                          style: const TextStyle(
-                            color: Colors.black45,
+                  SizedBox(
+                    width: 140,
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 4.0),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: <Widget>[
+                          Text(
+                            inc.label.toString().capitalize,
+                            style: const TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.bold,
+                            ),
                           ),
-                        ),
-                    ],
+                          Text(
+                            categoryName.capitalize,//exp.date.toString(),
+                            style: const TextStyle(
+                              color: Colors.black45,
+                            ),
+                          ),
+                          if (subcategoryName.isNotEmpty)
+                            Text(
+                              subcategoryName.capitalize,//exp.date.toString(),
+                              style: const TextStyle(
+                                color: Colors.black45,
+                              ),
+                            ),
+                        ],
+                      ),
+                    ),
                   ),
-                ),
+                  //const SizedBox(width: 30),
+                ],
               ),
-              const SizedBox(width: 30),
               Column(
                 mainAxisAlignment: MainAxisAlignment.end,
                 crossAxisAlignment: CrossAxisAlignment.end,

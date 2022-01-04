@@ -216,7 +216,7 @@ Widget _buildChart(context, List<FlSpot> expensesList,
   LineChartBarData incomesLine = LineChartBarData(
     spots: incomesList,
     isCurved: true,
-    colors: [Colors.blue, Colors.green],
+    colors: [Colors.green, Colors.greenAccent],
     barWidth: 5,
     /*belowBarData: BarAreaData(
           show: true,
@@ -226,6 +226,7 @@ Widget _buildChart(context, List<FlSpot> expensesList,
   );
 
   return LineChart(LineChartData(
+      lineTouchData: LineTouchData(touchTooltipData: LineTouchTooltipData(tooltipBgColor: Colors.white,tooltipRoundedRadius: 20)),
       minX: 0,
       maxX: dates.length - 1,
       minY: 0,
@@ -313,10 +314,10 @@ class TtestDashBoardState extends State<TestDashboard> {
                       fontSize: 16, color: Colors.white, fontWeight: FontWeight.bold),
                   //textAlign: TextAlign.center,
                 ),
-                Text(
+                const Text(
                   "Incomes",
                   style: TextStyle(
-                      fontSize: 16, color: Colors.greenAccent.shade700, fontWeight: FontWeight.bold),
+                      fontSize: 16, color: Color(0xFF5CD561), fontWeight: FontWeight.bold),
                   //textAlign: TextAlign.center,
                 ),
               ],
