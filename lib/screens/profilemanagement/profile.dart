@@ -14,7 +14,6 @@ class Profile extends StatelessWidget {
       appBar: AppBar(
         title: const Text('Profile'),
         centerTitle: true,
-        //elevation: 0,
       ),
       body: SingleChildScrollView(
         padding: const EdgeInsets.symmetric(vertical: 20),
@@ -87,21 +86,6 @@ class Profile extends StatelessWidget {
   }
 }
 
-
-/*Container(
-      child: Scaffold(
-        body: Center(
-          child: ElevatedButton(
-            child: const Text("Log out"),
-            onPressed: () {
-              FirebaseAuth.instance.signOut();
-            },
-          ),
-        ),
-      ),
-    );*/
-
-
 class ProfileMenu extends StatelessWidget {
   const ProfileMenu({
     Key? key,
@@ -117,7 +101,6 @@ class ProfileMenu extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      //padding: EdgeInsets.symmetric(horizontal: 10, vertical: 5),
       margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 7),
       decoration: BoxDecoration(
         color: mainColorList[1],
@@ -127,7 +110,6 @@ class ProfileMenu extends StatelessWidget {
         boxShadow: const <BoxShadow>[
           BoxShadow(
             color: Color(0xFFDBDBDB),
-            //offset: Offset(1.1, 1.1),
             blurRadius: 5.0,
           ),
         ],
