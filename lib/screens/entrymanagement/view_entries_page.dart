@@ -227,9 +227,7 @@ Widget _buildBody(context, List<Entries> expenses, List<Entries> incomes, List<C
         }
         expansionChildren.add(Card(
           margin: const EdgeInsets.symmetric(vertical: 5, horizontal: 13),
-          //margin: EdgeInsets.symmetric(horizontal: 10),
           elevation: 2,
-          //color: mainColorList[1],
           shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(15)),
           child:
@@ -274,14 +272,14 @@ Widget _buildBody(context, List<Entries> expenses, List<Entries> incomes, List<C
                             ),
                           ),
                           Text(
-                            categoryName.capitalize,//exp.date.toString(),
+                            categoryName.capitalize,
                             style: const TextStyle(
                               color: Colors.black45,
                             ),
                           ),
                           if (subcategoryName.isNotEmpty)
                             Text(
-                              subcategoryName.capitalize,//exp.date.toString(),
+                              subcategoryName.capitalize,
                               style: const TextStyle(
                                 color: Colors.black45,
                               ),
@@ -290,7 +288,6 @@ Widget _buildBody(context, List<Entries> expenses, List<Entries> incomes, List<C
                       ),
                     ),
                   ),
-                  //const SizedBox(width: 30),
                 ],
               ),
               Column(
@@ -334,7 +331,6 @@ Widget _buildBody(context, List<Entries> expenses, List<Entries> incomes, List<C
                                     Text(
                                       "Are you sure you want to delete '$expLabel' from your entries?",
                                       textAlign: TextAlign.center,
-                                      //style: TextStyle(fontSize: 20),
                                     ),
                                     const SizedBox(height: 12),
                                     Row(
@@ -361,7 +357,6 @@ Widget _buildBody(context, List<Entries> expenses, List<Entries> incomes, List<C
                                         )
                                       ],
                                     ),
-                                    //const SizedBox(height: 12),
                                   ],
                                 ),
                               ),
@@ -388,9 +383,7 @@ Widget _buildBody(context, List<Entries> expenses, List<Entries> incomes, List<C
         expansionChildren.add(Card(
           margin: const EdgeInsets.symmetric(vertical: 5, horizontal: 13),
 
-          //margin: EdgeInsets.symmetric(horizontal: 10),
           elevation: 2,
-          //color: mainColorList[1],
           shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(15)),
           child:
@@ -435,14 +428,14 @@ Widget _buildBody(context, List<Entries> expenses, List<Entries> incomes, List<C
                             ),
                           ),
                           Text(
-                            categoryName.capitalize,//exp.date.toString(),
+                            categoryName.capitalize,
                             style: const TextStyle(
                               color: Colors.black45,
                             ),
                           ),
                           if (subcategoryName.isNotEmpty)
                             Text(
-                              subcategoryName.capitalize,//exp.date.toString(),
+                              subcategoryName.capitalize,
                               style: const TextStyle(
                                 color: Colors.black45,
                               ),
@@ -451,7 +444,6 @@ Widget _buildBody(context, List<Entries> expenses, List<Entries> incomes, List<C
                       ),
                     ),
                   ),
-                  //const SizedBox(width: 30),
                 ],
               ),
               Column(
@@ -495,7 +487,6 @@ Widget _buildBody(context, List<Entries> expenses, List<Entries> incomes, List<C
                                     Text(
                                       "Are you sure you want to delete '$incLabel' from your entries?",
                                       textAlign: TextAlign.center,
-                                      //style: TextStyle(fontSize: 20),
                                     ),
                                     const SizedBox(height: 12),
                                     Row(
@@ -522,7 +513,6 @@ Widget _buildBody(context, List<Entries> expenses, List<Entries> incomes, List<C
                                         )
                                       ],
                                     ),
-                                    //const SizedBox(height: 12),
                                   ],
                                 ),
                               ),
