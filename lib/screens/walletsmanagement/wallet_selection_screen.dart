@@ -85,8 +85,6 @@ class _SelectWalletState extends State<SelectWallet> {
   Widget _createWalletCard(List<dynamic> wallets, int index) {
     return GestureDetector(
       onTap: (){
-        //where wallet is switched
-        /*print("wallet switched to " + (wallets[index].name as String));*/
         globals.setWallet(wallets[index]);
         Navigator.of(context).pushAndRemoveUntil(
             MaterialPageRoute(builder: (context) => const DashboardScreen()),
@@ -105,7 +103,6 @@ class _SelectWalletState extends State<SelectWallet> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Align(
-                    //alignment: Alignment.bottomCenter,
                     child: Padding(
                       padding: const EdgeInsets.only(top: 8.0),
                       child: Container(
