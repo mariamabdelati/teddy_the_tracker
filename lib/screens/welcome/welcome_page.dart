@@ -1,10 +1,6 @@
-//import 'dart:async';
-//import 'package:flutter/cupertino.dart';
 import 'dart:async';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
-//import 'package:keyboard_visibility/keyboard_visibility.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import '../../components/success_dialog.dart';
 import '../../components/rounded_fill_button.dart';
@@ -241,7 +237,6 @@ class _RegistrationPageState extends State<RegistrationPage> {
                               const SizedBox(
                                 height: 15,
                               ),
-                              //const InputWithIcon(icon: Icons.vpn_key, hint: "Enter Password...",),
                             ])),
                   ],
                 ),
@@ -280,7 +275,6 @@ class _RegistrationPageState extends State<RegistrationPage> {
   Widget buildImage() {
     return Expanded(
       flex: 1,
-      //padding: const EdgeInsets.symmetric(horizontal: 32),
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 25),
         child: Center(
@@ -375,11 +369,9 @@ class _RegistrationPageState extends State<RegistrationPage> {
           width: 60,
           child: IconButton(
             icon: Icon(
-              // Based on passwordVisible state choose the icon
               _passwordVisible ? Icons.visibility : Icons.visibility_off,
             ),
             onPressed: () {
-              // Update the state i.e. toggle the state of passwordVisible variable
               setState(() {
                 _passwordVisible = !_passwordVisible;
               });
@@ -456,7 +448,6 @@ void buildSuccessDialog(BuildContext context) {
             const Text(
               "A verification email has been sent to your email",
               textAlign: TextAlign.center,
-              //style: TextStyle(fontSize: 20),
             ),
             const SizedBox(height: 12),
             Center(
