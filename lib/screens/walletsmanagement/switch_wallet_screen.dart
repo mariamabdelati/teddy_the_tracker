@@ -18,7 +18,6 @@ class _SwitchWalletState extends State<SwitchWallet> {
   @override
   Widget build(BuildContext context) {
     return SafeArea(
-      //maintainBottomViewPadding: true,
       bottom: false,
       child: Container(
         decoration: BoxDecoration(boxShadow: [BoxShadow(color: Colors.blue.withAlpha(100), blurRadius: 10.0)], borderRadius: const BorderRadius.only(topLeft: Radius.circular(40), topRight: Radius.circular(40)), color: mainColorList[1],),
@@ -97,13 +96,10 @@ class _SwitchWalletState extends State<SwitchWallet> {
   Widget _createWalletCard(List<dynamic> wallets, int index) {
     return GestureDetector(
       onTap: (){
-        //where wallet is switched
-        /*print("wallet switched to " + (wallets[index].name as String));*/
         globals.setWallet(wallets[index]);
         Navigator.of(context).pushAndRemoveUntil(
             MaterialPageRoute(builder: (context) => const DashboardScreen()),
                 (route) => false);
-        //Navigator.pop(context);
       },
       child: Card(
         elevation: 4,
@@ -118,7 +114,6 @@ class _SwitchWalletState extends State<SwitchWallet> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Align(
-                    //alignment: Alignment.bottomCenter,
                     child: Padding(
                       padding: const EdgeInsets.only(top: 8.0),
                       child: Container(
