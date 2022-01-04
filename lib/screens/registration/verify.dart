@@ -1,5 +1,4 @@
 import 'dart:ffi';
-
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -24,7 +23,6 @@ class _VerifyState extends State<Verify> {
   late FirebaseAuth _mauth;
   @override
   void initState() {
-    // TODO: implement initState
     _isLogin = widget.isLogin;
     _mauth = widget.mauth;
     super.initState();
@@ -44,7 +42,6 @@ class _VerifyState extends State<Verify> {
         padding: const EdgeInsets.all(32.0),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          //mainAxisSize: MainAxisSize.min,
           children: <Widget>[
             Column(
               mainAxisSize: MainAxisSize.min,
@@ -64,7 +61,6 @@ class _VerifyState extends State<Verify> {
                 ),
                 Flexible(
                   flex: 1,
-                  //padding: const EdgeInsets.symmetric(horizontal: 32),
                   child: Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 25),
                     child: Center(
@@ -139,7 +135,6 @@ class _VerifyState extends State<Verify> {
                   const Text(
                     "A verification link has been sent to your email",
                     textAlign: TextAlign.center,
-                    //style: TextStyle(fontSize: 20),
                   ),
                   const SizedBox(height: 12),
                   Center(
