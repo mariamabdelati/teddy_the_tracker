@@ -220,7 +220,7 @@ class AddNewEntryPageState extends State<AddNewEntryPage> {
       // only allow numbers and decimal places up to 2 places
       keyboardType: TextInputType.number,
       inputFormatters: <TextInputFormatter>[
-        FilteringTextInputFormatter.allow(RegExp(r"^\d*\.?\d{0,2}\b"))
+        FilteringTextInputFormatter.allow(RegExp(r"^\d*\.?\d{0,2}"))
       ],
       onSaved: (value) => setState(() => amount = zeroCheck(value!)),
     );
